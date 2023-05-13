@@ -1,0 +1,485 @@
+package edu.unnoba.compiladores.compilador_unnoba_2023;
+
+import java_cup.runtime.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.io.FileReader;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.Hashtable;
+import edu.unnoba.compiladores.compilador_unnoba_2023.exceptions.*;
+import edu.unnoba.compiladores.compilador_unnoba_2023.ast.*;
+import edu.unnoba.compiladores.compilador_unnoba_2023.ast_expresiones.*;
+import edu.unnoba.compiladores.compilador_unnoba_2023.ast_expresiones_binarias.*;
+import edu.unnoba.compiladores.compilador_unnoba_2023.ast_expresiones_binarias.logicas.*;
+import edu.unnoba.compiladores.compilador_unnoba_2023.ast_expresiones_unarias.*;
+import edu.unnoba.compiladores.compilador_unnoba_2023.factor.*;
+import edu.unnoba.compiladores.compilador_unnoba_2023.sentencias.*;
+import java.util.Iterator;
+
+
+//crear un metodo de clase que genere un autoincremental
+class MiParser;
+action code {:
+:};
+
+parser code
+{:
+
+    List<String> produccionesRecorridas = new ArrayList<>();
+    
+    Boolean isAsignacion = false;
+    String idAsignacion; 
+    String returnFilter;
+
+    public List<String> getProduccionesList(){
+        return this.produccionesRecorridas;
+    }
+   
+
+    public String printProduccionesRecorridas(List<String> misProducciones){
+        String textoConcat = "";
+        textoConcat = textoConcat.concat("Pasó por las siguientes reglas:\n");
+        for(String txt : misProducciones){
+            textoConcat = textoConcat.concat(txt).concat("\n");
+        }
+        return textoConcat;
+    }
+
+    Hashtable<String, String> ht = new Hashtable<String, String>();
+
+    public Hashtable getSymbolTable(){
+        return this.ht;
+    }
+
+    public void printHt(Hashtable ht){
+        ht.forEach((k, v) -> {
+            System.out.println("Tabla de simbolos: " + k.toString() + " " + v.toString());
+        });
+    }
+    public String concatHt(Hashtable ht){
+        Iterator<String> iterator = ht.keySet().iterator();
+        String concatenado = "\nTabla de simbolos:\n";
+
+        while(iterator.hasNext()) {
+            String clave = iterator.next();
+            String valor = (String) ht.get(clave);
+            concatenado += clave.concat(" -> ").concat(valor).concat("\n");
+        }
+        return concatenado;
+    }
+
+    private String s;
+
+    public void syntax_error(Symbol s){
+        this.s="Error en la linea "+ (s.right+1)+ " Columna "+ (s.left+1)+ ". Valor simbolo '"
+        +s.value+"' . Simbolo n° "+s.sym+ " no reconocido.";
+    }
+
+    public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception{
+        this.s="Error en la linea "+ (s.right+1)+ " Columna "+ (s.left+1)+ ". Valor simbolo '"
+        +s.value+"' . Simbolo n° "+s.sym+ " no reconocido." ;
+    }
+
+    public String getS(){
+        return this.s;
+    }
+:};
+
+terminal OPERADOR_SUMA, OPERADOR_RESTA, OPERADOR_DIV, OPERADOR_MULTI, PARENTESIS_ABRE, PARENTESIS_CIERRA,LLAVE_ABRE,LLAVE_CIERRA, OPERADOR_IGUAL,
+OPERADOR_DISTINTO, OPERADOR_MAYOR, OPERADOR_MENOR, OPERADOR_MENOR_IGUAL, OPERADOR_MAYOR_IGUAL, OPERADOR_AND, OPERADOR_OR, OPERADOR_NOT,
+FOR, DO, CORCHETE_ABRE, CORCHETE_CIERRA, COMA, DOS_PUNTOS, PUNTO_COMA, END, BREAK, CONTINUE, INT_TYPE, FLOAT_TYPE,STRING_LITERAL,
+BOOLEAN_TYPE, FILTER, DISPLAY, DECLARE_SECTION, END_DECLARE_SECTION, PROGRAM_SECTION, END_PROGRAM_SECTION, CONST_BOOL, CONST_INT, CONST_FLOAT,
+VAR, ASIGNACION, INPUT_INT, INPUT_FLOAT, INPUT_BOOL, GUION_BAJO, IF, ELSE, ELIF, THEN;
+
+nonterminal Programa programa;
+nonterminal ArrayList<Sentencia> declaraciones;
+nonterminal Declaracion declaracion;
+nonterminal bloque_programa, bloque_declaraciones, bloque_sentencias;
+nonterminal Sentencia sentencia;
+nonterminal SentenciaFor sentencia_for;
+nonterminal SentenciaIf sentencia_if;
+nonterminal Asignacion sentencia_asignacion;
+nonterminal Display sentencia_display;
+nonterminal Expresion expresion_or;
+nonterminal Input input;
+nonterminal Expresion expresion_and;
+nonterminal Expresion expresion_not;
+nonterminal Expresion comparacion;
+nonterminal Expresion expresion_sr;
+nonterminal Expresion expresion_md;
+nonterminal NegacionAritmetica menos_unario;
+nonterminal Expresion factor;
+nonterminal Constante constante;
+nonterminal filter;
+nonterminal Input input_int;
+nonterminal Input input_float;
+nonterminal Input input_bool;
+nonterminal IncrementoDecrementoFor expresion_incremento_decremento; 
+nonterminal SentenciaElif sentencia_elseif;
+nonterminal List<String> lista_var;
+
+start with programa;
+
+programa ::= bloque_declaraciones:bd bloque_programa: bp{:
+        produccionesRecorridas.add("programa ->");
+    :}
+    |
+    bloque_declaraciones:bd {:
+        produccionesRecorridas.add("programa ->");
+    :}
+   |
+   bloque_programa: bp{:
+        produccionesRecorridas.add("programa ->");
+:};
+
+
+bloque_declaraciones ::= DECLARE_SECTION declaraciones:d END_DECLARE_SECTION{:
+        produccionesRecorridas.add("bloque_declaraciones -> DECLARE_SECTION declaraciones END_DECLARE_SECTION");
+   :};
+
+
+declaraciones ::= declaracion:dec declaraciones:decs{:
+        produccionesRecorridas.add("declaraciones -> declaracion declaraciones");
+   :}
+   |
+   declaracion:dec{:
+        produccionesRecorridas.add("declaraciones -> declaracion");
+:};
+
+lista_var::= lista_var:l_v COMA VAR:id{:
+        produccionesRecorridas.add("lista_var -> lista_var COMA VAR");
+        l_v.add((String) id);
+        RESULT = l_v;
+    :}
+    |
+    VAR:id{:
+        produccionesRecorridas.add("lista_var -> VAR");
+        List<String> ident = new ArrayList<String>();
+        ident.add((String) id);
+        RESULT = ident;
+:};
+
+declaracion ::= INT_TYPE:tipo DOS_PUNTOS lista_var:l_v PUNTO_COMA{:
+        produccionesRecorridas.add("declaracion -> INT_TYPE DOS_PUNTOS lista_var PUNTO_COMA");
+        for(String i : l_v){
+            if(ht.containsKey(i)){
+                throw new VarAlreadyExistTSException("La variable "+i+" ya esta definida\n");
+            }else{
+                ht.put(i,"INT");
+            }
+        }
+    :}
+    |
+    FLOAT_TYPE DOS_PUNTOS lista_var:l_v  PUNTO_COMA{:
+        produccionesRecorridas.add("declaracion -> FLOAT_TYPE DOS_PUNTOS lista_var PUNTO_COMA");
+        for(String i : l_v){
+            if(ht.containsKey(i)){
+                throw new VarAlreadyExistTSException("La variable "+i+" ya esta definida\n");
+            }else{
+                ht.put(i,"FLOAT");
+            }
+        }
+    :}
+    |
+    BOOLEAN_TYPE DOS_PUNTOS lista_var:l_v PUNTO_COMA{:
+        produccionesRecorridas.add("declaracion -> BOOLEAN_TYPE DOS_PUNTOS lista_var PUNTO_COMA");
+        for(String i : l_v){
+            if(ht.containsKey(i)){
+                throw new VarAlreadyExistTSException("La variable "+i+" ya esta definida\n");
+            }else{
+                ht.put(i,"BOOLEAN");
+            }
+        }
+:};
+
+
+bloque_programa ::= PROGRAM_SECTION bloque_sentencias:bs END_PROGRAM_SECTION{:
+    produccionesRecorridas.add("bloque_programa -> PROGRAM_SECTION bloque_sentencias END_PROGRAM_SECTION");
+    RESULT = bs;
+:};
+
+
+bloque_sentencias ::= bloque_sentencias:bs sentencia:s {:
+            produccionesRecorridas.add("bloque_sentencias -> bloque_sentencias:bs sentencia");
+       :}
+       |
+       sentencia:s {:
+            produccionesRecorridas.add("bloque_sentencias -> sentencia");
+:};
+
+
+sentencia ::= sentencia_for: sf{:
+            produccionesRecorridas.add("sentencia -> sentencia_for");
+       :}
+       |
+       sentencia_if: si{:
+            produccionesRecorridas.add("sentencia -> sentencia_if");
+       :}
+       |
+       sentencia_asignacion: sa{:
+            produccionesRecorridas.add("sentencia -> sentencia_asignacion");
+       :}
+       |
+       sentencia_display: sd{:
+            produccionesRecorridas.add("sentencia -> sentencia_display");
+        :}
+        |
+        BREAK{:
+            produccionesRecorridas.add("sentencia -> BREAK");
+        :}
+        |
+        CONTINUE{:
+            produccionesRecorridas.add("sentencia -> CONTINUE");
+:};
+
+
+sentencia_asignacion ::= VAR:id ASIGNACION {:
+    isAsignacion= true;
+    idAsignacion = (String)id;
+    :} expresion_or: eo {:
+        produccionesRecorridas.add("sentencia_asignacion -> VAR ASIGNACION expresion_or");
+        if(!ht.containsKey((String) id)){
+            throw new VarNotDeclaredTSException("La variable "+(String) id+" no está declarada previamente.");
+        }
+:};
+
+
+expresion_or ::= expresion_or: eo OPERADOR_OR expresion_and :ea{:
+    produccionesRecorridas.add("expresion_or -> expresion_or OPERADOR_OR expresion_and");
+       :}
+       |
+       expresion_and :ea{:
+    produccionesRecorridas.add("expresion_or -> expresion_and");
+:};
+
+
+expresion_and ::= expresion_and: ea OPERADOR_AND expresion_not :en{:
+        produccionesRecorridas.add("expresion_and -> expresion_and OPERADOR_AND expresion_not");
+    :}
+    |
+    expresion_not :en{:
+        produccionesRecorridas.add("expresion_and -> expresion_not");
+:};
+
+
+expresion_not ::= OPERADOR_NOT expresion_not :en{:
+    produccionesRecorridas.add("expresion_not -> OPERADOR_NOT expresion_not");
+       :}
+       |
+       comparacion:c{:
+    produccionesRecorridas.add("expresion_not -> comparacion");
+:};
+
+
+
+comparacion ::= expresion_sr :esr1 OPERADOR_MAYOR expresion_sr: esr2{:
+            produccionesRecorridas.add("comparacion -> expresion_sr OPERADOR_MAYOR expresion_sr");
+       :}
+       |
+       expresion_sr :esr1 OPERADOR_MAYOR_IGUAL expresion_sr: esr2{:
+            produccionesRecorridas.add("comparacion -> expresion_sr OPERADOR_MAYOR_IGUAL expresion_sr");
+       :}
+       |
+       expresion_sr :esr1 OPERADOR_MENOR expresion_sr: esr2{:
+            produccionesRecorridas.add("comparacion -> expresion_sr OPERADOR_MENOR expresion_sr");
+       :}
+       |
+       expresion_sr :esr1 OPERADOR_MENOR_IGUAL expresion_sr: esr2{:
+            produccionesRecorridas.add("comparacion -> expresion_sr OPERADOR_MENOR_IGUAL expresion_s");
+       :}
+       |
+       expresion_sr :esr1 OPERADOR_IGUAL expresion_sr: esr2{:
+            produccionesRecorridas.add("comparacion -> expresion_sr OPERADOR_IGUAL expresion_sr");
+       :}
+       |
+       expresion_sr :esr1 OPERADOR_DISTINTO expresion_sr: esr2{:
+            produccionesRecorridas.add("comparacion -> expresion_sr OPERADOR_DISTINTO expresion_sr");
+       :}
+       |
+       expresion_sr :esr{:
+            produccionesRecorridas.add("comparacion -> expresion_sr");
+:};
+
+
+expresion_sr ::= expresion_sr :esr OPERADOR_SUMA expresion_md: emd{:
+            produccionesRecorridas.add("expresion_sr ->expresion_sr OPERADOR_SUMA expresion_md");
+       :}
+       |
+       expresion_sr :esr OPERADOR_RESTA expresion_md: emd{:
+            produccionesRecorridas.add("expresion_sr -> expresion_sr OPERADOR_RESTA expresion_md");
+       :}
+       |
+       expresion_md :emd{:
+            produccionesRecorridas.add("expresion_sr -> expresion_md");
+:};
+
+
+expresion_md ::= expresion_md :emd OPERADOR_MULTI menos_unario:mu{:
+        produccionesRecorridas.add("expresion_md -> expresion_md OPERADOR_MULTI menos_unario");
+    :}
+    |
+    expresion_md :emd OPERADOR_DIV menos_unario:mu{:
+        produccionesRecorridas.add("expresion_md -> expresion_md OPERADOR_DIV menos_unario");
+    :}
+    |
+    menos_unario:mu{:
+        produccionesRecorridas.add("expresion_md -> menos_unario");
+    :};
+
+
+menos_unario ::= OPERADOR_RESTA menos_unario:mu{:
+        produccionesRecorridas.add("menos_unario -> OPERADOR_RESTA menos_unario");
+    :}
+    |
+    factor:f {:
+        produccionesRecorridas.add("menos_unario -> factor");
+:};
+
+
+factor ::= constante: c{:
+    produccionesRecorridas.add("factor -> constante");
+       :}
+       |
+    filter:f{:
+        produccionesRecorridas.add("factor -> filter");
+    :}
+    |
+    PARENTESIS_ABRE expresion_or:eo PARENTESIS_CIERRA{:
+            produccionesRecorridas.add("factor -> PARENTESIS_ABRE expresion_or PARENTESIS_CIERRA");
+    :}
+    |
+    GUION_BAJO {:
+        produccionesRecorridas.add("factor -> GUION_BAJO");
+    :}    
+    |
+    input: in{:
+        produccionesRecorridas.add("factor ->  input");
+:};
+
+
+constante::= CONST_BOOL:bl{:
+        produccionesRecorridas.add("constante -> CONST_BOOL");
+    :}
+    |
+    CONST_INT:il{:
+    produccionesRecorridas.add("constante -> CONST_INT");
+    :}
+    |
+    CONST_FLOAT:fl{:
+        produccionesRecorridas.add("constante -> CONST_FLOAT");
+    :}
+    |
+    STRING_LITERAL:fl{:
+        produccionesRecorridas.add("constante -> STRING_LITERAL");
+    :}
+    |
+    VAR:id{:
+        produccionesRecorridas.add("constante -> VAR");
+            if(!ht.containsKey((String) id)){
+                throw new VarNotDeclaredTSException("La variable "+(String) id+" no está declarada previamente.");
+            }
+ :};
+
+
+filter::= FILTER PARENTESIS_ABRE expresion_or:e_o COMA CORCHETE_ABRE lista_var:l_v CORCHETE_CIERRA  PARENTESIS_CIERRA {:
+    //validarTiposVariablesConExpresion() ---  validar que todos los tipos de l_V y la expresion sean validos, ej filter (_ != TRUE; [1,2,3]) NO DEBERIA PODER OPERAR.
+    
+    /*if (validarTiposVariablesConExpresion(e_o, l_v)){
+        if(isAsignacion==true){
+            if(!validarTiposVariablesConTipoAsignacionId(l_v,idAsignacion)){
+                //error
+            }
+        }
+    }*/
+
+
+    produccionesRecorridas.add("filter -> FILTER PARENTESIS_ABRE expresion_or COMA CORCHETE_ABRE lista_var CORCHETE_CIERRA PARENTESIS_CIERRA");
+    for(String i : l_v){
+        if(!ht.containsKey(i)){
+            throw new VarNotDeclaredTSException("La variable "+i+" no esta declarada previamente\n");
+        }
+    }
+:};
+
+sentencia_display ::= DISPLAY PARENTESIS_ABRE expresion_or:eo PARENTESIS_CIERRA {:
+    produccionesRecorridas.add("sentencia_display -> DISPLAY PARENTESIS_ABRE expresion_or PARENTESIS_CIERRA");
+:};
+
+input ::= input_int:ii {:
+        produccionesRecorridas.add("input -> input_int");
+    :}
+    |
+    input_float:ifl {:
+        produccionesRecorridas.add("input -> input_float");
+    :}
+    |
+    input_bool:ib {:
+        produccionesRecorridas.add("input -> input_bool");
+:};
+
+
+input_int ::= INPUT_INT PARENTESIS_ABRE PARENTESIS_CIERRA {:
+    produccionesRecorridas.add("input_int -> INPUT_INT PARENTESIS_ABRE PARENTESIS_CIERRA");
+:};
+
+input_float ::= INPUT_FLOAT PARENTESIS_ABRE PARENTESIS_CIERRA {:
+    produccionesRecorridas.add("input_float -> INPUT_FLOAT PARENTESIS_ABRE PARENTESIS_CIERRA");
+:};
+
+input_bool ::= INPUT_BOOL PARENTESIS_ABRE PARENTESIS_CIERRA {:
+    produccionesRecorridas.add("input_bool -> INPUT_BOOL PARENTESIS_ABRE PARENTESIS_CIERRA");
+:};
+
+sentencia_if ::= IF PARENTESIS_ABRE expresion_or:eo PARENTESIS_CIERRA THEN bloque_sentencias:bs END {:
+        produccionesRecorridas.add("sentencia_if -> IF PARENTESIS_ABRE expresion_or PARENTESIS_CIERRA THEN bloque_sentencias END");
+    :}
+    |
+    IF PARENTESIS_ABRE expresion_or:eo PARENTESIS_CIERRA THEN bloque_sentencias:bs1 ELSE THEN bloque_sentencias:bs2 END{:
+        produccionesRecorridas.add("sentencia_if -> IF PARENTESIS_ABRE expresion_or PARENTESIS_CIERRA THEN bloque_sentencias ELSE THEN bloque_sentencias END");
+    :}
+    |
+    IF PARENTESIS_ABRE expresion_or:eo PARENTESIS_CIERRA THEN bloque_sentencias:bs1 sentencia_elseif: elseif END{:
+        produccionesRecorridas.add("sentencia_if -> IF PARENTESIS_ABRE expresion_or PARENTESIS_CIERRA THEN bloque_sentencias sentencia_elseif END");
+    :}
+    |
+    IF PARENTESIS_ABRE expresion_or:eo PARENTESIS_CIERRA THEN bloque_sentencias:bs1 sentencia_elseif: elseif ELSE THEN bloque_sentencias:bs2 END{:
+        produccionesRecorridas.add("sentencia_if -> IF PARENTESIS_ABRE expresion_or PARENTESIS_CIERRA THEN bloque_sentencias sentencia_elseif ELSE THEN bloque_sentencias END");
+:};
+
+
+sentencia_elseif ::= sentencia_elseif: elseif ELIF PARENTESIS_ABRE expresion_or:eo PARENTESIS_CIERRA THEN bloque_sentencias:bs2{:
+        produccionesRecorridas.add("sentencia_elseif -> sentencia_elseif ELIF PARENTESIS_ABRE expresion_or PARENTESIS_CIERRA THEN bloque_sentencias");
+    :}
+    |
+    ELIF PARENTESIS_ABRE expresion_or:eo PARENTESIS_CIERRA THEN bloque_sentencias:bs2{:
+        produccionesRecorridas.add("sentencia_elseif -> ELIF PARENTESIS_ABRE expresion_or PARENTESIS_CIERRA THEN bloque_sentencias");
+:};
+
+
+expresion_incremento_decremento ::= OPERADOR_SUMA expresion_sr: esr2{:
+        produccionesRecorridas.add("expresion_incremento_decremento -> OPERADOR_SUMA expresion_sr");
+    :}
+    |
+    OPERADOR_RESTA expresion_sr: esr2{:
+        produccionesRecorridas.add("expresion_incremento_decremento -> OPERADOR_RESTA expresion_sr");
+    :}
+    | OPERADOR_SUMA OPERADOR_SUMA: esr2{:
+        produccionesRecorridas.add("expresion_incremento_decremento -> OPERADOR_SUMA OPERADOR_SUMA");
+    :}
+    | OPERADOR_RESTA OPERADOR_RESTA{:
+        produccionesRecorridas.add("expresion_incremento_decremento -> OPERADOR_RESTA OPERADOR_RESTA");
+:};
+
+sentencia_for ::= FOR PARENTESIS_ABRE VAR:id1 ASIGNACION CONST_INT  PUNTO_COMA VAR:id2 expresion_incremento_decremento:e_id PUNTO_COMA comparacion:c_f  PARENTESIS_CIERRA DO bloque_sentencias:bs END{:
+        
+    //Verificar que c_f contenga el mismo id que id1 y id2;
+    if(((String) id1).equals((String) id2)){
+        if(!ht.containsKey((String) id1)){
+            throw new VarNotDeclaredTSException("La variable "+(String) id1+" no está declarada previamente.");
+        }
+    }else{
+        throw new VarForNotEqualException("La variable pasada como parametro al FOR debe ser la misma");
+    }
+  produccionesRecorridas.add("sentencia_for -> FOR PARENTESIS_ABRE VAR ASIGNACION CONST_INT PUNTO_COMA VAR expresion_incremento_decremento PUNTO_COMA comparacion PARENTESIS_CIERRA DO bloque_sentencias END");
+:};
