@@ -13,6 +13,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.Hashtable;
 import edu.unnoba.compiladores.compilador_unnoba_2023.exceptions.*;
+import edu.unnoba.compiladores.compilador_unnoba_2023.ast.*;
+import edu.unnoba.compiladores.compilador_unnoba_2023.ast_expresiones.*;
+import edu.unnoba.compiladores.compilador_unnoba_2023.ast_expresiones_binarias.*;
+import edu.unnoba.compiladores.compilador_unnoba_2023.ast_expresiones_binarias.logicas.*;
+import edu.unnoba.compiladores.compilador_unnoba_2023.ast_expresiones_unarias.*;
+import edu.unnoba.compiladores.compilador_unnoba_2023.factor.*;
+import edu.unnoba.compiladores.compilador_unnoba_2023.sentencias.*;
 import java.util.Iterator;
 import java_cup.runtime.XMLElement;
 
@@ -597,7 +604,7 @@ class CUP$MiParser$actions {
               Object RESULT =null;
 		int start_valleft = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-1)).left;
 		int start_valright = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-1)).right;
-		Object start_val = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-1)).value;
+		Programa start_val = (Programa)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-1)).value;
 		RESULT = start_val;
               CUP$MiParser$result = parser.getSymbolFactory().newSymbol("$START",0, ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-1)), ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()), RESULT);
             }
@@ -608,7 +615,7 @@ class CUP$MiParser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 1: // programa ::= bloque_declaraciones bloque_programa 
             {
-              Object RESULT =null;
+              Programa RESULT =null;
 		int bdleft = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-1)).left;
 		int bdright = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-1)).right;
 		Object bd = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-1)).value;
@@ -625,7 +632,7 @@ class CUP$MiParser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 2: // programa ::= bloque_declaraciones 
             {
-              Object RESULT =null;
+              Programa RESULT =null;
 		int bdleft = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).left;
 		int bdright = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).right;
 		Object bd = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
@@ -639,7 +646,7 @@ class CUP$MiParser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 3: // programa ::= bloque_programa 
             {
-              Object RESULT =null;
+              Programa RESULT =null;
 		int bpleft = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).left;
 		int bpright = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).right;
 		Object bp = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
@@ -656,7 +663,7 @@ class CUP$MiParser$actions {
               Object RESULT =null;
 		int dleft = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-1)).left;
 		int dright = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-1)).right;
-		Object d = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-1)).value;
+		ArrayList<Sentencia> d = (ArrayList<Sentencia>)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-1)).value;
 		
         produccionesRecorridas.add("bloque_declaraciones -> DECLARE_SECTION declaraciones END_DECLARE_SECTION");
    
@@ -667,13 +674,13 @@ class CUP$MiParser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 5: // declaraciones ::= declaracion declaraciones 
             {
-              Object RESULT =null;
+              ArrayList<Sentencia> RESULT =null;
 		int decleft = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-1)).left;
 		int decright = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-1)).right;
-		Object dec = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-1)).value;
+		Declaracion dec = (Declaracion)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-1)).value;
 		int decsleft = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).left;
 		int decsright = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).right;
-		Object decs = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
+		ArrayList<Sentencia> decs = (ArrayList<Sentencia>)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
 		
         produccionesRecorridas.add("declaraciones -> declaracion declaraciones");
    
@@ -684,10 +691,10 @@ class CUP$MiParser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 6: // declaraciones ::= declaracion 
             {
-              Object RESULT =null;
+              ArrayList<Sentencia> RESULT =null;
 		int decleft = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).left;
 		int decright = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).right;
-		Object dec = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
+		Declaracion dec = (Declaracion)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
 		
         produccionesRecorridas.add("declaraciones -> declaracion");
 
@@ -734,7 +741,7 @@ class CUP$MiParser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 9: // declaracion ::= INT_TYPE DOS_PUNTOS lista_var PUNTO_COMA 
             {
-              Object RESULT =null;
+              Declaracion RESULT =null;
 		int tipoleft = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-3)).left;
 		int tiporight = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-3)).right;
 		Object tipo = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-3)).value;
@@ -758,7 +765,7 @@ class CUP$MiParser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 10: // declaracion ::= FLOAT_TYPE DOS_PUNTOS lista_var PUNTO_COMA 
             {
-              Object RESULT =null;
+              Declaracion RESULT =null;
 		int l_vleft = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-1)).left;
 		int l_vright = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-1)).right;
 		List<String> l_v = (List<String>)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-1)).value;
@@ -779,7 +786,7 @@ class CUP$MiParser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 11: // declaracion ::= BOOLEAN_TYPE DOS_PUNTOS lista_var PUNTO_COMA 
             {
-              Object RESULT =null;
+              Declaracion RESULT =null;
 		int l_vleft = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-1)).left;
 		int l_vright = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-1)).right;
 		List<String> l_v = (List<String>)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-1)).value;
@@ -821,7 +828,7 @@ class CUP$MiParser$actions {
 		Object bs = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-1)).value;
 		int sleft = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).left;
 		int sright = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).right;
-		Object s = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
+		Sentencia s = (Sentencia)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
 		
             produccionesRecorridas.add("bloque_sentencias -> bloque_sentencias:bs sentencia");
        
@@ -835,7 +842,7 @@ class CUP$MiParser$actions {
               Object RESULT =null;
 		int sleft = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).left;
 		int sright = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).right;
-		Object s = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
+		Sentencia s = (Sentencia)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
 		
             produccionesRecorridas.add("bloque_sentencias -> sentencia");
 
@@ -846,10 +853,10 @@ class CUP$MiParser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 15: // sentencia ::= sentencia_for 
             {
-              Object RESULT =null;
+              Sentencia RESULT =null;
 		int sfleft = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).left;
 		int sfright = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).right;
-		Object sf = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
+		SentenciaFor sf = (SentenciaFor)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
 		
             produccionesRecorridas.add("sentencia -> sentencia_for");
        
@@ -860,10 +867,10 @@ class CUP$MiParser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 16: // sentencia ::= sentencia_if 
             {
-              Object RESULT =null;
+              Sentencia RESULT =null;
 		int sileft = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).left;
 		int siright = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).right;
-		Object si = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
+		SentenciaIf si = (SentenciaIf)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
 		
             produccionesRecorridas.add("sentencia -> sentencia_if");
        
@@ -874,10 +881,10 @@ class CUP$MiParser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 17: // sentencia ::= sentencia_asignacion 
             {
-              Object RESULT =null;
+              Sentencia RESULT =null;
 		int saleft = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).left;
 		int saright = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).right;
-		Object sa = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
+		Asignacion sa = (Asignacion)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
 		
             produccionesRecorridas.add("sentencia -> sentencia_asignacion");
        
@@ -888,10 +895,10 @@ class CUP$MiParser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 18: // sentencia ::= sentencia_display 
             {
-              Object RESULT =null;
+              Sentencia RESULT =null;
 		int sdleft = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).left;
 		int sdright = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).right;
-		Object sd = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
+		Display sd = (Display)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
 		
             produccionesRecorridas.add("sentencia -> sentencia_display");
         
@@ -902,7 +909,7 @@ class CUP$MiParser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 19: // sentencia ::= BREAK 
             {
-              Object RESULT =null;
+              Sentencia RESULT =null;
 		
             produccionesRecorridas.add("sentencia -> BREAK");
         
@@ -913,7 +920,7 @@ class CUP$MiParser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 20: // sentencia ::= CONTINUE 
             {
-              Object RESULT =null;
+              Sentencia RESULT =null;
 		
             produccionesRecorridas.add("sentencia -> CONTINUE");
 
@@ -924,7 +931,7 @@ class CUP$MiParser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 21: // NT$0 ::= 
             {
-              Object RESULT =null;
+              Asignacion RESULT =null;
 		int idleft = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-1)).left;
 		int idright = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-1)).right;
 		Object id = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-1)).value;
@@ -939,15 +946,15 @@ class CUP$MiParser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 22: // sentencia_asignacion ::= VAR ASIGNACION NT$0 expresion_or 
             {
-              Object RESULT =null;
+              Asignacion RESULT =null;
               // propagate RESULT from NT$0
-                RESULT = (Object) ((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-1)).value;
+                RESULT = (Asignacion) ((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-1)).value;
 		int idleft = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-3)).left;
 		int idright = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-3)).right;
 		Object id = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-3)).value;
 		int eoleft = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).left;
 		int eoright = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).right;
-		Object eo = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
+		Expresion eo = (Expresion)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
 		
         produccionesRecorridas.add("sentencia_asignacion -> VAR ASIGNACION expresion_or");
         if(!ht.containsKey((String) id)){
@@ -961,13 +968,13 @@ class CUP$MiParser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 23: // expresion_or ::= expresion_or OPERADOR_OR expresion_and 
             {
-              Object RESULT =null;
+              Expresion RESULT =null;
 		int eoleft = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-2)).left;
 		int eoright = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-2)).right;
-		Object eo = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-2)).value;
+		Expresion eo = (Expresion)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-2)).value;
 		int ealeft = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).left;
 		int earight = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).right;
-		Object ea = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
+		Expresion ea = (Expresion)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
 		
     produccionesRecorridas.add("expresion_or -> expresion_or OPERADOR_OR expresion_and");
        
@@ -978,10 +985,10 @@ class CUP$MiParser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 24: // expresion_or ::= expresion_and 
             {
-              Object RESULT =null;
+              Expresion RESULT =null;
 		int ealeft = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).left;
 		int earight = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).right;
-		Object ea = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
+		Expresion ea = (Expresion)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
 		
     produccionesRecorridas.add("expresion_or -> expresion_and");
 
@@ -992,13 +999,13 @@ class CUP$MiParser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 25: // expresion_and ::= expresion_and OPERADOR_AND expresion_not 
             {
-              Object RESULT =null;
+              Expresion RESULT =null;
 		int ealeft = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-2)).left;
 		int earight = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-2)).right;
-		Object ea = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-2)).value;
+		Expresion ea = (Expresion)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-2)).value;
 		int enleft = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).left;
 		int enright = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).right;
-		Object en = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
+		Expresion en = (Expresion)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
 		
         produccionesRecorridas.add("expresion_and -> expresion_and OPERADOR_AND expresion_not");
     
@@ -1009,10 +1016,10 @@ class CUP$MiParser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 26: // expresion_and ::= expresion_not 
             {
-              Object RESULT =null;
+              Expresion RESULT =null;
 		int enleft = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).left;
 		int enright = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).right;
-		Object en = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
+		Expresion en = (Expresion)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
 		
         produccionesRecorridas.add("expresion_and -> expresion_not");
 
@@ -1023,10 +1030,10 @@ class CUP$MiParser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 27: // expresion_not ::= OPERADOR_NOT expresion_not 
             {
-              Object RESULT =null;
+              Expresion RESULT =null;
 		int enleft = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).left;
 		int enright = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).right;
-		Object en = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
+		Expresion en = (Expresion)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
 		
     produccionesRecorridas.add("expresion_not -> OPERADOR_NOT expresion_not");
        
@@ -1037,10 +1044,10 @@ class CUP$MiParser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 28: // expresion_not ::= comparacion 
             {
-              Object RESULT =null;
+              Expresion RESULT =null;
 		int cleft = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).left;
 		int cright = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).right;
-		Object c = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
+		Expresion c = (Expresion)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
 		
     produccionesRecorridas.add("expresion_not -> comparacion");
 
@@ -1051,13 +1058,13 @@ class CUP$MiParser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 29: // comparacion ::= expresion_sr OPERADOR_MAYOR expresion_sr 
             {
-              Object RESULT =null;
+              Expresion RESULT =null;
 		int esr1left = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-2)).left;
 		int esr1right = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-2)).right;
-		Object esr1 = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-2)).value;
+		Expresion esr1 = (Expresion)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-2)).value;
 		int esr2left = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).left;
 		int esr2right = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).right;
-		Object esr2 = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
+		Expresion esr2 = (Expresion)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
 		
             produccionesRecorridas.add("comparacion -> expresion_sr OPERADOR_MAYOR expresion_sr");
        
@@ -1068,13 +1075,13 @@ class CUP$MiParser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 30: // comparacion ::= expresion_sr OPERADOR_MAYOR_IGUAL expresion_sr 
             {
-              Object RESULT =null;
+              Expresion RESULT =null;
 		int esr1left = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-2)).left;
 		int esr1right = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-2)).right;
-		Object esr1 = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-2)).value;
+		Expresion esr1 = (Expresion)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-2)).value;
 		int esr2left = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).left;
 		int esr2right = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).right;
-		Object esr2 = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
+		Expresion esr2 = (Expresion)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
 		
             produccionesRecorridas.add("comparacion -> expresion_sr OPERADOR_MAYOR_IGUAL expresion_sr");
        
@@ -1085,13 +1092,13 @@ class CUP$MiParser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 31: // comparacion ::= expresion_sr OPERADOR_MENOR expresion_sr 
             {
-              Object RESULT =null;
+              Expresion RESULT =null;
 		int esr1left = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-2)).left;
 		int esr1right = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-2)).right;
-		Object esr1 = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-2)).value;
+		Expresion esr1 = (Expresion)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-2)).value;
 		int esr2left = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).left;
 		int esr2right = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).right;
-		Object esr2 = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
+		Expresion esr2 = (Expresion)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
 		
             produccionesRecorridas.add("comparacion -> expresion_sr OPERADOR_MENOR expresion_sr");
        
@@ -1102,13 +1109,13 @@ class CUP$MiParser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 32: // comparacion ::= expresion_sr OPERADOR_MENOR_IGUAL expresion_sr 
             {
-              Object RESULT =null;
+              Expresion RESULT =null;
 		int esr1left = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-2)).left;
 		int esr1right = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-2)).right;
-		Object esr1 = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-2)).value;
+		Expresion esr1 = (Expresion)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-2)).value;
 		int esr2left = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).left;
 		int esr2right = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).right;
-		Object esr2 = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
+		Expresion esr2 = (Expresion)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
 		
             produccionesRecorridas.add("comparacion -> expresion_sr OPERADOR_MENOR_IGUAL expresion_s");
        
@@ -1119,13 +1126,13 @@ class CUP$MiParser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 33: // comparacion ::= expresion_sr OPERADOR_IGUAL expresion_sr 
             {
-              Object RESULT =null;
+              Expresion RESULT =null;
 		int esr1left = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-2)).left;
 		int esr1right = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-2)).right;
-		Object esr1 = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-2)).value;
+		Expresion esr1 = (Expresion)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-2)).value;
 		int esr2left = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).left;
 		int esr2right = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).right;
-		Object esr2 = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
+		Expresion esr2 = (Expresion)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
 		
             produccionesRecorridas.add("comparacion -> expresion_sr OPERADOR_IGUAL expresion_sr");
        
@@ -1136,13 +1143,13 @@ class CUP$MiParser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 34: // comparacion ::= expresion_sr OPERADOR_DISTINTO expresion_sr 
             {
-              Object RESULT =null;
+              Expresion RESULT =null;
 		int esr1left = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-2)).left;
 		int esr1right = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-2)).right;
-		Object esr1 = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-2)).value;
+		Expresion esr1 = (Expresion)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-2)).value;
 		int esr2left = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).left;
 		int esr2right = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).right;
-		Object esr2 = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
+		Expresion esr2 = (Expresion)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
 		
             produccionesRecorridas.add("comparacion -> expresion_sr OPERADOR_DISTINTO expresion_sr");
        
@@ -1153,10 +1160,10 @@ class CUP$MiParser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 35: // comparacion ::= expresion_sr 
             {
-              Object RESULT =null;
+              Expresion RESULT =null;
 		int esrleft = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).left;
 		int esrright = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).right;
-		Object esr = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
+		Expresion esr = (Expresion)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
 		
             produccionesRecorridas.add("comparacion -> expresion_sr");
 
@@ -1167,13 +1174,13 @@ class CUP$MiParser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 36: // expresion_sr ::= expresion_sr OPERADOR_SUMA expresion_md 
             {
-              Object RESULT =null;
+              Expresion RESULT =null;
 		int esrleft = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-2)).left;
 		int esrright = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-2)).right;
-		Object esr = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-2)).value;
+		Expresion esr = (Expresion)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-2)).value;
 		int emdleft = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).left;
 		int emdright = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).right;
-		Object emd = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
+		Expresion emd = (Expresion)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
 		
             produccionesRecorridas.add("expresion_sr ->expresion_sr OPERADOR_SUMA expresion_md");
        
@@ -1184,13 +1191,13 @@ class CUP$MiParser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 37: // expresion_sr ::= expresion_sr OPERADOR_RESTA expresion_md 
             {
-              Object RESULT =null;
+              Expresion RESULT =null;
 		int esrleft = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-2)).left;
 		int esrright = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-2)).right;
-		Object esr = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-2)).value;
+		Expresion esr = (Expresion)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-2)).value;
 		int emdleft = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).left;
 		int emdright = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).right;
-		Object emd = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
+		Expresion emd = (Expresion)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
 		
             produccionesRecorridas.add("expresion_sr -> expresion_sr OPERADOR_RESTA expresion_md");
        
@@ -1201,10 +1208,10 @@ class CUP$MiParser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 38: // expresion_sr ::= expresion_md 
             {
-              Object RESULT =null;
+              Expresion RESULT =null;
 		int emdleft = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).left;
 		int emdright = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).right;
-		Object emd = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
+		Expresion emd = (Expresion)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
 		
             produccionesRecorridas.add("expresion_sr -> expresion_md");
 
@@ -1215,13 +1222,13 @@ class CUP$MiParser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 39: // expresion_md ::= expresion_md OPERADOR_MULTI menos_unario 
             {
-              Object RESULT =null;
+              Expresion RESULT =null;
 		int emdleft = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-2)).left;
 		int emdright = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-2)).right;
-		Object emd = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-2)).value;
+		Expresion emd = (Expresion)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-2)).value;
 		int muleft = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).left;
 		int muright = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).right;
-		Object mu = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
+		NegacionAritmetica mu = (NegacionAritmetica)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
 		
         produccionesRecorridas.add("expresion_md -> expresion_md OPERADOR_MULTI menos_unario");
     
@@ -1232,13 +1239,13 @@ class CUP$MiParser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 40: // expresion_md ::= expresion_md OPERADOR_DIV menos_unario 
             {
-              Object RESULT =null;
+              Expresion RESULT =null;
 		int emdleft = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-2)).left;
 		int emdright = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-2)).right;
-		Object emd = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-2)).value;
+		Expresion emd = (Expresion)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-2)).value;
 		int muleft = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).left;
 		int muright = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).right;
-		Object mu = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
+		NegacionAritmetica mu = (NegacionAritmetica)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
 		
         produccionesRecorridas.add("expresion_md -> expresion_md OPERADOR_DIV menos_unario");
     
@@ -1249,10 +1256,10 @@ class CUP$MiParser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 41: // expresion_md ::= menos_unario 
             {
-              Object RESULT =null;
+              Expresion RESULT =null;
 		int muleft = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).left;
 		int muright = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).right;
-		Object mu = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
+		NegacionAritmetica mu = (NegacionAritmetica)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
 		
         produccionesRecorridas.add("expresion_md -> menos_unario");
     
@@ -1263,10 +1270,10 @@ class CUP$MiParser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 42: // menos_unario ::= OPERADOR_RESTA menos_unario 
             {
-              Object RESULT =null;
+              NegacionAritmetica RESULT =null;
 		int muleft = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).left;
 		int muright = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).right;
-		Object mu = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
+		NegacionAritmetica mu = (NegacionAritmetica)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
 		
         produccionesRecorridas.add("menos_unario -> OPERADOR_RESTA menos_unario");
     
@@ -1277,10 +1284,10 @@ class CUP$MiParser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 43: // menos_unario ::= factor 
             {
-              Object RESULT =null;
+              NegacionAritmetica RESULT =null;
 		int fleft = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).left;
 		int fright = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).right;
-		Object f = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
+		Expresion f = (Expresion)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
 		
         produccionesRecorridas.add("menos_unario -> factor");
 
@@ -1291,10 +1298,10 @@ class CUP$MiParser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 44: // factor ::= constante 
             {
-              Object RESULT =null;
+              Expresion RESULT =null;
 		int cleft = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).left;
 		int cright = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).right;
-		Object c = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
+		Constante c = (Constante)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
 		
     produccionesRecorridas.add("factor -> constante");
        
@@ -1305,7 +1312,7 @@ class CUP$MiParser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 45: // factor ::= filter 
             {
-              Object RESULT =null;
+              Expresion RESULT =null;
 		int fleft = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).left;
 		int fright = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).right;
 		Object f = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
@@ -1319,10 +1326,10 @@ class CUP$MiParser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 46: // factor ::= PARENTESIS_ABRE expresion_or PARENTESIS_CIERRA 
             {
-              Object RESULT =null;
+              Expresion RESULT =null;
 		int eoleft = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-1)).left;
 		int eoright = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-1)).right;
-		Object eo = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-1)).value;
+		Expresion eo = (Expresion)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-1)).value;
 		
             produccionesRecorridas.add("factor -> PARENTESIS_ABRE expresion_or PARENTESIS_CIERRA");
     
@@ -1333,7 +1340,7 @@ class CUP$MiParser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 47: // factor ::= GUION_BAJO 
             {
-              Object RESULT =null;
+              Expresion RESULT =null;
 		
         produccionesRecorridas.add("factor -> GUION_BAJO");
     
@@ -1344,10 +1351,10 @@ class CUP$MiParser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 48: // factor ::= input 
             {
-              Object RESULT =null;
+              Expresion RESULT =null;
 		int inleft = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).left;
 		int inright = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).right;
-		Object in = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
+		Input in = (Input)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
 		
         produccionesRecorridas.add("factor ->  input");
 
@@ -1358,7 +1365,7 @@ class CUP$MiParser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 49: // constante ::= CONST_BOOL 
             {
-              Object RESULT =null;
+              Constante RESULT =null;
 		int blleft = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).left;
 		int blright = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).right;
 		Object bl = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
@@ -1372,7 +1379,7 @@ class CUP$MiParser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 50: // constante ::= CONST_INT 
             {
-              Object RESULT =null;
+              Constante RESULT =null;
 		int illeft = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).left;
 		int ilright = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).right;
 		Object il = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
@@ -1386,7 +1393,7 @@ class CUP$MiParser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 51: // constante ::= CONST_FLOAT 
             {
-              Object RESULT =null;
+              Constante RESULT =null;
 		int flleft = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).left;
 		int flright = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).right;
 		Object fl = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
@@ -1400,7 +1407,7 @@ class CUP$MiParser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 52: // constante ::= STRING_LITERAL 
             {
-              Object RESULT =null;
+              Constante RESULT =null;
 		int flleft = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).left;
 		int flright = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).right;
 		Object fl = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
@@ -1414,7 +1421,7 @@ class CUP$MiParser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 53: // constante ::= VAR 
             {
-              Object RESULT =null;
+              Constante RESULT =null;
 		int idleft = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).left;
 		int idright = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).right;
 		Object id = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
@@ -1434,7 +1441,7 @@ class CUP$MiParser$actions {
               Object RESULT =null;
 		int e_oleft = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-5)).left;
 		int e_oright = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-5)).right;
-		Object e_o = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-5)).value;
+		Expresion e_o = (Expresion)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-5)).value;
 		int l_vleft = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-2)).left;
 		int l_vright = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-2)).right;
 		List<String> l_v = (List<String>)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-2)).value;
@@ -1464,10 +1471,10 @@ class CUP$MiParser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 55: // sentencia_display ::= DISPLAY PARENTESIS_ABRE expresion_or PARENTESIS_CIERRA 
             {
-              Object RESULT =null;
+              Display RESULT =null;
 		int eoleft = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-1)).left;
 		int eoright = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-1)).right;
-		Object eo = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-1)).value;
+		Expresion eo = (Expresion)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-1)).value;
 		
     produccionesRecorridas.add("sentencia_display -> DISPLAY PARENTESIS_ABRE expresion_or PARENTESIS_CIERRA");
 
@@ -1478,10 +1485,10 @@ class CUP$MiParser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 56: // input ::= input_int 
             {
-              Object RESULT =null;
+              Input RESULT =null;
 		int iileft = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).left;
 		int iiright = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).right;
-		Object ii = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
+		Input ii = (Input)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
 		
         produccionesRecorridas.add("input -> input_int");
     
@@ -1492,10 +1499,10 @@ class CUP$MiParser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 57: // input ::= input_float 
             {
-              Object RESULT =null;
+              Input RESULT =null;
 		int iflleft = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).left;
 		int iflright = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).right;
-		Object ifl = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
+		Input ifl = (Input)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
 		
         produccionesRecorridas.add("input -> input_float");
     
@@ -1506,10 +1513,10 @@ class CUP$MiParser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 58: // input ::= input_bool 
             {
-              Object RESULT =null;
+              Input RESULT =null;
 		int ibleft = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).left;
 		int ibright = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).right;
-		Object ib = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
+		Input ib = (Input)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
 		
         produccionesRecorridas.add("input -> input_bool");
 
@@ -1520,7 +1527,7 @@ class CUP$MiParser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 59: // input_int ::= INPUT_INT PARENTESIS_ABRE PARENTESIS_CIERRA 
             {
-              Object RESULT =null;
+              Input RESULT =null;
 		
     produccionesRecorridas.add("input_int -> INPUT_INT PARENTESIS_ABRE PARENTESIS_CIERRA");
 
@@ -1531,7 +1538,7 @@ class CUP$MiParser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 60: // input_float ::= INPUT_FLOAT PARENTESIS_ABRE PARENTESIS_CIERRA 
             {
-              Object RESULT =null;
+              Input RESULT =null;
 		
     produccionesRecorridas.add("input_float -> INPUT_FLOAT PARENTESIS_ABRE PARENTESIS_CIERRA");
 
@@ -1542,7 +1549,7 @@ class CUP$MiParser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 61: // input_bool ::= INPUT_BOOL PARENTESIS_ABRE PARENTESIS_CIERRA 
             {
-              Object RESULT =null;
+              Input RESULT =null;
 		
     produccionesRecorridas.add("input_bool -> INPUT_BOOL PARENTESIS_ABRE PARENTESIS_CIERRA");
 
@@ -1553,10 +1560,10 @@ class CUP$MiParser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 62: // sentencia_if ::= IF PARENTESIS_ABRE expresion_or PARENTESIS_CIERRA THEN bloque_sentencias END 
             {
-              Object RESULT =null;
+              SentenciaIf RESULT =null;
 		int eoleft = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-4)).left;
 		int eoright = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-4)).right;
-		Object eo = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-4)).value;
+		Expresion eo = (Expresion)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-4)).value;
 		int bsleft = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-1)).left;
 		int bsright = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-1)).right;
 		Object bs = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-1)).value;
@@ -1570,10 +1577,10 @@ class CUP$MiParser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 63: // sentencia_if ::= IF PARENTESIS_ABRE expresion_or PARENTESIS_CIERRA THEN bloque_sentencias ELSE THEN bloque_sentencias END 
             {
-              Object RESULT =null;
+              SentenciaIf RESULT =null;
 		int eoleft = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-7)).left;
 		int eoright = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-7)).right;
-		Object eo = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-7)).value;
+		Expresion eo = (Expresion)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-7)).value;
 		int bs1left = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-4)).left;
 		int bs1right = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-4)).right;
 		Object bs1 = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-4)).value;
@@ -1590,16 +1597,16 @@ class CUP$MiParser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 64: // sentencia_if ::= IF PARENTESIS_ABRE expresion_or PARENTESIS_CIERRA THEN bloque_sentencias sentencia_elseif END 
             {
-              Object RESULT =null;
+              SentenciaIf RESULT =null;
 		int eoleft = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-5)).left;
 		int eoright = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-5)).right;
-		Object eo = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-5)).value;
+		Expresion eo = (Expresion)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-5)).value;
 		int bs1left = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-2)).left;
 		int bs1right = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-2)).right;
 		Object bs1 = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-2)).value;
 		int elseifleft = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-1)).left;
 		int elseifright = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-1)).right;
-		Object elseif = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-1)).value;
+		SentenciaElif elseif = (SentenciaElif)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-1)).value;
 		
         produccionesRecorridas.add("sentencia_if -> IF PARENTESIS_ABRE expresion_or PARENTESIS_CIERRA THEN bloque_sentencias sentencia_elseif END");
     
@@ -1610,16 +1617,16 @@ class CUP$MiParser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 65: // sentencia_if ::= IF PARENTESIS_ABRE expresion_or PARENTESIS_CIERRA THEN bloque_sentencias sentencia_elseif ELSE THEN bloque_sentencias END 
             {
-              Object RESULT =null;
+              SentenciaIf RESULT =null;
 		int eoleft = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-8)).left;
 		int eoright = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-8)).right;
-		Object eo = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-8)).value;
+		Expresion eo = (Expresion)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-8)).value;
 		int bs1left = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-5)).left;
 		int bs1right = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-5)).right;
 		Object bs1 = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-5)).value;
 		int elseifleft = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-4)).left;
 		int elseifright = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-4)).right;
-		Object elseif = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-4)).value;
+		SentenciaElif elseif = (SentenciaElif)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-4)).value;
 		int bs2left = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-1)).left;
 		int bs2right = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-1)).right;
 		Object bs2 = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-1)).value;
@@ -1633,13 +1640,13 @@ class CUP$MiParser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 66: // sentencia_elseif ::= sentencia_elseif ELIF PARENTESIS_ABRE expresion_or PARENTESIS_CIERRA THEN bloque_sentencias 
             {
-              Object RESULT =null;
+              SentenciaElif RESULT =null;
 		int elseifleft = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-6)).left;
 		int elseifright = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-6)).right;
-		Object elseif = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-6)).value;
+		SentenciaElif elseif = (SentenciaElif)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-6)).value;
 		int eoleft = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-3)).left;
 		int eoright = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-3)).right;
-		Object eo = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-3)).value;
+		Expresion eo = (Expresion)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-3)).value;
 		int bs2left = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).left;
 		int bs2right = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).right;
 		Object bs2 = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
@@ -1653,10 +1660,10 @@ class CUP$MiParser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 67: // sentencia_elseif ::= ELIF PARENTESIS_ABRE expresion_or PARENTESIS_CIERRA THEN bloque_sentencias 
             {
-              Object RESULT =null;
+              SentenciaElif RESULT =null;
 		int eoleft = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-3)).left;
 		int eoright = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-3)).right;
-		Object eo = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-3)).value;
+		Expresion eo = (Expresion)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-3)).value;
 		int bs2left = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).left;
 		int bs2right = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).right;
 		Object bs2 = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
@@ -1670,10 +1677,10 @@ class CUP$MiParser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 68: // expresion_incremento_decremento ::= OPERADOR_SUMA expresion_sr 
             {
-              Object RESULT =null;
+              IncrementoDecrementoFor RESULT =null;
 		int esr2left = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).left;
 		int esr2right = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).right;
-		Object esr2 = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
+		Expresion esr2 = (Expresion)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
 		
         produccionesRecorridas.add("expresion_incremento_decremento -> OPERADOR_SUMA expresion_sr");
     
@@ -1684,10 +1691,10 @@ class CUP$MiParser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 69: // expresion_incremento_decremento ::= OPERADOR_RESTA expresion_sr 
             {
-              Object RESULT =null;
+              IncrementoDecrementoFor RESULT =null;
 		int esr2left = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).left;
 		int esr2right = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).right;
-		Object esr2 = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
+		Expresion esr2 = (Expresion)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
 		
         produccionesRecorridas.add("expresion_incremento_decremento -> OPERADOR_RESTA expresion_sr");
     
@@ -1698,7 +1705,7 @@ class CUP$MiParser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 70: // expresion_incremento_decremento ::= OPERADOR_SUMA OPERADOR_SUMA 
             {
-              Object RESULT =null;
+              IncrementoDecrementoFor RESULT =null;
 		int esr2left = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).left;
 		int esr2right = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).right;
 		Object esr2 = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
@@ -1712,7 +1719,7 @@ class CUP$MiParser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 71: // expresion_incremento_decremento ::= OPERADOR_RESTA OPERADOR_RESTA 
             {
-              Object RESULT =null;
+              IncrementoDecrementoFor RESULT =null;
 		
         produccionesRecorridas.add("expresion_incremento_decremento -> OPERADOR_RESTA OPERADOR_RESTA");
 
@@ -1723,7 +1730,7 @@ class CUP$MiParser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 72: // sentencia_for ::= FOR PARENTESIS_ABRE VAR ASIGNACION CONST_INT PUNTO_COMA VAR expresion_incremento_decremento PUNTO_COMA comparacion PARENTESIS_CIERRA DO bloque_sentencias END 
             {
-              Object RESULT =null;
+              SentenciaFor RESULT =null;
 		int id1left = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-11)).left;
 		int id1right = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-11)).right;
 		Object id1 = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-11)).value;
@@ -1732,10 +1739,10 @@ class CUP$MiParser$actions {
 		Object id2 = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-7)).value;
 		int e_idleft = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-6)).left;
 		int e_idright = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-6)).right;
-		Object e_id = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-6)).value;
+		IncrementoDecrementoFor e_id = (IncrementoDecrementoFor)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-6)).value;
 		int c_fleft = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-4)).left;
 		int c_fright = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-4)).right;
-		Object c_f = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-4)).value;
+		Expresion c_f = (Expresion)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-4)).value;
 		int bsleft = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-1)).left;
 		int bsright = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-1)).right;
 		Object bs = (Object)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-1)).value;
