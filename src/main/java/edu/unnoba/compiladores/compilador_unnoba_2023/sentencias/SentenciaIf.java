@@ -13,6 +13,7 @@ import java.util.ArrayList;
  * @author julianzabala
  */
 public class SentenciaIf extends Sentencia{
+
     ArrayList<Sentencia> sentenciasIf;
     ArrayList<Sentencia> sentenciasElse;
     ArrayList<SentenciaElif> sentenciasElif;
@@ -50,5 +51,37 @@ public class SentenciaIf extends Sentencia{
             }
         }
         return grafico;
+    }
+    
+    public ArrayList<Sentencia> getSentenciasIf() {
+        return sentenciasIf;
+    }
+
+    public void setSentenciasIf(ArrayList<Sentencia> sentenciasIf) {
+        this.sentenciasIf = sentenciasIf;
+    }
+
+    public ArrayList<Sentencia> getSentenciasElse() {
+        return sentenciasElse;
+    }
+
+    public void setSentenciasElse(ArrayList<Sentencia> sentenciasElse) {
+        this.sentenciasElse = sentenciasElse;
+    }
+
+    public ArrayList<SentenciaElif> getSentenciasElif() {
+        return sentenciasElif;
+    }
+
+    public void setSentenciasElif(ArrayList<SentenciaElif> sentenciasElif) {
+        this.sentenciasElif = sentenciasElif;
+    }
+
+    public Expresion getExpresion() {
+        return expresion;
+    }
+
+    public void setExpresion(Expresion expresion) {
+        this.expresion = expresion;
     }
 }

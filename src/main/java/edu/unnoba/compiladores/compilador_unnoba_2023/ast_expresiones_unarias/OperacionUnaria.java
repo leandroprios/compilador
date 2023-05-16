@@ -16,6 +16,11 @@ public abstract class OperacionUnaria extends Expresion {
         setNombre(nombre);
         this.expresion = expresion;
     }
+    
+    public OperacionUnaria(String nombre, Expresion expresion) {
+        setNombre(nombre);
+        this.expresion = expresion;
+    }
 
     public Expresion getExpresion() {
         return expresion;

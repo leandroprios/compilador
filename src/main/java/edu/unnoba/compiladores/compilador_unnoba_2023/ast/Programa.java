@@ -13,14 +13,14 @@ import java.util.ArrayList;
 public class Programa extends Nodo {
     
     private ArrayList<Sentencia> sentencias;
-    private ArrayList<Declaracion> declaraciones;
+    private ArrayList<ArrayList<Declaracion>> declaraciones;
 
     public Programa(ArrayList<Sentencia> sentencias) {
         this.sentencias = sentencias;
         this.setIdVar(CodeGeneratorHelper.getNewPointer());
     }
     
-    public Programa(ArrayList<Sentencia> sentencias, ArrayList<Declaracion> declaraciones) {
+    public Programa(ArrayList<Sentencia> sentencias, ArrayList<ArrayList<Declaracion>> declaraciones) {
         this.sentencias = sentencias;
         this.declaraciones = declaraciones;
         this.setIdVar(CodeGeneratorHelper.getNewPointer());
@@ -34,8 +34,10 @@ public class Programa extends Nodo {
         }
         
         if(declaraciones != null && !declaraciones.isEmpty()){
-            for(Declaracion dec : declaraciones){
-                grafico += dec.graficar(this.getId());
+            for(ArrayList<Declaracion> declaracionesPrograma : declaraciones){
+                for(Declaracion dec : declaracionesPrograma){ 
+                    grafico += dec.graficar(this.getId());
+                }
             }
         }
         

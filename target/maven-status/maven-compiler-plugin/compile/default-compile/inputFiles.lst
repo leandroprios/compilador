@@ -1,32 +1,56 @@
-C:\Users\zabal\Desktop\Facultad\5to año\compiladores\compilador_unnoba_2023\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\ast_expresiones_binarias\logicas\Menor.java
-C:\Users\zabal\Desktop\Facultad\5to año\compiladores\compilador_unnoba_2023\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\ast_expresiones_binarias\Division.java
-C:\Users\zabal\Desktop\Facultad\5to año\compiladores\compilador_unnoba_2023\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\ast_expresiones_binarias\logicas\MenorIgual.java
-C:\Users\zabal\Desktop\Facultad\5to año\compiladores\compilador_unnoba_2023\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\ast_expresiones_binarias\logicas\Mayor.java
-C:\Users\zabal\Desktop\Facultad\5to año\compiladores\compilador_unnoba_2023\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\Compilador_unnoba_2023.java
-C:\Users\zabal\Desktop\Facultad\5to año\compiladores\compilador_unnoba_2023\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\MiParserSym.java
-C:\Users\zabal\Desktop\Facultad\5to año\compiladores\compilador_unnoba_2023\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\ast_expresiones_binarias\Impresion.java
-C:\Users\zabal\Desktop\Facultad\5to año\compiladores\compilador_unnoba_2023\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\ast_expresiones_binarias\logicas\Or.java
-C:\Users\zabal\Desktop\Facultad\5to año\compiladores\compilador_unnoba_2023\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\ast_expresiones_binarias\Multiplicacion.java
-C:\Users\zabal\Desktop\Facultad\5to año\compiladores\compilador_unnoba_2023\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\MiParser.java
-C:\Users\zabal\Desktop\Facultad\5to año\compiladores\compilador_unnoba_2023\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\MiLexicoCup.java
-C:\Users\zabal\Desktop\Facultad\5to año\compiladores\compilador_unnoba_2023\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\ast_base\Tipo.java
-C:\Users\zabal\Desktop\Facultad\5to año\compiladores\compilador_unnoba_2023\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\ast_expresiones_binarias\logicas\And.java
-C:\Users\zabal\Desktop\Facultad\5to año\compiladores\compilador_unnoba_2023\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\ast_expresiones_binarias\Resta.java
-C:\Users\zabal\Desktop\Facultad\5to año\compiladores\compilador_unnoba_2023\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\ast_base\Programa.java
-C:\Users\zabal\Desktop\Facultad\5to año\compiladores\compilador_unnoba_2023\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\ast_expresiones_binarias\logicas\Igualdad.java
-C:\Users\zabal\Desktop\Facultad\5to año\compiladores\compilador_unnoba_2023\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\ast_expresiones_binarias\OperacionBinaria.java
-C:\Users\zabal\Desktop\Facultad\5to año\compiladores\compilador_unnoba_2023\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\ast_expresiones_binarias\logicas\MayorIgual.java
-C:\Users\zabal\Desktop\Facultad\5to año\compiladores\compilador_unnoba_2023\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\exceptions\VarNotDeclaredTSException.java
-C:\Users\zabal\Desktop\Facultad\5to año\compiladores\compilador_unnoba_2023\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\ast_expresiones_binarias\logicas\Desigualdad.java
-C:\Users\zabal\Desktop\Facultad\5to año\compiladores\compilador_unnoba_2023\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\ast_expresiones_binarias\Suma.java
-C:\Users\zabal\Desktop\Facultad\5to año\compiladores\compilador_unnoba_2023\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\ast_expresiones\Input.java
-C:\Users\zabal\Desktop\Facultad\5to año\compiladores\compilador_unnoba_2023\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\ast_expresiones_binarias\Nodo.java
-C:\Users\zabal\Desktop\Facultad\5to año\compiladores\compilador_unnoba_2023\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\exceptions\VarAlreadyExistTSException.java
-C:\Users\zabal\Desktop\Facultad\5to año\compiladores\compilador_unnoba_2023\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\FrmPrincipal.java
-C:\Users\zabal\Desktop\Facultad\5to año\compiladores\compilador_unnoba_2023\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\FrmAyuda.java
-C:\Users\zabal\Desktop\Facultad\5to año\compiladores\compilador_unnoba_2023\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\ast_expresiones_binarias\Constante.java
-C:\Users\zabal\Desktop\Facultad\5to año\compiladores\compilador_unnoba_2023\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\MiToken.java
-C:\Users\zabal\Desktop\Facultad\5to año\compiladores\compilador_unnoba_2023\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\ast_expresiones\Identificador.java
-C:\Users\zabal\Desktop\Facultad\5to año\compiladores\compilador_unnoba_2023\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\ast_expresiones_binarias\Expresion.java
-C:\Users\zabal\Desktop\Facultad\5to año\compiladores\compilador_unnoba_2023\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\ast_expresiones\Expresion.java
-C:\Users\zabal\Desktop\Facultad\5to año\compiladores\compilador_unnoba_2023\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\exceptions\VarForNotEqualException.java
+D:\Facultad\5to año\1 cuatrimestre\proyecto en git\compilador\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\ast\Programa.java
+D:\Facultad\5to año\1 cuatrimestre\proyecto en git\compilador\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\sentencias\SentenciaIf.java
+D:\Facultad\5to año\1 cuatrimestre\proyecto en git\compilador\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\FrmPrincipal.java
+D:\Facultad\5to año\1 cuatrimestre\proyecto en git\compilador\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\ast\CodeGeneratorHelper.java
+D:\Facultad\5to año\1 cuatrimestre\proyecto en git\compilador\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\ast_expresiones_binarias\ConstanteBORRAR.java
+D:\Facultad\5to año\1 cuatrimestre\proyecto en git\compilador\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\ast_expresiones_unarias\GuionBajo.java
+D:\Facultad\5to año\1 cuatrimestre\proyecto en git\compilador\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\ast_expresiones_binarias\Nodo.java
+D:\Facultad\5to año\1 cuatrimestre\proyecto en git\compilador\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\ast_expresiones_binarias\OperacionBinaria.java
+D:\Facultad\5to año\1 cuatrimestre\proyecto en git\compilador\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\ast_expresiones\Identificador.java
+D:\Facultad\5to año\1 cuatrimestre\proyecto en git\compilador\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\MiLexicoCup.java
+D:\Facultad\5to año\1 cuatrimestre\proyecto en git\compilador\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\sentencias\Continue.java
+D:\Facultad\5to año\1 cuatrimestre\proyecto en git\compilador\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\ast_expresiones_binarias\logicas\And.java
+D:\Facultad\5to año\1 cuatrimestre\proyecto en git\compilador\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\ast_expresiones_unarias\NegacionLogica.java
+D:\Facultad\5to año\1 cuatrimestre\proyecto en git\compilador\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\MiToken.java
+D:\Facultad\5to año\1 cuatrimestre\proyecto en git\compilador\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\MiParser.java
+D:\Facultad\5to año\1 cuatrimestre\proyecto en git\compilador\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\ast_expresiones_binarias\Resta.java
+D:\Facultad\5to año\1 cuatrimestre\proyecto en git\compilador\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\exceptions\VarForNotEqualException.java
+D:\Facultad\5to año\1 cuatrimestre\proyecto en git\compilador\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\factor\Constante.java
+D:\Facultad\5to año\1 cuatrimestre\proyecto en git\compilador\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\sentencias\SentenciaFor.java
+D:\Facultad\5to año\1 cuatrimestre\proyecto en git\compilador\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\Compilador_unnoba_2023.java
+D:\Facultad\5to año\1 cuatrimestre\proyecto en git\compilador\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\MiParserSym.java
+D:\Facultad\5to año\1 cuatrimestre\proyecto en git\compilador\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\factor\Entero.java
+D:\Facultad\5to año\1 cuatrimestre\proyecto en git\compilador\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\ast\BloqueDeclaracion.java
+D:\Facultad\5to año\1 cuatrimestre\proyecto en git\compilador\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\ast_expresiones_binarias\logicas\Igualdad.java
+D:\Facultad\5to año\1 cuatrimestre\proyecto en git\compilador\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\factor\EnteroAFlotante.java
+D:\Facultad\5to año\1 cuatrimestre\proyecto en git\compilador\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\sentencias\Break.java
+D:\Facultad\5to año\1 cuatrimestre\proyecto en git\compilador\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\ast_expresiones_binarias\Suma.java
+D:\Facultad\5to año\1 cuatrimestre\proyecto en git\compilador\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\factor\StringLiteral.java
+D:\Facultad\5to año\1 cuatrimestre\proyecto en git\compilador\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\ast_expresiones\Input.java
+D:\Facultad\5to año\1 cuatrimestre\proyecto en git\compilador\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\ast_expresiones_binarias\logicas\Or.java
+D:\Facultad\5to año\1 cuatrimestre\proyecto en git\compilador\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\MiLexico.java
+D:\Facultad\5to año\1 cuatrimestre\proyecto en git\compilador\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\sentencias\Asignacion.java
+D:\Facultad\5to año\1 cuatrimestre\proyecto en git\compilador\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\ast_expresiones_binarias\Expresion.java
+D:\Facultad\5to año\1 cuatrimestre\proyecto en git\compilador\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\ast_expresiones_binarias\logicas\Menor.java
+D:\Facultad\5to año\1 cuatrimestre\proyecto en git\compilador\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\ast\Tipo.java
+D:\Facultad\5to año\1 cuatrimestre\proyecto en git\compilador\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\ast\BloqueSentencia.java
+D:\Facultad\5to año\1 cuatrimestre\proyecto en git\compilador\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\sentencias\Declaracion.java
+D:\Facultad\5to año\1 cuatrimestre\proyecto en git\compilador\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\ast_expresiones_binarias\logicas\Mayor.java
+D:\Facultad\5to año\1 cuatrimestre\proyecto en git\compilador\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\sentencias\Sentencia.java
+D:\Facultad\5to año\1 cuatrimestre\proyecto en git\compilador\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\FrmAyuda.java
+D:\Facultad\5to año\1 cuatrimestre\proyecto en git\compilador\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\ast_expresiones_binarias\logicas\MenorIgual.java
+D:\Facultad\5to año\1 cuatrimestre\proyecto en git\compilador\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\factor\Booleano.java
+D:\Facultad\5to año\1 cuatrimestre\proyecto en git\compilador\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\factor\Literal.java
+D:\Facultad\5to año\1 cuatrimestre\proyecto en git\compilador\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\ast_expresiones_binarias\logicas\MayorIgual.java
+D:\Facultad\5to año\1 cuatrimestre\proyecto en git\compilador\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\factor\Flotante.java
+D:\Facultad\5to año\1 cuatrimestre\proyecto en git\compilador\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\ast_expresiones_unarias\IncrementoDecrementoFor.java
+D:\Facultad\5to año\1 cuatrimestre\proyecto en git\compilador\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\ast_expresiones_binarias\logicas\Desigualdad.java
+D:\Facultad\5to año\1 cuatrimestre\proyecto en git\compilador\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\sentencias\SentenciaElif.java
+D:\Facultad\5to año\1 cuatrimestre\proyecto en git\compilador\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\exceptions\VarAlreadyExistTSException.java
+D:\Facultad\5to año\1 cuatrimestre\proyecto en git\compilador\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\ast_expresiones_binarias\Division.java
+D:\Facultad\5to año\1 cuatrimestre\proyecto en git\compilador\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\ast_expresiones_unarias\OperacionUnaria.java
+D:\Facultad\5to año\1 cuatrimestre\proyecto en git\compilador\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\ast_expresiones_unarias\NegacionAritmetica.java
+D:\Facultad\5to año\1 cuatrimestre\proyecto en git\compilador\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\ast_expresiones_binarias\Multiplicacion.java
+D:\Facultad\5to año\1 cuatrimestre\proyecto en git\compilador\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\exceptions\VarNotDeclaredTSException.java
+D:\Facultad\5to año\1 cuatrimestre\proyecto en git\compilador\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\sentencias\Display.java
+D:\Facultad\5to año\1 cuatrimestre\proyecto en git\compilador\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\ast_expresiones_binarias\Impresion.java

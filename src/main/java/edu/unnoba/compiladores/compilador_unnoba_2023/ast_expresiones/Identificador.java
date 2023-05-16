@@ -1,7 +1,8 @@
 package edu.unnoba.compiladores.compilador_unnoba_2023.ast_expresiones;
 
+import edu.unnoba.compiladores.compilador_unnoba_2023.ast.CodeGeneratorHelper;
 import edu.unnoba.compiladores.compilador_unnoba_2023.ast.Tipo;
-import edu.unnoba.compiladores.compilador_unnoba_2023.ast_expresiones_binarias.Constante;
+import edu.unnoba.compiladores.compilador_unnoba_2023.factor.Constante;
 
 
 
@@ -13,8 +14,10 @@ public class Identificador extends Constante {
     
     private String nombreVar = "ID";
 
-    public Identificador(Object valor, Tipo tipo) {
-        super(valor, tipo);
+    public Identificador(String nombre, Tipo tipo) {
+        setTipo(tipo);
+        setNombre(nombre);
+        this.setIdVar(CodeGeneratorHelper.getNewPointer());
     }
 
     public String getNombreVar() {
@@ -23,6 +26,20 @@ public class Identificador extends Constante {
 
     public void setNombreVar(String nombreVar) {
         this.nombreVar = nombreVar;
+    }
+    
+    @Override
+    public String getEtiqueta() {
+        return String.format("%s\\n<%s>", super.getNombre(), getTipo().toString());
+    }
+    
+    @Override
+    public String graficar(String idPadre){
+        StringBuilder grafico = new StringBuilder();
+        grafico.append(String.format("%1$s[label=\"%2$s : %3$s\"]\n", this.getId(), this.nombreVar, this.getEtiqueta()));
+        if(idPadre != null)
+            grafico.append(String.format("%1$s--%2$s\n", idPadre, this.getId()));
+        return grafico.toString();
     }
 
 }

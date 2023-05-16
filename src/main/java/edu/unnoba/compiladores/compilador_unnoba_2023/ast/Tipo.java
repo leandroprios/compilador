@@ -22,4 +22,17 @@ public enum Tipo {
         }
         return Tipo.UNKNOWN;
     }
+    
+    public static String toString(Tipo tipo) {
+        
+        switch (tipo){
+            case BOOLEAN:
+                return "BOOLEAN";
+            case INTEGER:
+                return "INTEGER";
+            case FLOAT :
+                return "FLOAT";
+        }
+        return "UNKNOWN";
+    }
 }

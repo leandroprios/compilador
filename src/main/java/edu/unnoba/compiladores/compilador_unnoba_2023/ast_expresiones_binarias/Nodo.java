@@ -3,7 +3,7 @@ package edu.unnoba.compiladores.compilador_unnoba_2023.ast_expresiones_binarias;
 import edu.unnoba.compiladores.compilador_unnoba_2023.ast.Tipo;
 
 public abstract class  Nodo {
-private String nombre;
+    private String nombre;
     private String idVar;
     private Tipo tipo;
 

@@ -5,6 +5,7 @@
 package edu.unnoba.compiladores.compilador_unnoba_2023.sentencias;
 
 import edu.unnoba.compiladores.compilador_unnoba_2023.ast.CodeGeneratorHelper;
+import edu.unnoba.compiladores.compilador_unnoba_2023.ast_expresiones_binarias.Expresion;
 import edu.unnoba.compiladores.compilador_unnoba_2023.ast_expresiones_binarias.OperacionBinaria;
 import edu.unnoba.compiladores.compilador_unnoba_2023.ast_expresiones_unarias.IncrementoDecrementoFor;
 import java.util.ArrayList;
@@ -14,12 +15,12 @@ import java.util.ArrayList;
  * @author julianzabala
  */
 public class SentenciaFor extends Sentencia{
-    OperacionBinaria operacion;
+    Expresion operacion;
     Asignacion asignacion;
     IncrementoDecrementoFor expresionFor;
     ArrayList<Sentencia> sentencias;
     
-    public SentenciaFor(OperacionBinaria operacion, Asignacion asignacion, IncrementoDecrementoFor expresionFor, ArrayList<Sentencia> sentencias){
+    public SentenciaFor(Expresion operacion, Asignacion asignacion, IncrementoDecrementoFor expresionFor, ArrayList<Sentencia> sentencias){
         setNombre("FOR");
         this.operacion = operacion;
         this.asignacion = asignacion;
