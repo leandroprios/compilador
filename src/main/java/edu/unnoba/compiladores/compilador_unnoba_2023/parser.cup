@@ -151,7 +151,7 @@ declaraciones ::= declaracion:dec declaraciones:decs{:
         produccionesRecorridas.add("declaraciones -> declaracion");
         ArrayList<ArrayList<Declaracion>> declaracionesRegla = new ArrayList<ArrayList<Declaracion>>();
         declaracionesRegla.add(dec);
-        RESULT declaracionesRegla;
+        RESULT = declaracionesRegla;
         
 :};
 
@@ -225,14 +225,14 @@ bloque_programa ::= PROGRAM_SECTION bloque_sentencias:bs END_PROGRAM_SECTION{:
 bloque_sentencias ::= bloque_sentencias:bs sentencia:s {:
             produccionesRecorridas.add("bloque_sentencias -> bloque_sentencias:bs sentencia");
             bs.add(s);
-            RESULT bs;
+            RESULT = bs;
        :}
        |
        sentencia:s {:
             produccionesRecorridas.add("bloque_sentencias -> sentencia");
             ArrayList<Sentencia> sentencias = new ArrayList<>();
             sentencias.add(s);
-            RESULT sentencias;
+            RESULT  = sentencias;
 :};
 
 
@@ -459,7 +459,7 @@ comparacion ::= expresion_sr :esr1 OPERADOR_MAYOR expresion_sr: esr2{:
        |
        expresion_sr :esr{:
             produccionesRecorridas.add("comparacion -> expresion_sr");
-            RESULT esr;
+            RESULT = esr;
 :};
 
 
@@ -507,7 +507,7 @@ expresion_sr ::= expresion_sr :esr OPERADOR_SUMA expresion_md: emd{:
        |
        expresion_md :emd{:
             produccionesRecorridas.add("expresion_sr -> expresion_md");
-            RESULT emd;
+            RESULT = emd;
 :};
 
 
@@ -555,7 +555,7 @@ expresion_md ::= expresion_md :emd OPERADOR_MULTI menos_unario:mu{:
     |
     menos_unario:mu{:
         produccionesRecorridas.add("expresion_md -> menos_unario");
-        RESULT mu;
+        RESULT = mu;
     :};
 
 menos_unario ::= OPERADOR_RESTA menos_unario:mu{:

@@ -691,7 +691,7 @@ class CUP$MiParser$actions {
         produccionesRecorridas.add("declaraciones -> declaracion");
         ArrayList<ArrayList<Declaracion>> declaracionesRegla = new ArrayList<ArrayList<Declaracion>>();
         declaracionesRegla.add(dec);
-        RESULT declaracionesRegla;
+        RESULT = declaracionesRegla;
         
 
               CUP$MiParser$result = parser.getSymbolFactory().newSymbol("declaraciones",1, ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()), RESULT);
@@ -842,7 +842,7 @@ class CUP$MiParser$actions {
 		
             produccionesRecorridas.add("bloque_sentencias -> bloque_sentencias:bs sentencia");
             bs.add(s);
-            RESULT bs;
+            RESULT = bs;
        
               CUP$MiParser$result = parser.getSymbolFactory().newSymbol("bloque_sentencias",5, ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-1)), ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()), RESULT);
             }
@@ -859,7 +859,7 @@ class CUP$MiParser$actions {
             produccionesRecorridas.add("bloque_sentencias -> sentencia");
             ArrayList<Sentencia> sentencias = new ArrayList<>();
             sentencias.add(s);
-            RESULT sentencias;
+            RESULT  = sentencias;
 
               CUP$MiParser$result = parser.getSymbolFactory().newSymbol("bloque_sentencias",5, ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()), RESULT);
             }
@@ -1320,7 +1320,7 @@ class CUP$MiParser$actions {
 		Expresion esr = (Expresion)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
 		
             produccionesRecorridas.add("comparacion -> expresion_sr");
-            RESULT esr;
+            RESULT = esr;
 
               CUP$MiParser$result = parser.getSymbolFactory().newSymbol("comparacion",15, ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()), RESULT);
             }
@@ -1403,7 +1403,7 @@ class CUP$MiParser$actions {
 		Expresion emd = (Expresion)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
 		
             produccionesRecorridas.add("expresion_sr -> expresion_md");
-            RESULT emd;
+            RESULT = emd;
 
               CUP$MiParser$result = parser.getSymbolFactory().newSymbol("expresion_sr",16, ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()), RESULT);
             }
@@ -1486,7 +1486,7 @@ class CUP$MiParser$actions {
 		Expresion mu = (Expresion)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
 		
         produccionesRecorridas.add("expresion_md -> menos_unario");
-        RESULT mu;
+        RESULT = mu;
     
               CUP$MiParser$result = parser.getSymbolFactory().newSymbol("expresion_md",17, ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()), RESULT);
             }
