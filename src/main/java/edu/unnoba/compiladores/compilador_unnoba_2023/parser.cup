@@ -26,6 +26,10 @@ action code {:
 parser code
 {:
 
+    Boolean is_asignacion_filter = false;
+
+    Tipo tipo_filter_validate_aux;
+
     List<String> produccionesRecorridas = new ArrayList<>();
     
     Boolean isAsignacion = false;
@@ -158,6 +162,7 @@ declaraciones ::= declaracion:dec declaraciones:decs{:
 lista_var::= lista_var:l_v COMA VAR:id{:
         produccionesRecorridas.add("lista_var -> lista_var COMA VAR");
         l_v.add(id);
+
         RESULT = l_v;
     :}
     |
@@ -165,6 +170,7 @@ lista_var::= lista_var:l_v COMA VAR:id{:
         produccionesRecorridas.add("lista_var -> VAR");
         ArrayList<String> ident = new ArrayList<String>();
         ident.add(id);
+        tipo_filter_validate_aux = ht.get(id);
         RESULT = ident;
 :};
 
@@ -268,6 +274,7 @@ sentencia ::= sentencia_for: sf{:
 
 
 sentencia_asignacion ::= VAR:id ASIGNACION {:
+
     isAsignacion= true;
     idAsignacion = id;
     :} expresion_or: eo {:
@@ -278,6 +285,7 @@ sentencia_asignacion ::= VAR:id ASIGNACION {:
             throw new VarNotDeclaredTSException("La variable "+(String) id+" no está declarada previamente.");
         }
         Tipo tipoId = ht.get(id);
+        is_asignacion_filter = true;
         RESULT = new Asignacion(new Identificador(id, tipoId),eo);
 :};
 
@@ -642,6 +650,20 @@ filter::= FILTER PARENTESIS_ABRE expresion_or:e_o COMA CORCHETE_ABRE lista_var:l
             }
         }
     }*/
+
+    
+    if(is_asignacion_filter){
+        
+        if(tipo_filter_validate_aux.equals(Tipo.BOOLEAN)){
+            if(!e_o.getTipo().equals(tipo_filter_validate_aux)){
+                throw new Exception("Un tipo de dato de la lista de var del FILTER no conicide");
+            } 
+        }
+        
+
+    }
+
+    
 
     SentenciaIf sentenciaIf;
     ArrayList<SentenciaElif> sentenciasELIF = new ArrayList<SentenciaElif>();

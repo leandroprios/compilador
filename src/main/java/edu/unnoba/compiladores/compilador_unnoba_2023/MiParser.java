@@ -511,6 +511,9 @@ public class MiParser extends java_cup.runtime.lr_parser {
 
 
 
+    Tipo tipo_filter_validate_aux;
+    
+
     List<String> produccionesRecorridas = new ArrayList<>();
     
     Boolean isAsignacion = false;
@@ -711,6 +714,7 @@ class CUP$MiParser$actions {
 		
         produccionesRecorridas.add("lista_var -> lista_var COMA VAR");
         l_v.add(id);
+
         RESULT = l_v;
     
               CUP$MiParser$result = parser.getSymbolFactory().newSymbol("lista_var",27, ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-2)), ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()), RESULT);
@@ -728,6 +732,7 @@ class CUP$MiParser$actions {
         produccionesRecorridas.add("lista_var -> VAR");
         ArrayList<String> ident = new ArrayList<String>();
         ident.add(id);
+        tipo_filter_validate_aux = ht.get(id);
         RESULT = ident;
 
               CUP$MiParser$result = parser.getSymbolFactory().newSymbol("lista_var",27, ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()), RESULT);
