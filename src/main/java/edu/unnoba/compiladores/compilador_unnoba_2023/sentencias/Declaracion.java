@@ -40,4 +40,12 @@ public class Declaracion extends Sentencia {
     public String getEtiqueta() {
         return getClass().getSimpleName();
     }
+
+
+    @Override
+    public String graficar(String idPadre){
+        String grafico = super.graficar(idPadre);
+        grafico += ident.graficar(getId());
+        return grafico;
+    }
 }

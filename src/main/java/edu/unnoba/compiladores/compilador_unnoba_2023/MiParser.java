@@ -511,8 +511,9 @@ public class MiParser extends java_cup.runtime.lr_parser {
 
 
 
+    Boolean is_asignacion_filter = false;
+
     Tipo tipo_filter_validate_aux;
-    
 
     List<String> produccionesRecorridas = new ArrayList<>();
     
@@ -524,6 +525,36 @@ public class MiParser extends java_cup.runtime.lr_parser {
     public List<String> getProduccionesList(){
         return this.produccionesRecorridas;
     }
+
+    public boolean validarTiposVariablesConExpresion(String var, Expresion expresion_or){
+        boolean retorno=true;
+        Tipo tipoAuxVar = ht.get(var);
+        if(expresion_or.getTipo() == Tipo.BOOLEAN &&  tipoAuxVar != Tipo.BOOLEAN){
+            retorno = false;
+        }else if((expresion_or.getTipo() == Tipo.INTEGER || expresion_or.getTipo() == Tipo.FLOAT) && tipoAuxVar == Tipo.BOOLEAN){
+            retorno = false;
+        }
+        
+        return retorno;
+    }
+    
+    public boolean validarTiposVariablesConTipoAsignacionId(String var){
+        boolean retorno = true;
+        Tipo tipoIdAsignacion = ht.get(idAsignacion);
+        
+        Tipo tipoAuxVar = ht.get(var);
+        if(tipoIdAsignacion == Tipo.BOOLEAN &&  tipoAuxVar != Tipo.BOOLEAN){
+            retorno = false;
+        }else if((tipoIdAsignacion == Tipo.INTEGER || tipoIdAsignacion == Tipo.FLOAT) && tipoAuxVar == Tipo.BOOLEAN){
+            retorno = false;
+        }else if(tipoIdAsignacion == Tipo.INTEGER && (tipoAuxVar == Tipo.BOOLEAN || tipoIdAsignacion == Tipo.FLOAT)){
+            retorno = false;
+        }
+     
+        return retorno;
+    }
+
+    
    
 
     public String printProduccionesRecorridas(List<String> misProducciones){
@@ -537,23 +568,23 @@ public class MiParser extends java_cup.runtime.lr_parser {
 
     Hashtable<String, Tipo> ht = new Hashtable<String, Tipo>();
 
-    public Hashtable getSymbolTable(){
+    public Hashtable<String, Tipo> getSymbolTable(){
         return this.ht;
     }
 
-    public void printHt(Hashtable ht){
+    public void printHt(Hashtable<String, Tipo> ht){
         ht.forEach((k, v) -> {
-            System.out.println("Tabla de simbolos: " + k.toString() + " " + v.toString());
+            System.out.println("Tabla de simbolos: " + k.toString() + " " + Tipo.toString(v));
         });
     }
-    public String concatHt(Hashtable ht){
+    public String concatHt(Hashtable<String, Tipo> ht){
         Iterator<String> iterator = ht.keySet().iterator();
         String concatenado = "\nTabla de simbolos:\n";
 
         while(iterator.hasNext()) {
             String clave = iterator.next();
-            String valor = (String) ht.get(clave);
-            concatenado += clave.concat(" -> ").concat(valor).concat("\n");
+            Tipo tipo = ht.get(clave);
+            concatenado += clave.concat(" -> ").concat(Tipo.toString(tipo)).concat("\n");
         }
         return concatenado;
     }
@@ -628,7 +659,7 @@ class CUP$MiParser$actions {
 		ArrayList<Sentencia> bp = (ArrayList<Sentencia>)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
 		
         produccionesRecorridas.add("programa ->");
-        new Programa(bp,bd);
+        RESULT = new Programa(bp,bd);
     
               CUP$MiParser$result = parser.getSymbolFactory().newSymbol("programa",0, ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-1)), ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()), RESULT);
             }
@@ -643,7 +674,7 @@ class CUP$MiParser$actions {
 		ArrayList<Sentencia> bp = (ArrayList<Sentencia>)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
 		
         produccionesRecorridas.add("programa ->");
-        new Programa(bp);
+        RESULT = new Programa(bp);
 
               CUP$MiParser$result = parser.getSymbolFactory().newSymbol("programa",0, ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()), RESULT);
             }
@@ -968,6 +999,7 @@ class CUP$MiParser$actions {
 		int idright = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-1)).right;
 		String id = (String)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-1)).value;
 
+
     isAsignacion= true;
     idAsignacion = id;
     
@@ -995,6 +1027,7 @@ class CUP$MiParser$actions {
             throw new VarNotDeclaredTSException("La variable "+(String) id+" no está declarada previamente.");
         }
         Tipo tipoId = ht.get(id);
+        is_asignacion_filter = true;
         RESULT = new Asignacion(new Identificador(id, tipoId),eo);
 
               CUP$MiParser$result = parser.getSymbolFactory().newSymbol("sentencia_asignacion",9, ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-3)), ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()), RESULT);
@@ -1274,6 +1307,9 @@ class CUP$MiParser$actions {
             else if(esr1.getTipo() == Tipo.FLOAT && esr2.getTipo() == Tipo.FLOAT){
                 RESULT = new Igualdad(esr1,esr2);
             }
+            else if(esr1.getTipo() == Tipo.BOOLEAN && esr2.getTipo() == Tipo.BOOLEAN){
+                RESULT = new Igualdad(esr1,esr2);
+            }
             else{
                 throw new Exception("La variable de tipo " + esr1.getTipo().toString() + " no puede compararse con el operador == con una variable del tipo " + esr2.getTipo().toString());
             }
@@ -1307,6 +1343,9 @@ class CUP$MiParser$actions {
             }
             else if(esr1.getTipo() == Tipo.FLOAT && esr2.getTipo() == Tipo.FLOAT){
                 RESULT = new Desigualdad(esr1,esr2);
+            }
+            else if(esr1.getTipo() == Tipo.BOOLEAN && esr2.getTipo() == Tipo.BOOLEAN){
+                RESULT = new Igualdad(esr1,esr2);
             }
             else{
                 throw new Exception("La variable de tipo " + esr1.getTipo().toString() + " no puede compararse con el operador != con una variable del tipo " + esr2.getTipo().toString());
@@ -1699,16 +1738,6 @@ class CUP$MiParser$actions {
 		int l_vright = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-2)).right;
 		ArrayList<String> l_v = (ArrayList<String>)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-2)).value;
 		
-    //validarTiposVariablesConExpresion() ---  validar que todos los tipos de l_V y la expresion sean validos, ej filter (_ != TRUE; [1,2,3]) NO DEBERIA PODER OPERAR.
-    
-    /*if (validarTiposVariablesConExpresion(e_o, l_v)){
-        if(isAsignacion==true){
-            if(!validarTiposVariablesConTipoAsignacionId(l_v,idAsignacion)){
-                //error
-            }
-        }
-    }*/
-
     SentenciaIf sentenciaIf;
     ArrayList<SentenciaElif> sentenciasELIF = new ArrayList<SentenciaElif>();
     ArrayList<Sentencia> sentenciasDentroIF = new ArrayList<>();
@@ -1720,28 +1749,38 @@ class CUP$MiParser$actions {
 
     
     for(int j =0; j < l_v.size(); j++){
-        String i = l_v.get(j);
-        if(!ht.containsKey(i)){
-            throw new VarNotDeclaredTSException("La variable "+i+" no esta declarada previamente\n");
-        }
-        else{
-            ArrayList<Sentencia> sentenciasDentroELIF = new ArrayList<>();
-            Tipo tipoId = ht.get(i);
-            
-            if(j==0){
+        String auxVar = l_v.get(j);
+        if(!ht.containsKey(auxVar)){
+            throw new VarNotDeclaredTSException("La variable " + auxVar + " no esta declarada previamente\n");
+        }else{
+            Tipo tipoAuxVar = ht.get(auxVar);
+            if(!validarTiposVariablesConExpresion(auxVar,e_o)){
                 if(isAsignacion==true){
-                    Asignacion asignacion = new Asignacion(new Identificador(i, tipoId), e_o); //sentencia dentro del if
+                    if(!validarTiposVariablesConTipoAsignacionId(auxVar)){
+                        Tipo tipoIdAsignacion = ht.get(idAsignacion);
+                        throw new VarTypeNotCompatibleWithVarListTypes("El Tipo " + Tipo.toString(tipoAuxVar) +  " de la variable "+ auxVar +" no coincide con el Tipo " + tipoIdAsignacion + " de la Asignacion con la variable " + idAsignacion + " \n");
+                    }
+                }
+            }else{
+                throw new VarTypeNotEqualWithVarListTypes("El Tipo " + Tipo.toString(tipoAuxVar) +  " de la variable "+ auxVar +" no coincide con el Tipo " + e_o.getTipo() + " de la Expresion \n");
+            }
+
+            ArrayList<Sentencia> sentenciasDentroELIF = new ArrayList<>();
+            
+            if(j==0){ //si es la primera variable de la lista de variables 
+                if(isAsignacion==true){
+                    Asignacion asignacion = new Asignacion(new Identificador(auxVar, tipoAuxVar), e_o); //agrego la asignacion dentro del IF sentencia dentro del IF
                     sentenciasDentroIF.add(asignacion);
                 }
-            }else if(j == l_v.size()-1){
+            }else if(j == l_v.size()-1){ //si es la ultima variable de la lista 
                 if(isAsignacion==true){
-                    Asignacion asignacion = new Asignacion(new Identificador(i, tipoId), e_o); //sentencia dentro del if
-                    sentenciasDentroELSE.add(asignacion);
+                    Asignacion asignacion = new Asignacion(new Identificador(auxVar, tipoAuxVar), e_o); //agrego la sentencia dentro del ultimo ELSE
+                    sentenciasDentroELSE.add(asignacion); 
                 }
                 
             }else{
                 if(isAsignacion==true){
-                    Asignacion asignacion = new Asignacion(new Identificador(i, tipoId), e_o); //sentencia dentro del if
+                    Asignacion asignacion = new Asignacion(new Identificador(auxVar, tipoAuxVar), e_o); //agrego la sentencia dentro del  ELIF
                     sentenciasDentroELIF.add(asignacion);
                 }
                 sentenciasELIF.add(new SentenciaElif(sentenciasDentroELIF, e_o));

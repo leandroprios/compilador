@@ -40,6 +40,36 @@ parser code
     public List<String> getProduccionesList(){
         return this.produccionesRecorridas;
     }
+
+    public boolean validarTiposVariablesConExpresion(String var, Expresion expresion_or){
+        boolean retorno=true;
+        Tipo tipoAuxVar = ht.get(var);
+        if(expresion_or.getTipo() == Tipo.BOOLEAN &&  tipoAuxVar != Tipo.BOOLEAN){
+            retorno = false;
+        }else if((expresion_or.getTipo() == Tipo.INTEGER || expresion_or.getTipo() == Tipo.FLOAT) && tipoAuxVar == Tipo.BOOLEAN){
+            retorno = false;
+        }
+        
+        return retorno;
+    }
+    
+    public boolean validarTiposVariablesConTipoAsignacionId(String var){
+        boolean retorno = true;
+        Tipo tipoIdAsignacion = ht.get(idAsignacion);
+        
+        Tipo tipoAuxVar = ht.get(var);
+        if(tipoIdAsignacion == Tipo.BOOLEAN &&  tipoAuxVar != Tipo.BOOLEAN){
+            retorno = false;
+        }else if((tipoIdAsignacion == Tipo.INTEGER || tipoIdAsignacion == Tipo.FLOAT) && tipoAuxVar == Tipo.BOOLEAN){
+            retorno = false;
+        }else if(tipoIdAsignacion == Tipo.INTEGER && (tipoAuxVar == Tipo.BOOLEAN || tipoIdAsignacion == Tipo.FLOAT)){
+            retorno = false;
+        }
+     
+        return retorno;
+    }
+
+    
    
 
     public String printProduccionesRecorridas(List<String> misProducciones){
@@ -53,23 +83,23 @@ parser code
 
     Hashtable<String, Tipo> ht = new Hashtable<String, Tipo>();
 
-    public Hashtable getSymbolTable(){
+    public Hashtable<String, Tipo> getSymbolTable(){
         return this.ht;
     }
 
-    public void printHt(Hashtable ht){
+    public void printHt(Hashtable<String, Tipo> ht){
         ht.forEach((k, v) -> {
-            System.out.println("Tabla de simbolos: " + k.toString() + " " + v.toString());
+            System.out.println("Tabla de simbolos: " + k.toString() + " " + Tipo.toString(v));
         });
     }
-    public String concatHt(Hashtable ht){
+    public String concatHt(Hashtable<String, Tipo> ht){
         Iterator<String> iterator = ht.keySet().iterator();
         String concatenado = "\nTabla de simbolos:\n";
 
         while(iterator.hasNext()) {
             String clave = iterator.next();
-            String valor = (String) ht.get(clave);
-            concatenado += clave.concat(" -> ").concat(valor).concat("\n");
+            Tipo tipo = ht.get(clave);
+            concatenado += clave.concat(" -> ").concat(Tipo.toString(tipo)).concat("\n");
         }
         return concatenado;
     }
@@ -130,12 +160,12 @@ start with programa;
 
 programa ::= bloque_declaraciones:bd bloque_programa: bp{:
         produccionesRecorridas.add("programa ->");
-        new Programa(bp,bd);
+        RESULT = new Programa(bp,bd);
     :}
     |
    bloque_programa: bp{:
         produccionesRecorridas.add("programa ->");
-        new Programa(bp);
+        RESULT = new Programa(bp);
 :};
 
 
@@ -439,6 +469,9 @@ comparacion ::= expresion_sr :esr1 OPERADOR_MAYOR expresion_sr: esr2{:
             else if(esr1.getTipo() == Tipo.FLOAT && esr2.getTipo() == Tipo.FLOAT){
                 RESULT = new Igualdad(esr1,esr2);
             }
+            else if(esr1.getTipo() == Tipo.BOOLEAN && esr2.getTipo() == Tipo.BOOLEAN){
+                RESULT = new Igualdad(esr1,esr2);
+            }
             else{
                 throw new Exception("La variable de tipo " + esr1.getTipo().toString() + " no puede compararse con el operador == con una variable del tipo " + esr2.getTipo().toString());
             }
@@ -459,6 +492,9 @@ comparacion ::= expresion_sr :esr1 OPERADOR_MAYOR expresion_sr: esr2{:
             }
             else if(esr1.getTipo() == Tipo.FLOAT && esr2.getTipo() == Tipo.FLOAT){
                 RESULT = new Desigualdad(esr1,esr2);
+            }
+            else if(esr1.getTipo() == Tipo.BOOLEAN && esr2.getTipo() == Tipo.BOOLEAN){
+                RESULT = new Igualdad(esr1,esr2);
             }
             else{
                 throw new Exception("La variable de tipo " + esr1.getTipo().toString() + " no puede compararse con el operador != con una variable del tipo " + esr2.getTipo().toString());
@@ -641,30 +677,6 @@ constante::= CONST_BOOL:bl{:
 
 
 filter::= FILTER PARENTESIS_ABRE expresion_or:e_o COMA CORCHETE_ABRE lista_var:l_v CORCHETE_CIERRA  PARENTESIS_CIERRA {:
-    //validarTiposVariablesConExpresion() ---  validar que todos los tipos de l_V y la expresion sean validos, ej filter (_ != TRUE; [1,2,3]) NO DEBERIA PODER OPERAR.
-    
-    /*if (validarTiposVariablesConExpresion(e_o, l_v)){
-        if(isAsignacion==true){
-            if(!validarTiposVariablesConTipoAsignacionId(l_v,idAsignacion)){
-                //error
-            }
-        }
-    }*/
-
-    
-    if(is_asignacion_filter){
-        
-        if(tipo_filter_validate_aux.equals(Tipo.BOOLEAN)){
-            if(!e_o.getTipo().equals(tipo_filter_validate_aux)){
-                throw new Exception("Un tipo de dato de la lista de var del FILTER no conicide");
-            } 
-        }
-        
-
-    }
-
-    
-
     SentenciaIf sentenciaIf;
     ArrayList<SentenciaElif> sentenciasELIF = new ArrayList<SentenciaElif>();
     ArrayList<Sentencia> sentenciasDentroIF = new ArrayList<>();
@@ -676,28 +688,38 @@ filter::= FILTER PARENTESIS_ABRE expresion_or:e_o COMA CORCHETE_ABRE lista_var:l
 
     
     for(int j =0; j < l_v.size(); j++){
-        String i = l_v.get(j);
-        if(!ht.containsKey(i)){
-            throw new VarNotDeclaredTSException("La variable "+i+" no esta declarada previamente\n");
-        }
-        else{
-            ArrayList<Sentencia> sentenciasDentroELIF = new ArrayList<>();
-            Tipo tipoId = ht.get(i);
-            
-            if(j==0){
+        String auxVar = l_v.get(j);
+        if(!ht.containsKey(auxVar)){
+            throw new VarNotDeclaredTSException("La variable " + auxVar + " no esta declarada previamente\n");
+        }else{
+            Tipo tipoAuxVar = ht.get(auxVar);
+            if(!validarTiposVariablesConExpresion(auxVar,e_o)){
                 if(isAsignacion==true){
-                    Asignacion asignacion = new Asignacion(new Identificador(i, tipoId), e_o); //sentencia dentro del if
+                    if(!validarTiposVariablesConTipoAsignacionId(auxVar)){
+                        Tipo tipoIdAsignacion = ht.get(idAsignacion);
+                        throw new VarTypeNotCompatibleWithVarListTypes("El Tipo " + Tipo.toString(tipoAuxVar) +  " de la variable "+ auxVar +" no coincide con el Tipo " + tipoIdAsignacion + " de la Asignacion con la variable " + idAsignacion + " \n");
+                    }
+                }
+            }else{
+                throw new VarTypeNotEqualWithVarListTypes("El Tipo " + Tipo.toString(tipoAuxVar) +  " de la variable "+ auxVar +" no coincide con el Tipo " + e_o.getTipo() + " de la Expresion \n");
+            }
+
+            ArrayList<Sentencia> sentenciasDentroELIF = new ArrayList<>();
+            
+            if(j==0){ //si es la primera variable de la lista de variables 
+                if(isAsignacion==true){
+                    Asignacion asignacion = new Asignacion(new Identificador(auxVar, tipoAuxVar), e_o); //agrego la asignacion dentro del IF sentencia dentro del IF
                     sentenciasDentroIF.add(asignacion);
                 }
-            }else if(j == l_v.size()-1){
+            }else if(j == l_v.size()-1){ //si es la ultima variable de la lista 
                 if(isAsignacion==true){
-                    Asignacion asignacion = new Asignacion(new Identificador(i, tipoId), e_o); //sentencia dentro del if
-                    sentenciasDentroELSE.add(asignacion);
+                    Asignacion asignacion = new Asignacion(new Identificador(auxVar, tipoAuxVar), e_o); //agrego la sentencia dentro del ultimo ELSE
+                    sentenciasDentroELSE.add(asignacion); 
                 }
                 
             }else{
                 if(isAsignacion==true){
-                    Asignacion asignacion = new Asignacion(new Identificador(i, tipoId), e_o); //sentencia dentro del if
+                    Asignacion asignacion = new Asignacion(new Identificador(auxVar, tipoAuxVar), e_o); //agrego la sentencia dentro del  ELIF
                     sentenciasDentroELIF.add(asignacion);
                 }
                 sentenciasELIF.add(new SentenciaElif(sentenciasDentroELIF, e_o));

@@ -1,0 +1,54 @@
+graph G {nodo_1233449910[label="Programa"]
+nodo_1741625459[label="Declaracion"]
+nodo_1233449910--nodo_1741625459
+nodo_2054803008[label="ID : varlogica\n<BOOLEAN>"]
+nodo_1741625459--nodo_2054803008
+nodo_344890362[label="Declaracion"]
+nodo_1233449910--nodo_344890362
+nodo_540029446[label="ID : var5\n<FLOAT>"]
+nodo_344890362--nodo_540029446
+nodo_1059302131[label="Declaracion"]
+nodo_1233449910--nodo_1059302131
+nodo_194803865[label="ID : var8\n<FLOAT>"]
+nodo_1059302131--nodo_194803865
+nodo_1798136667[label="Declaracion"]
+nodo_1233449910--nodo_1798136667
+nodo_1252842554[label="ID : var6\n<FLOAT>"]
+nodo_1798136667--nodo_1252842554
+nodo_1752859566[label="Declaracion"]
+nodo_1233449910--nodo_1752859566
+nodo_13264520[label="ID : var1\n<INTEGER>"]
+nodo_1752859566--nodo_13264520
+nodo_8256113[label="Declaracion"]
+nodo_1233449910--nodo_8256113
+nodo_748469064[label="ID : var2\n<INTEGER>"]
+nodo_8256113--nodo_748469064
+nodo_273103494[label="Declaracion"]
+nodo_1233449910--nodo_273103494
+nodo_1131077664[label="ID : var3\n<INTEGER>"]
+nodo_273103494--nodo_1131077664
+nodo_741024846[label="Declaracion"]
+nodo_1233449910--nodo_741024846
+nodo_1696898168[label="ID : var4\n<INTEGER>"]
+nodo_741024846--nodo_1696898168
+nodo_1285425488[label="="]
+nodo_1233449910--nodo_1285425488
+nodo_1482787587[label="ID : varlogica\n<BOOLEAN>"]
+nodo_1285425488--nodo_1482787587
+nodo_756927765[label="Boolean : false\n<BOOLEAN>"]
+nodo_1285425488--nodo_756927765
+nodo_1822114706[label="IF"]
+nodo_1233449910--nodo_1822114706
+nodo_1358103512[label="=="]
+nodo_1822114706--nodo_1358103512
+nodo_69116758[label="ID : varlogica\n<BOOLEAN>"]
+nodo_1358103512--nodo_69116758
+nodo_1193845669[label="Boolean : true\n<BOOLEAN>"]
+nodo_1358103512--nodo_1193845669
+nodo_1905913601[label="="]
+nodo_1822114706--nodo_1905913601
+nodo_968679209[label="ID : var1\n<INTEGER>"]
+nodo_1905913601--nodo_968679209
+nodo_1221185371[label="Integer : 21214\n<INTEGER>"]
+nodo_1905913601--nodo_1221185371
+}

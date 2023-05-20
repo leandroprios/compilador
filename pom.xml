@@ -37,6 +37,14 @@
             <artifactId>spring-boot-maven-plugin</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
+        
+        <!-- https://mvnrepository.com/artifact/guru.nidi/graphviz-java -->
+        <dependency>
+            <groupId>guru.nidi</groupId>
+            <artifactId>graphviz-java</artifactId>
+            <version>0.18.1</version>
+        </dependency>
+
     </dependencies>
     
     <build>

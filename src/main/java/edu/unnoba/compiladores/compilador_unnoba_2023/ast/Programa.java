@@ -25,22 +25,28 @@ public class Programa extends Nodo {
         this.declaraciones = declaraciones;
         this.setIdVar(CodeGeneratorHelper.getNewPointer());
     }
-    
-    @Override
-    public String graficar(String idPadre){
-        String grafico = super.graficar(idPadre);
-        for(Sentencia sentencia : sentencias){
-            grafico += sentencia.graficar(this.getId());
-        }
-        
+
+
+    public String graficar(){
+        StringBuilder resultado = new StringBuilder();
+        resultado.append("graph G {");
+        resultado.append(this.graficar(null));
+
         if(declaraciones != null && !declaraciones.isEmpty()){
             for(ArrayList<Declaracion> declaracionesPrograma : declaraciones){
-                for(Declaracion dec : declaracionesPrograma){ 
-                    grafico += dec.graficar(this.getId());
+                for(Declaracion dec : declaracionesPrograma){
+                    resultado.append(dec.graficar(this.getId()));
                 }
             }
         }
-        
-        return grafico;
+
+        for(Sentencia sentencia : sentencias){
+            resultado.append(sentencia.graficar(this.getId()));
+        }
+
+
+        resultado.append("}");
+        return resultado.toString();
     }
+
 }

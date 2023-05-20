@@ -1,7 +1,10 @@
 DECLARE.SECTION
-int: num1 ;
+INT : var1, var2, var3, var4;
+float: var5, var8, var6;
+BOOLEAN: varlogica;
 ENDDECLARE.SECTION
 PROGRAM.SECTION
-num1=1+2
-DISPLAY(num1)
+#Esto es un comentario
+varlogica = false
+IF (varlogica == true) THEN var1 = 21214 END
 ENDPROGRAM.SECTION

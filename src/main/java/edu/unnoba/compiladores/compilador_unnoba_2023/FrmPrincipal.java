@@ -1,19 +1,13 @@
 package edu.unnoba.compiladores.compilador_unnoba_2023;
 
+import edu.unnoba.compiladores.compilador_unnoba_2023.ast.Programa;
 import edu.unnoba.compiladores.compilador_unnoba_2023.exceptions.VarAlreadyExistTSException;
 import edu.unnoba.compiladores.compilador_unnoba_2023.exceptions.VarNotDeclaredTSException;
 import java.awt.Color;
 import java.awt.FlowLayout;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.Reader;
+import java.io.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java_cup.runtime.Scanner;
 import java_cup.runtime.Symbol;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
@@ -53,6 +47,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
         btnImportar = new javax.swing.JMenu();
         btnAnalizar = new javax.swing.JMenu();
         jMenu1 = new javax.swing.JMenu();
+
+        jPanelAST = new javax.swing.JTextPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(1024, 768));
@@ -106,6 +102,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
         tabs.addTab("Análisis Sintáctico", jPanel2);
 
+        tabs.addTab("Análisis AST ", jPanelAST);
+
         btnImportar.setText("Importar");
         btnImportar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -149,10 +147,6 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
 
-    private void btnInstruccionesMouseClicked(java.awt.event.MouseEvent evt) {
-
-
-    }
     private void btnAnalizarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAnalizarMouseClicked
 
         File file = new File("pruebas.txt");
@@ -165,11 +159,10 @@ public class FrmPrincipal extends javax.swing.JFrame {
         }
 
         String resultLexico = "";
-        String resultCup="";
-        MiLexicoCup lexico;
+        MiLexico lexico;
         MiParser parser=null;
         try {
-            lexico = new MiLexicoCup(new FileReader("pruebas.txt"));
+            lexico = new MiLexico(new FileReader("pruebas.txt"));
             while (!lexico.yyatEOF()) {
                 System.out.println("Analizo: " + lexico.yytext());
                 Symbol token;
@@ -178,7 +171,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
                     resultLexico += "Token: " + MiParserSym.terminalNames[token.sym] + "\n";
                 }            
             }
-            parser= new MiParser(new MiLexicoCup(new FileReader("pruebas.txt")));
+            parser= new MiParser(new MiLexico(new FileReader("pruebas.txt")));
+
             parser.parse();
             String s = parser.getS();
             this.parserResult.selectAll();
@@ -187,9 +181,27 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 this.parserResult.setText("Analisis Sintáctico finalizado con éxito\n" +
                         parser.printProduccionesRecorridas(parser.getProduccionesList()).concat(
                         parser.concatHt(parser.getSymbolTable())));
+
+                MiParser sintactico2= new MiParser(new MiLexicoCup(new FileReader("pruebas.txt")));
+
+                Programa programa = (Programa) sintactico2.parse().value;
+                try {
+                    jPanelAST.setText(programa.graficar());
+                    PrintWriter grafico = new PrintWriter(new FileWriter("arbol.dot"));
+                    grafico.println(programa.graficar());
+                    grafico.close();
+                    String cmdDot = "dot -Tpng arbol.dot -o arbol.png";
+                    Runtime.getRuntime().exec(cmdDot);
+
+                } catch (Error e) {
+                    System.out.println("Error: " + e.getMessage());
+                    jPanelAST.setText("Error: " + e.getMessage());
+                }
             }
-            else
+            else{
                 this.parserResult.setText(s);
+            }
+
             
         } catch (FileNotFoundException ex) {
             resultLexico += "Error: " + ex.getMessage() + "\n";
@@ -320,5 +332,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTextArea parserResult;
     private javax.swing.JTabbedPane tabs;
+
+    private javax.swing.JTextPane jPanelAST;
     // End of variables declaration//GEN-END:variables
 }

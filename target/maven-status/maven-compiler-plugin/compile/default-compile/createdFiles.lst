@@ -1,6 +1,7 @@
 edu\unnoba\compiladores\compilador_unnoba_2023\factor\Flotante.class
 edu\unnoba\compiladores\compilador_unnoba_2023\FrmPrincipal$2.class
 edu\unnoba\compiladores\compilador_unnoba_2023\sentencias\Display.class
+edu\unnoba\compiladores\compilador_unnoba_2023\MiParser.class
 edu\unnoba\compiladores\compilador_unnoba_2023\ast\Tipo.class
 edu\unnoba\compiladores\compilador_unnoba_2023\ast_expresiones_unarias\GuionBajo.class
 edu\unnoba\compiladores\compilador_unnoba_2023\FrmAyuda.class
@@ -9,6 +10,7 @@ edu\unnoba\compiladores\compilador_unnoba_2023\FrmAyuda$1.class
 edu\unnoba\compiladores\compilador_unnoba_2023\ast\Tipo$1.class
 edu\unnoba\compiladores\compilador_unnoba_2023\ast\BloqueDeclaracion.class
 edu\unnoba\compiladores\compilador_unnoba_2023\ast_expresiones\Identificador.class
+edu\unnoba\compiladores\compilador_unnoba_2023\MiParser$CUP$MiParser$actions.class
 edu\unnoba\compiladores\compilador_unnoba_2023\sentencias\Declaracion.class
 edu\unnoba\compiladores\compilador_unnoba_2023\ast_expresiones_unarias\NegacionLogica.class
 edu\unnoba\compiladores\compilador_unnoba_2023\exceptions\VarAlreadyExistTSException.class
@@ -35,12 +37,16 @@ edu\unnoba\compiladores\compilador_unnoba_2023\exceptions\VarForNotEqualExceptio
 edu\unnoba\compiladores\compilador_unnoba_2023\ast\CodeGeneratorHelper.class
 edu\unnoba\compiladores\compilador_unnoba_2023\sentencias\Break.class
 edu\unnoba\compiladores\compilador_unnoba_2023\factor\Entero.class
+edu\unnoba\compiladores\compilador_unnoba_2023\ast_expresiones_binarias\Filter.class
 edu\unnoba\compiladores\compilador_unnoba_2023\FrmPrincipal$4.class
 edu\unnoba\compiladores\compilador_unnoba_2023\ast_expresiones_binarias\logicas\Igualdad.class
 edu\unnoba\compiladores\compilador_unnoba_2023\ast_expresiones_unarias\NegacionAritmetica.class
 edu\unnoba\compiladores\compilador_unnoba_2023\sentencias\SentenciaIf.class
 edu\unnoba\compiladores\compilador_unnoba_2023\ast_expresiones_binarias\logicas\MayorIgual.class
+edu\unnoba\compiladores\compilador_unnoba_2023\exceptions\VarTypeNotEqualWithVarListTypes.class
+.netbeans_automatic_build
 edu\unnoba\compiladores\compilador_unnoba_2023\ast_expresiones_binarias\logicas\Or.class
+edu\unnoba\compiladores\compilador_unnoba_2023\exceptions\VarTypeNotCompatibleWithVarListTypes.class
 edu\unnoba\compiladores\compilador_unnoba_2023\MiToken.class
 edu\unnoba\compiladores\compilador_unnoba_2023\sentencias\SentenciaElif.class
 edu\unnoba\compiladores\compilador_unnoba_2023\ast_expresiones_binarias\logicas\And.class
@@ -49,6 +55,7 @@ edu\unnoba\compiladores\compilador_unnoba_2023\ast_expresiones_binarias\logicas\
 edu\unnoba\compiladores\compilador_unnoba_2023\ast_expresiones_binarias\OperacionBinaria.class
 edu\unnoba\compiladores\compilador_unnoba_2023\FrmPrincipal$1.class
 edu\unnoba\compiladores\compilador_unnoba_2023\ast_expresiones_unarias\IncrementoDecrementoFor.class
+edu\unnoba\compiladores\compilador_unnoba_2023\ast_expresiones_unarias\OperacionFilter.class
 edu\unnoba\compiladores\compilador_unnoba_2023\ast_expresiones_unarias\OperacionUnaria.class
 edu\unnoba\compiladores\compilador_unnoba_2023\sentencias\SentenciaFor.class
 edu\unnoba\compiladores\compilador_unnoba_2023\factor\Booleano.class

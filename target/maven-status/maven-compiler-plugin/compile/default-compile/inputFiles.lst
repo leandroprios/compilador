@@ -1,4 +1,6 @@
 D:\Facultad\5to año\1 cuatrimestre\proyecto en git\compilador\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\ast\Programa.java
+D:\Facultad\5to año\1 cuatrimestre\proyecto en git\compilador\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\exceptions\VarTypeNotEqualWithVarListTypes.java
+D:\Facultad\5to año\1 cuatrimestre\proyecto en git\compilador\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\ast_expresiones_unarias\OperacionFilter.java
 D:\Facultad\5to año\1 cuatrimestre\proyecto en git\compilador\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\sentencias\SentenciaIf.java
 D:\Facultad\5to año\1 cuatrimestre\proyecto en git\compilador\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\FrmPrincipal.java
 D:\Facultad\5to año\1 cuatrimestre\proyecto en git\compilador\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\ast\CodeGeneratorHelper.java
@@ -23,6 +25,7 @@ D:\Facultad\5to año\1 cuatrimestre\proyecto en git\compilador\src\main\java\edu\
 D:\Facultad\5to año\1 cuatrimestre\proyecto en git\compilador\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\ast\BloqueDeclaracion.java
 D:\Facultad\5to año\1 cuatrimestre\proyecto en git\compilador\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\ast_expresiones_binarias\logicas\Igualdad.java
 D:\Facultad\5to año\1 cuatrimestre\proyecto en git\compilador\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\factor\EnteroAFlotante.java
+D:\Facultad\5to año\1 cuatrimestre\proyecto en git\compilador\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\exceptions\VarTypeNotCompatibleWithVarListTypes.java
 D:\Facultad\5to año\1 cuatrimestre\proyecto en git\compilador\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\sentencias\Break.java
 D:\Facultad\5to año\1 cuatrimestre\proyecto en git\compilador\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\ast_expresiones_binarias\Suma.java
 D:\Facultad\5to año\1 cuatrimestre\proyecto en git\compilador\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\factor\StringLiteral.java
@@ -50,6 +53,7 @@ D:\Facultad\5to año\1 cuatrimestre\proyecto en git\compilador\src\main\java\edu\
 D:\Facultad\5to año\1 cuatrimestre\proyecto en git\compilador\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\ast_expresiones_binarias\Division.java
 D:\Facultad\5to año\1 cuatrimestre\proyecto en git\compilador\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\ast_expresiones_unarias\OperacionUnaria.java
 D:\Facultad\5to año\1 cuatrimestre\proyecto en git\compilador\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\ast_expresiones_unarias\NegacionAritmetica.java
+D:\Facultad\5to año\1 cuatrimestre\proyecto en git\compilador\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\ast_expresiones_binarias\Filter.java
 D:\Facultad\5to año\1 cuatrimestre\proyecto en git\compilador\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\ast_expresiones_binarias\Multiplicacion.java
 D:\Facultad\5to año\1 cuatrimestre\proyecto en git\compilador\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\exceptions\VarNotDeclaredTSException.java
 D:\Facultad\5to año\1 cuatrimestre\proyecto en git\compilador\src\main\java\edu\unnoba\compiladores\compilador_unnoba_2023\sentencias\Display.java
