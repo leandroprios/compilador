@@ -511,7 +511,8 @@ public class MiParser extends java_cup.runtime.lr_parser {
 
 
 
-    Boolean is_asignacion_filter = false;
+
+    boolean is_sentencia_for = false;
 
     Tipo tipo_filter_validate_aux;
 
@@ -909,6 +910,7 @@ class CUP$MiParser$actions {
 		int sfright = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).right;
 		Sentencia sf = (Sentencia)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
 		
+            is_sentencia_for = true;
             produccionesRecorridas.add("sentencia -> sentencia_for");
             RESULT = sf;
        
@@ -969,6 +971,9 @@ class CUP$MiParser$actions {
 		int bright = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).right;
 		String b = (String)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
 		
+            if(!is_sentencia_for){
+                throw new Exception("El BREAK no se encuentra dentro del FOR");
+            }
             produccionesRecorridas.add("sentencia -> BREAK");
             RESULT = new Break(); 
         
@@ -984,6 +989,9 @@ class CUP$MiParser$actions {
 		int cright = ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()).right;
 		String c = (String)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
 		
+            if(!is_sentencia_for){
+                throw new Exception("El CONTINUE no se encuentra dentro del FOR");
+            }
             produccionesRecorridas.add("sentencia -> CONTINUE");
             RESULT = new Continue();
 
@@ -1027,7 +1035,6 @@ class CUP$MiParser$actions {
             throw new VarNotDeclaredTSException("La variable "+(String) id+" no está declarada previamente.");
         }
         Tipo tipoId = ht.get(id);
-        is_asignacion_filter = true;
         RESULT = new Asignacion(new Identificador(id, tipoId),eo);
 
               CUP$MiParser$result = parser.getSymbolFactory().newSymbol("sentencia_asignacion",9, ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-3)), ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()), RESULT);
@@ -1789,6 +1796,7 @@ class CUP$MiParser$actions {
     }
     sentenciaIf = new SentenciaIf(sentenciasDentroIF,e_o,sentenciasELIF, sentenciasDentroELSE);
     filter = new Filter(sentenciaIf);
+    isAsignacion = false;
 
     RESULT = filter; 
 
@@ -2125,6 +2133,9 @@ class CUP$MiParser$actions {
     ArrayList<Sentencia> sentencias = new ArrayList<>();
     produccionesRecorridas.add("sentencia_for -> FOR PARENTESIS_ABRE VAR ASIGNACION CONST_INT PUNTO_COMA VAR expresion_incremento_decremento PUNTO_COMA comparacion PARENTESIS_CIERRA DO bloque_sentencias END");
     Asignacion asignacion = new Asignacion(new Identificador(id1,Tipo.INTEGER),e_id);
+
+    is_sentencia_for = false;
+
     RESULT = new SentenciaFor(c_f,asignacion,e_id,sentencias);  
 
               CUP$MiParser$result = parser.getSymbolFactory().newSymbol("sentencia_for",7, ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-13)), ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()), RESULT);
