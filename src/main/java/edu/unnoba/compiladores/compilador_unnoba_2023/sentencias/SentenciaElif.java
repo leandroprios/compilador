@@ -26,12 +26,18 @@ public class SentenciaElif extends Sentencia {
     @Override
     public String graficar(String idPadre){
         final String miId = this.getId();
+        Then then = new Then("THEN");
         String grafico = super.graficar(idPadre) + 
-        expresion.graficar(miId);
-
+        expresion.graficar(miId) + then.graficar(miId);
+        
+        //setNombre("THEN");
+        //grafico += super.graficar(idPadre);
+        
         for(Sentencia sen : sentencias){
-            grafico += sen.graficar(miId);
+            grafico += sen.graficar(then.getId());
         }
+        
+
         
         return grafico;
     }

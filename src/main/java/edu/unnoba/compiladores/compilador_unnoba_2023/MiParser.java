@@ -514,12 +514,12 @@ public class MiParser extends java_cup.runtime.lr_parser {
 
     boolean is_sentencia_for = false;
 
-    Tipo tipo_filter_validate_aux;
+    Boolean isGuionBajoFilter = false;
 
     List<String> produccionesRecorridas = new ArrayList<>();
     
-    Boolean isAsignacion = false;
-    String idAsignacion; 
+    Boolean isAsignacionFilter = false;
+    String idAsignacionFilter; 
     String returnFilter;
     ArrayList<String> lista_varFilter = new ArrayList<String>();
 
@@ -541,7 +541,7 @@ public class MiParser extends java_cup.runtime.lr_parser {
     
     public boolean validarTiposVariablesConTipoAsignacionId(String var){
         boolean retorno = true;
-        Tipo tipoIdAsignacion = ht.get(idAsignacion);
+        Tipo tipoIdAsignacion = ht.get(idAsignacionFilter);
         
         Tipo tipoAuxVar = ht.get(var);
         if(tipoIdAsignacion == Tipo.BOOLEAN &&  tipoAuxVar != Tipo.BOOLEAN){
@@ -764,7 +764,6 @@ class CUP$MiParser$actions {
         produccionesRecorridas.add("lista_var -> VAR");
         ArrayList<String> ident = new ArrayList<String>();
         ident.add(id);
-        tipo_filter_validate_aux = ht.get(id);
         RESULT = ident;
 
               CUP$MiParser$result = parser.getSymbolFactory().newSymbol("lista_var",27, ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()), RESULT);
@@ -1008,8 +1007,8 @@ class CUP$MiParser$actions {
 		String id = (String)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-1)).value;
 
 
-    isAsignacion= true;
-    idAsignacion = id;
+    isAsignacionFilter= true;
+    idAsignacionFilter = id;
     
               CUP$MiParser$result = parser.getSymbolFactory().newSymbol("NT$0",28, ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()), RESULT);
             }
@@ -1057,7 +1056,7 @@ class CUP$MiParser$actions {
             RESULT =new Or(eo,ea);
         }
         else{
-            throw new Exception("No se puede realizar la expresion OR entre una variable del tipo " + eo.getTipo().toString() + " y una variable de tipo " + ea.getTipo().toString());
+            throw new Exception("No se puede realizar la expresion OR entre una variable del tipo " + Tipo.toString(eo.getTipo()) + " y una variable de tipo " + Tipo.toString(ea.getTipo()));
         }
        
               CUP$MiParser$result = parser.getSymbolFactory().newSymbol("expresion_or",11, ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-2)), ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()), RESULT);
@@ -1095,7 +1094,7 @@ class CUP$MiParser$actions {
             RESULT =new And(ea,en);
         }
         else{
-            throw new Exception("No se puede realizar la expresion AND entre una variable del tipo " + ea.getTipo().toString() + " y una variable de tipo " + en.getTipo().toString());
+            throw new Exception("No se puede realizar la expresion AND entre una variable del tipo " + Tipo.toString(ea.getTipo()) + " y una variable de tipo " + Tipo.toString(en.getTipo()));
         }
     
               CUP$MiParser$result = parser.getSymbolFactory().newSymbol("expresion_and",13, ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-2)), ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()), RESULT);
@@ -1130,7 +1129,7 @@ class CUP$MiParser$actions {
             RESULT =new NegacionLogica(en);
         }
         else{
-            throw new Exception("No se puede realizar la expresion NOT con una variable del tipo " + en.getTipo().toString());
+            throw new Exception("No se puede realizar la expresion NOT con una variable del tipo " +  Tipo.toString(en.getTipo()));
         }        
        
               CUP$MiParser$result = parser.getSymbolFactory().newSymbol("expresion_not",14, ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-1)), ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()), RESULT);
@@ -1178,8 +1177,12 @@ class CUP$MiParser$actions {
             else if(esr1.getTipo() == Tipo.FLOAT && esr2.getTipo() == Tipo.FLOAT){
                 RESULT = new Mayor(esr1,esr2);
             }
+            else if(isGuionBajoFilter && (esr2.getTipo() == Tipo.FLOAT || esr2.getTipo() == Tipo.INTEGER)){
+                esr1.setTipo(esr2.getTipo());
+                RESULT = new Mayor(esr1,esr2);
+            }
             else{
-                throw new Exception("La variable de tipo " + esr1.getTipo().toString() + " no puede compararse con el operador > con una variable del tipo " + esr2.getTipo().toString());
+                throw new Exception("La variable de tipo " + Tipo.toString(esr1.getTipo()) + " no puede compararse con el operador > con una variable del tipo " + Tipo.toString(esr2.getTipo()));
             }
        
               CUP$MiParser$result = parser.getSymbolFactory().newSymbol("comparacion",15, ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-2)), ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()), RESULT);
@@ -1212,8 +1215,12 @@ class CUP$MiParser$actions {
             else if(esr1.getTipo() == Tipo.FLOAT && esr2.getTipo() == Tipo.FLOAT){
                 RESULT = new MayorIgual(esr1,esr2);
             }
+            else if(isGuionBajoFilter && (esr2.getTipo() == Tipo.FLOAT || esr2.getTipo() == Tipo.INTEGER)){
+                esr1.setTipo(esr2.getTipo());
+                RESULT = new MayorIgual(esr1,esr2);
+            }
             else{
-                throw new Exception("La variable de tipo " + esr1.getTipo().toString() + " no puede compararse con el operador >= con una variable del tipo " + esr2.getTipo().toString());
+                throw new Exception("La variable de tipo " + Tipo.toString(esr1.getTipo()) + " no puede compararse con el operador >= con una variable del tipo " + Tipo.toString(esr2.getTipo()));
             }
        
               CUP$MiParser$result = parser.getSymbolFactory().newSymbol("comparacion",15, ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-2)), ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()), RESULT);
@@ -1246,8 +1253,12 @@ class CUP$MiParser$actions {
             else if(esr1.getTipo() == Tipo.FLOAT && esr2.getTipo() == Tipo.FLOAT){
                 RESULT = new Menor(esr1,esr2);
             }
+            else if(isGuionBajoFilter && (esr2.getTipo() == Tipo.FLOAT || esr2.getTipo() == Tipo.INTEGER)){
+                esr1.setTipo(esr2.getTipo());
+                RESULT = new Menor(esr1,esr2);
+            }
             else{
-                throw new Exception("La variable de tipo " + esr1.getTipo().toString() + " no puede compararse con el operador < con una variable del tipo " + esr2.getTipo().toString());
+                throw new Exception("La variable de tipo " + Tipo.toString(esr1.getTipo()) + " no puede compararse con el operador < con una variable del tipo " + Tipo.toString(esr2.getTipo()));
             }
        
               CUP$MiParser$result = parser.getSymbolFactory().newSymbol("comparacion",15, ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-2)), ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()), RESULT);
@@ -1280,8 +1291,12 @@ class CUP$MiParser$actions {
             else if(esr1.getTipo() == Tipo.FLOAT && esr2.getTipo() == Tipo.FLOAT){
                 RESULT = new MenorIgual(esr1,esr2);
             }
+            else if(isGuionBajoFilter && (esr2.getTipo() == Tipo.FLOAT || esr2.getTipo() == Tipo.INTEGER)){
+                esr1.setTipo(esr2.getTipo());
+                RESULT = new MenorIgual(esr1,esr2);
+            }
             else{
-                throw new Exception("La variable de tipo " + esr1.getTipo().toString() + " no puede compararse con el operador < con una variable del tipo " + esr2.getTipo().toString());
+                throw new Exception("La variable de tipo " + Tipo.toString(esr1.getTipo()) + " no puede compararse con el operador < con una variable del tipo " + Tipo.toString(esr2.getTipo()));
             }
        
               CUP$MiParser$result = parser.getSymbolFactory().newSymbol("comparacion",15, ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-2)), ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()), RESULT);
@@ -1317,8 +1332,12 @@ class CUP$MiParser$actions {
             else if(esr1.getTipo() == Tipo.BOOLEAN && esr2.getTipo() == Tipo.BOOLEAN){
                 RESULT = new Igualdad(esr1,esr2);
             }
+            else if(isGuionBajoFilter && (esr2.getTipo() == Tipo.FLOAT || esr2.getTipo() == Tipo.INTEGER || esr2.getTipo() == Tipo.BOOLEAN)){
+                esr1.setTipo(esr2.getTipo());
+                RESULT = new Igualdad(esr1,esr2);
+            }
             else{
-                throw new Exception("La variable de tipo " + esr1.getTipo().toString() + " no puede compararse con el operador == con una variable del tipo " + esr2.getTipo().toString());
+                throw new Exception("La variable de tipo " + Tipo.toString(esr1.getTipo()) + " no puede compararse con el operador == con una variable del tipo " + Tipo.toString(esr2.getTipo()));
             }
        
               CUP$MiParser$result = parser.getSymbolFactory().newSymbol("comparacion",15, ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-2)), ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()), RESULT);
@@ -1352,10 +1371,14 @@ class CUP$MiParser$actions {
                 RESULT = new Desigualdad(esr1,esr2);
             }
             else if(esr1.getTipo() == Tipo.BOOLEAN && esr2.getTipo() == Tipo.BOOLEAN){
-                RESULT = new Igualdad(esr1,esr2);
+                RESULT = new Desigualdad(esr1,esr2);
+            }
+            else if(isGuionBajoFilter && (esr2.getTipo() == Tipo.FLOAT || esr2.getTipo() == Tipo.INTEGER || esr2.getTipo() == Tipo.BOOLEAN)){
+                esr1.setTipo(esr2.getTipo());
+                RESULT = new Desigualdad(esr1,esr2);
             }
             else{
-                throw new Exception("La variable de tipo " + esr1.getTipo().toString() + " no puede compararse con el operador != con una variable del tipo " + esr2.getTipo().toString());
+                throw new Exception("La variable de tipo " + Tipo.toString(esr1.getTipo()) + " no puede compararse con el operador != con una variable del tipo " + Tipo.toString(esr2.getTipo()));
             }
        
               CUP$MiParser$result = parser.getSymbolFactory().newSymbol("comparacion",15, ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-2)), ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()), RESULT);
@@ -1403,8 +1426,16 @@ class CUP$MiParser$actions {
             else if(esr.getTipo() == Tipo.FLOAT && emd.getTipo() == Tipo.FLOAT){
                 RESULT = new Suma(esr,emd, Tipo.FLOAT);
             }
+            else if(isGuionBajoFilter && (emd.getTipo() == Tipo.FLOAT || emd.getTipo() == Tipo.INTEGER)){
+                esr.setTipo(emd.getTipo());
+                if(emd.getTipo() == Tipo.INTEGER){
+                    RESULT = new Suma(esr,emd , Tipo.INTEGER);
+                }else{
+                    RESULT = new Suma(esr,emd, Tipo.FLOAT);
+                }
+            }
             else{
-                throw new Exception("No se puede sumar entre una variable de tipo " + esr.getTipo().toString() + " y una variable de tipo " + emd.getTipo().toString());
+                throw new Exception("No se puede sumar entre una variable de tipo " + Tipo.toString(esr.getTipo()) + " y una variable de tipo " + Tipo.toString(emd.getTipo()));
             }
        
               CUP$MiParser$result = parser.getSymbolFactory().newSymbol("expresion_sr",16, ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-2)), ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()), RESULT);
@@ -1437,8 +1468,16 @@ class CUP$MiParser$actions {
             else if(esr.getTipo() == Tipo.FLOAT && emd.getTipo() == Tipo.FLOAT){
                 RESULT = new Resta(esr,emd, Tipo.FLOAT);
             }
+            else if(isGuionBajoFilter && (emd.getTipo() == Tipo.FLOAT || emd.getTipo() == Tipo.INTEGER)){
+                esr.setTipo(emd.getTipo());
+                if(emd.getTipo() == Tipo.INTEGER){
+                    RESULT = new Resta(esr,emd , Tipo.INTEGER);
+                }else{
+                    RESULT = new Resta(esr,emd, Tipo.FLOAT);
+                }
+            }
             else{
-                throw new Exception("No se puede restar entre una variable de tipo " + esr.getTipo().toString() + " y una variable de tipo " + emd.getTipo().toString());
+                throw new Exception("No se puede restar entre una variable de tipo " + Tipo.toString(esr.getTipo()) + " y una variable de tipo " + Tipo.toString(emd.getTipo()));
             }
        
               CUP$MiParser$result = parser.getSymbolFactory().newSymbol("expresion_sr",16, ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-2)), ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()), RESULT);
@@ -1486,8 +1525,16 @@ class CUP$MiParser$actions {
         else if(emd.getTipo() == Tipo.FLOAT && mu.getTipo() == Tipo.FLOAT){
             RESULT = new Multiplicacion(emd,mu, Tipo.FLOAT);
         }
+        else if(isGuionBajoFilter && (mu.getTipo() == Tipo.FLOAT || mu.getTipo() == Tipo.INTEGER)){
+            emd.setTipo(mu.getTipo());
+            if(mu.getTipo() == Tipo.INTEGER){
+                RESULT = new Multiplicacion(emd,mu, Tipo.INTEGER);
+            }else{
+                RESULT = new Multiplicacion(emd,mu, Tipo.FLOAT);
+            }
+        }
         else{
-            throw new Exception("No se puede multiplicar entre una variable de tipo " + emd.getTipo().toString() + " y una variable de tipo " + mu.getTipo().toString());
+            throw new Exception("No se puede multiplicar entre una variable de tipo " + Tipo.toString(emd.getTipo()) + " y una variable de tipo " + Tipo.toString(mu.getTipo()));
         }
     
               CUP$MiParser$result = parser.getSymbolFactory().newSymbol("expresion_md",17, ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-2)), ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()), RESULT);
@@ -1520,8 +1567,16 @@ class CUP$MiParser$actions {
         else if(emd.getTipo() == Tipo.FLOAT && mu.getTipo() == Tipo.FLOAT){
             RESULT = new Division(emd,mu, Tipo.FLOAT);
         }
+        else if(isGuionBajoFilter && (mu.getTipo() == Tipo.FLOAT || mu.getTipo() == Tipo.INTEGER)){
+            emd.setTipo(mu.getTipo());
+            if(mu.getTipo() == Tipo.INTEGER){
+                RESULT = new Division(emd,mu, Tipo.INTEGER);
+            }else{
+                RESULT = new Division(emd,mu, Tipo.FLOAT);
+            }
+        }
         else{
-            throw new Exception("No se puede dividir entre una variable de tipo " + emd.getTipo().toString() + " y una variable de tipo " + mu.getTipo().toString());
+            throw new Exception("No se puede dividir entre una variable de tipo " + Tipo.toString(emd.getTipo()) + " y una variable de tipo " + Tipo.toString(mu.getTipo()));
         }
     
               CUP$MiParser$result = parser.getSymbolFactory().newSymbol("expresion_md",17, ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-2)), ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()), RESULT);
@@ -1558,7 +1613,7 @@ class CUP$MiParser$actions {
             RESULT =  new NegacionAritmetica(mu,"fsub",Tipo.FLOAT);
         }
         else{
-            throw new Exception("No se puede negar una variable de tipo " + mu.getTipo().toString());
+            throw new Exception("No se puede negar una variable de tipo " + Tipo.toString(mu.getTipo()));
         }
     
               CUP$MiParser$result = parser.getSymbolFactory().newSymbol("menos_unario",18, ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-1)), ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()), RESULT);
@@ -1634,6 +1689,7 @@ class CUP$MiParser$actions {
 		String gb = (String)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
 		
         produccionesRecorridas.add("factor -> GUION_BAJO");
+        isGuionBajoFilter = true;
         RESULT = new GuionBajo();
     
               CUP$MiParser$result = parser.getSymbolFactory().newSymbol("factor",19, ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()), RESULT);
@@ -1753,7 +1809,8 @@ class CUP$MiParser$actions {
     Filter filter;
     
     produccionesRecorridas.add("filter -> FILTER PARENTESIS_ABRE expresion_or COMA CORCHETE_ABRE lista_var CORCHETE_CIERRA PARENTESIS_CIERRA");
-
+    
+    Tipo tipoIdAsignacion = ht.get(idAsignacionFilter);
     
     for(int j =0; j < l_v.size(); j++){
         String auxVar = l_v.get(j);
@@ -1762,10 +1819,9 @@ class CUP$MiParser$actions {
         }else{
             Tipo tipoAuxVar = ht.get(auxVar);
             if(!validarTiposVariablesConExpresion(auxVar,e_o)){
-                if(isAsignacion==true){
+                if(isAsignacionFilter==true){
                     if(!validarTiposVariablesConTipoAsignacionId(auxVar)){
-                        Tipo tipoIdAsignacion = ht.get(idAsignacion);
-                        throw new VarTypeNotCompatibleWithVarListTypes("El Tipo " + Tipo.toString(tipoAuxVar) +  " de la variable "+ auxVar +" no coincide con el Tipo " + tipoIdAsignacion + " de la Asignacion con la variable " + idAsignacion + " \n");
+                        throw new VarTypeNotCompatibleWithVarListTypes("El Tipo " + Tipo.toString(tipoAuxVar) +  " de la variable "+ auxVar +" no coincide con el Tipo " + tipoIdAsignacion + " de la Asignacion con la variable " + idAsignacionFilter + " \n");
                     }
                 }
             }else{
@@ -1775,28 +1831,36 @@ class CUP$MiParser$actions {
             ArrayList<Sentencia> sentenciasDentroELIF = new ArrayList<>();
             
             if(j==0){ //si es la primera variable de la lista de variables 
-                if(isAsignacion==true){
+                //if(isAsignacionFilter==true){
                     Asignacion asignacion = new Asignacion(new Identificador(auxVar, tipoAuxVar), e_o); //agrego la asignacion dentro del IF sentencia dentro del IF
                     sentenciasDentroIF.add(asignacion);
-                }
+                //}
             }else if(j == l_v.size()-1){ //si es la ultima variable de la lista 
-                if(isAsignacion==true){
+                //if(isAsignacionFilter==true){
                     Asignacion asignacion = new Asignacion(new Identificador(auxVar, tipoAuxVar), e_o); //agrego la sentencia dentro del ultimo ELSE
                     sentenciasDentroELSE.add(asignacion); 
-                }
+                //}
                 
             }else{
-                if(isAsignacion==true){
+                //if(isAsignacionFilter==true){
                     Asignacion asignacion = new Asignacion(new Identificador(auxVar, tipoAuxVar), e_o); //agrego la sentencia dentro del  ELIF
                     sentenciasDentroELIF.add(asignacion);
-                }
+                //}
                 sentenciasELIF.add(new SentenciaElif(sentenciasDentroELIF, e_o));
             }
         }
     }
     sentenciaIf = new SentenciaIf(sentenciasDentroIF,e_o,sentenciasELIF, sentenciasDentroELSE);
-    filter = new Filter(sentenciaIf);
-    isAsignacion = false;
+    
+    if(isAsignacionFilter==true){
+        filter = new Filter(sentenciaIf, tipoIdAsignacion);
+    }else{
+        filter = new Filter(sentenciaIf, e_o.getTipo());
+    }
+
+
+    isAsignacionFilter = false;
+    isGuionBajoFilter = false;
 
     RESULT = filter; 
 
@@ -2122,21 +2186,24 @@ class CUP$MiParser$actions {
 		
         
     //Verificar que c_f contenga el mismo id que id1 y id2;
-    if(((String) id1).equals((String) id2)){
-        if(!ht.containsKey((String) id1)){
-            throw new VarNotDeclaredTSException("La variable "+(String) id1+" no está declarada previamente.");
+    if((id1).equals(id2) && (id1).equals(c_f.getIdVar())){
+
+        //ht.put(id1+'VARIABLE_FOR',Tipo.INTEGER);
+        if(!ht.containsKey(id1)){
+            throw new VarNotDeclaredTSException("La variable " + id1 + " no está declarada previamente.");
         }
     }else{
-        throw new VarForNotEqualException("La variable pasada como parametro al FOR debe ser la misma");
+        throw new VarForNotEqualException("La variable utlizada en el FOR debe ser la misma");
     }
 
-    ArrayList<Sentencia> sentencias = new ArrayList<>();
+    //ArrayList<Sentencia> sentencias = new ArrayList<>();
     produccionesRecorridas.add("sentencia_for -> FOR PARENTESIS_ABRE VAR ASIGNACION CONST_INT PUNTO_COMA VAR expresion_incremento_decremento PUNTO_COMA comparacion PARENTESIS_CIERRA DO bloque_sentencias END");
     Asignacion asignacion = new Asignacion(new Identificador(id1,Tipo.INTEGER),e_id);
 
     is_sentencia_for = false;
 
-    RESULT = new SentenciaFor(c_f,asignacion,e_id,sentencias);  
+   // RESULT = new SentenciaFor(c_f,asignacion,e_id,sentencias);
+    RESULT = new SentenciaFor(c_f,asignacion,e_id,bs);
 
               CUP$MiParser$result = parser.getSymbolFactory().newSymbol("sentencia_for",7, ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-13)), ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()), RESULT);
             }

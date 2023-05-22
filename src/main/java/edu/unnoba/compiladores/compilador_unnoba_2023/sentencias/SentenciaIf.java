@@ -38,18 +38,29 @@ public class SentenciaIf extends Sentencia{
     @Override
     public String graficar(String idPadre){
         final String miId = this.getId();
+        Then thenIf = new Then("THEN");
         String grafico = super.graficar(idPadre) + 
-        expresion.graficar(miId);
-
+        expresion.graficar(miId) + thenIf.graficar(miId);
+        
         for(Sentencia sen : sentenciasIf){
-            grafico += sen.graficar(miId);
+            grafico += sen.graficar(thenIf.getId());
         }
         
-        if(sentenciasElse != null && !sentenciasElse.isEmpty()){
-            for(Sentencia sen : sentenciasIf){
-                grafico += sen.graficar(miId);
+        if(this.sentenciasElif != null && !this.sentenciasElif.isEmpty()){
+            for(SentenciaElif senElif : sentenciasElif){
+                grafico += senElif.graficar(thenIf.getId());
             }
         }
+        
+        if(this.sentenciasElse != null && !this.sentenciasElse.isEmpty()){
+            Then thenElse = new Then("ELSE");
+            grafico += thenElse.graficar(thenIf.getId());
+            for(Sentencia senElse : sentenciasElse){
+                grafico += senElse.graficar(thenElse.getId());
+            }
+        }
+        
+        
         return grafico;
     }
     

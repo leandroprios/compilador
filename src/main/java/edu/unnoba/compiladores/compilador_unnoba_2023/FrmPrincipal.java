@@ -182,7 +182,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
                         parser.printProduccionesRecorridas(parser.getProduccionesList()).concat(
                         parser.concatHt(parser.getSymbolTable())));
 
-                MiParser sintactico2= new MiParser(new MiLexicoCup(new FileReader("pruebas.txt")));
+                MiParser sintactico2= new MiParser(new MiLexico(new FileReader("pruebas.txt")));
 
                 Programa programa = (Programa) sintactico2.parse().value;
                 try {

@@ -31,7 +31,7 @@ public class Programa extends Nodo {
         StringBuilder resultado = new StringBuilder();
         resultado.append("graph G {");
         resultado.append(this.graficar(null));
-
+        /*
         if(declaraciones != null && !declaraciones.isEmpty()){
             for(ArrayList<Declaracion> declaracionesPrograma : declaraciones){
                 for(Declaracion dec : declaracionesPrograma){
@@ -39,6 +39,7 @@ public class Programa extends Nodo {
                 }
             }
         }
+        */
 
         for(Sentencia sentencia : sentencias){
             resultado.append(sentencia.graficar(this.getId()));

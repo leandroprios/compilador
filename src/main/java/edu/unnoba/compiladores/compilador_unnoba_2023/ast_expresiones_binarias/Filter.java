@@ -6,6 +6,7 @@ package edu.unnoba.compiladores.compilador_unnoba_2023.ast_expresiones_binarias;
 
 import edu.unnoba.compiladores.compilador_unnoba_2023.ast.Tipo;
 import edu.unnoba.compiladores.compilador_unnoba_2023.ast_expresiones_unarias.OperacionUnaria;
+import edu.unnoba.compiladores.compilador_unnoba_2023.sentencias.Sentencia;
 import edu.unnoba.compiladores.compilador_unnoba_2023.sentencias.SentenciaIf;
 
 /**
@@ -15,8 +16,8 @@ import edu.unnoba.compiladores.compilador_unnoba_2023.sentencias.SentenciaIf;
 public class Filter extends OperacionUnaria {
     SentenciaIf sentenciaIf;
 
-    public Filter(SentenciaIf sentenciaIf) {
-        super("FILTER", sentenciaIf.getExpresion(),Tipo.BOOLEAN);
+    public Filter(SentenciaIf sentenciaIf, Tipo tipo) {
+        super("FILTER", sentenciaIf.getExpresion(),tipo);
         this.sentenciaIf=sentenciaIf;
     }
     
@@ -27,6 +28,15 @@ public class Filter extends OperacionUnaria {
     public void setSentenciaIf(SentenciaIf sentenciaIf) {
         this.sentenciaIf = sentenciaIf;
     }
+    
+    @Override
+    public String graficar(String idPadre){
+        final String miId = this.getId();
+        String grafico = super.graficar(idPadre) + 
+        sentenciaIf.graficar(miId);
+        return grafico;
+    }
+
     
     
 

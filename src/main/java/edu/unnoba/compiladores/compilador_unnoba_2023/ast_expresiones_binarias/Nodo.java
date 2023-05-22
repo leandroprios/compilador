@@ -17,7 +17,7 @@ public abstract class  Nodo {
         return getTipo().equals(Tipo.FLOAT) ? "double" : (getTipo().equals(Tipo.INTEGER) ? "i32" : "i1");
     }
 
-    protected String getId() {
+    public String getId() {
         return "nodo_" + this.hashCode();
     }
 

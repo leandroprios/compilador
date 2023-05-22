@@ -6,5 +6,5 @@ ENDDECLARE.SECTION
 PROGRAM.SECTION
 #Esto es un comentario
 varlogica = false
-IF (varlogica == true) THEN var1 = 21214 END
+IF (varlogica == true) THEN var1 = 21214 ELIF (varlogica == true) THEN  var2=3  ELIF (varlogica == true) THEN  var2=3 ELSE THEN var3=3 END
 ENDPROGRAM.SECTION
