@@ -13,9 +13,11 @@ import edu.unnoba.compiladores.compilador_unnoba_2023.ast_expresiones_binarias.E
  * @author zabal
  */
 public class OperacionFilter extends OperacionUnaria {
-    
+
+    Expresion expresion;
     public OperacionFilter(Expresion expresion) {
         super("_", expresion, Tipo.BOOLEAN);
+        this.expresion = expresion;
         this.setIdVar(CodeGeneratorHelper.getNewPointer());
     }
     

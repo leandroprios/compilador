@@ -48,7 +48,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
         btnAnalizar = new javax.swing.JMenu();
         jMenu1 = new javax.swing.JMenu();
 
-        jPanelAST = new javax.swing.JTextPane();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        ASTResult = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(1024, 768));
@@ -102,7 +103,11 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
         tabs.addTab("Análisis Sintáctico", jPanel2);
 
-        tabs.addTab("Análisis AST ", jPanelAST);
+        ASTResult.setColumns(20);
+        ASTResult.setRows(5);
+        jScrollPane5.setViewportView(ASTResult);
+
+        tabs.addTab("Análisis AST ", jScrollPane5);
 
         btnImportar.setText("Importar");
         btnImportar.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -186,7 +191,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
                 Programa programa = (Programa) sintactico2.parse().value;
                 try {
-                    jPanelAST.setText(programa.graficar());
+                    this.ASTResult.setText(programa.graficar());
                     PrintWriter grafico = new PrintWriter(new FileWriter("arbol.dot"));
                     grafico.println(programa.graficar());
                     grafico.close();
@@ -195,7 +200,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
                 } catch (Error e) {
                     System.out.println("Error: " + e.getMessage());
-                    jPanelAST.setText("Error: " + e.getMessage());
+                    this.ASTResult.setText("Error: " + e.getMessage());
                 }
             }
             else{
@@ -333,6 +338,10 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JTextArea parserResult;
     private javax.swing.JTabbedPane tabs;
 
-    private javax.swing.JTextPane jPanelAST;
+
+    private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JTextArea ASTResult;
+
+
     // End of variables declaration//GEN-END:variables
 }

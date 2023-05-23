@@ -6,5 +6,7 @@ ENDDECLARE.SECTION
 PROGRAM.SECTION
 #Esto es un comentario
 varlogica = false
-IF (varlogica == true) THEN var1 = 21214 ELIF (varlogica == true) THEN  var2=3  ELIF (varlogica == true) THEN  var2=3 ELSE THEN var3=3 END
+var1=5
+var2=3
+var6 = FILTER(_<4, [var1,var2])
 ENDPROGRAM.SECTION

@@ -1,64 +1,58 @@
-graph G {nodo_1166892990[label="Programa"]
-nodo_166517308[label="="]
-nodo_1166892990--nodo_166517308
-nodo_119534261[label="ID : varlogica\n<BOOLEAN>"]
-nodo_166517308--nodo_119534261
-nodo_2046957709[label="Boolean : false\n<BOOLEAN>"]
-nodo_166517308--nodo_2046957709
-nodo_1440598236[label="IF"]
-nodo_1166892990--nodo_1440598236
-nodo_982504801[label="=="]
-nodo_1440598236--nodo_982504801
-nodo_1123881695[label="ID : varlogica\n<BOOLEAN>"]
-nodo_982504801--nodo_1123881695
-nodo_676441213[label="Boolean : true\n<BOOLEAN>"]
-nodo_982504801--nodo_676441213
-nodo_2041047019[label="THEN"]
-nodo_1440598236--nodo_2041047019
-nodo_1460789569[label="="]
-nodo_2041047019--nodo_1460789569
-nodo_2110814870[label="ID : var1\n<INTEGER>"]
-nodo_1460789569--nodo_2110814870
-nodo_1481048853[label="Integer : 21214\n<INTEGER>"]
-nodo_1460789569--nodo_1481048853
-nodo_1140408220[label="ELIF"]
-nodo_2041047019--nodo_1140408220
-nodo_465225035[label="=="]
-nodo_1140408220--nodo_465225035
-nodo_1698695264[label="ID : varlogica\n<BOOLEAN>"]
-nodo_465225035--nodo_1698695264
-nodo_100655222[label="Boolean : true\n<BOOLEAN>"]
-nodo_465225035--nodo_100655222
-nodo_1515893840[label="THEN"]
-nodo_1140408220--nodo_1515893840
-nodo_1110255282[label="="]
-nodo_1515893840--nodo_1110255282
-nodo_667624863[label="ID : var2\n<INTEGER>"]
-nodo_1110255282--nodo_667624863
-nodo_1573756224[label="Integer : 3\n<INTEGER>"]
-nodo_1110255282--nodo_1573756224
-nodo_1399281689[label="ELIF"]
-nodo_2041047019--nodo_1399281689
-nodo_2018835569[label="=="]
-nodo_1399281689--nodo_2018835569
-nodo_105761081[label="ID : varlogica\n<BOOLEAN>"]
-nodo_2018835569--nodo_105761081
-nodo_928736045[label="Boolean : true\n<BOOLEAN>"]
-nodo_2018835569--nodo_928736045
-nodo_1873780783[label="THEN"]
-nodo_1399281689--nodo_1873780783
-nodo_33397400[label="="]
-nodo_1873780783--nodo_33397400
-nodo_1762762655[label="ID : var2\n<INTEGER>"]
-nodo_33397400--nodo_1762762655
-nodo_88066971[label="Integer : 3\n<INTEGER>"]
-nodo_33397400--nodo_88066971
-nodo_1809462523[label="ELSE THEN"]
-nodo_2041047019--nodo_1809462523
-nodo_470289330[label="="]
-nodo_1809462523--nodo_470289330
-nodo_2038465227[label="ID : var3\n<INTEGER>"]
-nodo_470289330--nodo_2038465227
-nodo_43580787[label="Integer : 3\n<INTEGER>"]
-nodo_470289330--nodo_43580787
+graph G {nodo_1864582582[label="Programa"]
+nodo_1100424528[label="="]
+nodo_1864582582--nodo_1100424528
+nodo_101941028[label="ID : varlogica\n<BOOLEAN>"]
+nodo_1100424528--nodo_101941028
+nodo_1936233637[label="Boolean : false\n<BOOLEAN>"]
+nodo_1100424528--nodo_1936233637
+nodo_241494135[label="="]
+nodo_1864582582--nodo_241494135
+nodo_1990320462[label="ID : var1\n<INTEGER>"]
+nodo_241494135--nodo_1990320462
+nodo_1800817377[label="Integer : 5\n<INTEGER>"]
+nodo_241494135--nodo_1800817377
+nodo_1546397330[label="="]
+nodo_1864582582--nodo_1546397330
+nodo_1973574192[label="ID : var2\n<INTEGER>"]
+nodo_1546397330--nodo_1973574192
+nodo_217087579[label="Integer : 3\n<INTEGER>"]
+nodo_1546397330--nodo_217087579
+nodo_1437088870[label="="]
+nodo_1864582582--nodo_1437088870
+nodo_1754110199[label="ID : var6\n<FLOAT>"]
+nodo_1437088870--nodo_1754110199
+nodo_253312012[label="FILTER"]
+nodo_1437088870--nodo_253312012
+nodo_9734418[label="IF"]
+nodo_253312012--nodo_9734418
+nodo_705542599[label="expresion Filter"]
+nodo_9734418--nodo_705542599
+nodo_277194276[label="_"]
+nodo_705542599--nodo_277194276
+nodo_1446642020[label="Integer : 4\n<INTEGER>"]
+nodo_705542599--nodo_1446642020
+nodo_1726777651[label="THEN"]
+nodo_9734418--nodo_1726777651
+nodo_951121428[label="="]
+nodo_1726777651--nodo_951121428
+nodo_87675808[label="ID : var1\n<INTEGER>"]
+nodo_951121428--nodo_87675808
+nodo_705542599[label="expresion Filter"]
+nodo_951121428--nodo_705542599
+nodo_277194276[label="_"]
+nodo_705542599--nodo_277194276
+nodo_1446642020[label="Integer : 4\n<INTEGER>"]
+nodo_705542599--nodo_1446642020
+nodo_1793940025[label="ELSE"]
+nodo_1726777651--nodo_1793940025
+nodo_1734175253[label="="]
+nodo_1793940025--nodo_1734175253
+nodo_1482825916[label="ID : var2\n<INTEGER>"]
+nodo_1734175253--nodo_1482825916
+nodo_705542599[label="expresion Filter"]
+nodo_1734175253--nodo_705542599
+nodo_277194276[label="_"]
+nodo_705542599--nodo_277194276
+nodo_1446642020[label="Integer : 4\n<INTEGER>"]
+nodo_705542599--nodo_1446642020
 }
