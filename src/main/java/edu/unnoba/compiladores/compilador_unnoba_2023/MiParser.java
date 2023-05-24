@@ -565,6 +565,19 @@ public class MiParser extends java_cup.runtime.lr_parser {
         return retorno;
     }
 
+    public Tipo obtenerTipoReturnFilter(ArrayList<String> l_v){
+        Tipo tipoReturn = ht.get(idAsignacionFilter);
+        if (!isAsignacionFilter){
+            for(String auxVar : l_v){
+                tipoReturn = ht.get(auxVar);
+                if(tipoReturn == Tipo.FLOAT){
+                    break;
+                }
+            }
+        }
+        return tipoReturn;
+    }
+
     
    
 
@@ -2182,7 +2195,7 @@ class CUP$MiParser$actions {
     produccionesRecorridas.add("filter -> FILTER PARENTESIS_ABRE expresion_or COMA CORCHETE_ABRE lista_var CORCHETE_CIERRA PARENTESIS_CIERRA");
     
     Tipo tipoIdAsignacion = ht.get(idAsignacionFilter);
-    
+    Tipo tipoResultadosFilter = obtenerTipoReturnFilter(l_v);
 
     Tipo tipoExpresion = e_o.getTipo();
     String nombreOperacion = e_o.getEtiqueta();
@@ -2206,6 +2219,10 @@ class CUP$MiParser$actions {
                 if(!validarTiposVariablesConTipoAsignacionId(auxVar)){
                     throw new VarTypeNotCompatibleWithVarListTypes("El Tipo " + Tipo.toString(tipoAuxVar) +  " de la variable "+ auxVar +" no coincide con el Tipo " + tipoIdAsignacion + " de la Asignacion con la variable " + idAsignacionFilter + " \n");
                 }
+            }else{
+                if(!validarTiposVariablesConExpresion(auxVar,e_o)){
+                    throw new VarTypeNotEqualWithVarListTypes("El Tipo " + Tipo.toString(tipoAuxVar) +  " de la variable "+ auxVar +" no coincide con el Tipo " + e_o.getTipo() + " de la Expresion \n");
+                }
             }
             /*}else{
                 throw new VarTypeNotEqualWithVarListTypes("El Tipo " + Tipo.toString(tipoAuxVar) +  " de la variable "+ auxVar +" no coincide con el Tipo " + e_o.getTipo() + " de la Expresion \n");
@@ -2215,8 +2232,8 @@ class CUP$MiParser$actions {
 
             
             if(isAsignacionFilter==true){
-                resultadoFilter = new Identificador("_aux" + autoincrementalAuxFilter.toString(), tipoIdAsignacion);
-                variable = new Identificador(auxVar, tipoIdAsignacion);
+                resultadoFilter = new Identificador("_aux" + autoincrementalAuxFilter.toString(), tipoResultadosFilter);
+                variable = new Identificador(auxVar, tipoResultadosFilter);
             }else{
                 if (e_o.getTipo() == Tipo.INTEGER || e_o.getTipo() == Tipo.FLOAT){
                     resultadoFilter = new Identificador("_aux" + autoincrementalAuxFilter.toString(), Tipo.FLOAT);
@@ -2243,8 +2260,8 @@ class CUP$MiParser$actions {
     }
     
     if(isAsignacionFilter==true){
-        resultadoFilter = new Identificador("_aux" + autoincrementalAuxFilter.toString(), tipoIdAsignacion);
-        variable = new Identificador("_retornoFilterDefault", tipoIdAsignacion);
+        resultadoFilter = new Identificador("_aux" + autoincrementalAuxFilter.toString(), tipoResultadosFilter);
+        variable = new Identificador("_retornoFilterDefault", tipoResultadosFilter);
     }else{
         if (e_o.getTipo() == Tipo.INTEGER || e_o.getTipo() == Tipo.FLOAT){
             resultadoFilter = new Identificador("_aux" + autoincrementalAuxFilter.toString(), Tipo.FLOAT);
@@ -2262,20 +2279,17 @@ class CUP$MiParser$actions {
     sentenciaIf = new SentenciaIf(sentenciasDentroIF,expresionIF,sentenciasELIF, sentenciasDentroELSE);
     
     if(isAsignacionFilter==true){
-        filter = new Filter(sentenciaIf, tipoIdAsignacion);
+        filter = new Filter(sentenciaIf, tipoResultadosFilter);
     }else{
-        filter = new Filter(sentenciaIf, e_o.getTipo());
+        filter = new Filter(sentenciaIf, tipoResultadosFilter);
     }
 
     pilaFilter.add(filter);
 
-
-    isAsignacionFilter = false;
-    isGuionBajoFilter = false;
-    isExpresionFilter = false;
+    autoincrementalAuxFilter = autoincrementalAuxFilter +1;
     
     if(isAsignacionFilter==true){
-        resultadoFilter = new Identificador("_aux" + autoincrementalAuxFilter.toString(), tipoIdAsignacion);
+        resultadoFilter = new Identificador("_aux" + autoincrementalAuxFilter.toString(), tipoResultadosFilter);
     }else{
         if (e_o.getTipo() == Tipo.INTEGER || e_o.getTipo() == Tipo.FLOAT){
             resultadoFilter = new Identificador("_aux" + autoincrementalAuxFilter.toString(), Tipo.FLOAT);
@@ -2283,6 +2297,10 @@ class CUP$MiParser$actions {
             resultadoFilter = new Identificador("_aux" + autoincrementalAuxFilter.toString(), Tipo.BOOLEAN);
         }
     }
+
+    isAsignacionFilter = false;
+    isGuionBajoFilter = false;
+    isExpresionFilter = false;
 
     RESULT = resultadoFilter;
 
