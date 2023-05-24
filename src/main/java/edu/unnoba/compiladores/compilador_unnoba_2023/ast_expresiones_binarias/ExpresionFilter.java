@@ -13,4 +13,21 @@ public class ExpresionFilter extends OperacionBinaria{
     protected String getNombreOperacion() {
         return "expresion Filter";
     }
+
+    @Override
+    public Expresion clonar() {
+        return new ExpresionFilter(this.izquierda, this.derecha, this.getTipo());
+    }
+
+    @Override
+    public Expresion reemplazarExpresionIzquierda(String valor) {
+        if(this.izquierda.getIdVar()=="_"){
+            this.izquierda.setIdVar(valor);
+        }else{
+            this.izquierda.reemplazarExpresionIzquierda(valor);
+        }
+        return this.clonar(); 
+    }
+    
+    
 }

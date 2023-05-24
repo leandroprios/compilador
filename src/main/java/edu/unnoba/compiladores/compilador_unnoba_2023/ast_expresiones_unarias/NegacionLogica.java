@@ -14,5 +14,16 @@ public class NegacionLogica extends OperacionUnaria {
         super("NOT", expresion, Tipo.BOOLEAN);
         this.setIdVar(CodeGeneratorHelper.getNewPointer());
     }
+
+    @Override
+    public Expresion clonar() {
+       return new NegacionLogica(this.getExpresion().clonar());
+    }
+    
+    @Override
+    public Expresion reemplazarExpresionIzquierda(String valor) {
+        this.getExpresion().reemplazarExpresionIzquierda(valor);
+        return this.clonar();  
+    }
     
 }

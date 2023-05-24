@@ -20,5 +20,15 @@ public class OperacionFilter extends OperacionUnaria {
         this.expresion = expresion;
         this.setIdVar(CodeGeneratorHelper.getNewPointer());
     }
+
+    @Override
+    public Expresion clonar() {
+        return new OperacionFilter(this.getExpresion());
+    }
+    
+    @Override
+    public Expresion reemplazarExpresionIzquierda(String valor) {
+        throw new UnsupportedOperationException("El OperacionFilter no soporta reemplazar la expresion izquierda."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
     
 }

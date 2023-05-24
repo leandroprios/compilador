@@ -34,4 +34,14 @@ public class EnteroAFlotante extends Expresion {
         return graph;
     }
 
+    @Override
+    public Expresion clonar() {
+        return new EnteroAFlotante(this.entero);
+    }
+    
+    @Override
+    public Expresion reemplazarExpresionIzquierda(String valor) {
+        throw new UnsupportedOperationException("El EnteroAFlotante no soporta reemplazar la expresion izquierda."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
 }

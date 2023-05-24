@@ -13,7 +13,18 @@ public class IncrementoDecrementoFor  extends OperacionUnaria{
         super(operacion, expresion, tipo);
         this.setIdVar(CodeGeneratorHelper.getNewPointer());
     }
-    
+
+
+    @Override
+    public Expresion clonar() {
+        return new IncrementoDecrementoFor(this.getExpresion(),this.getNombre(),this.getTipo());
+    }
+
+    @Override
+    public Expresion reemplazarExpresionIzquierda(String valor) {
+        throw new UnsupportedOperationException("El IncrementoDecrementoFor no soporta reemplazar la expresion izquierda."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+ 
     
 
 }

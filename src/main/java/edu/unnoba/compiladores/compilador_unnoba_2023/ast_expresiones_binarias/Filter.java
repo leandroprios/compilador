@@ -13,11 +13,11 @@ import edu.unnoba.compiladores.compilador_unnoba_2023.sentencias.SentenciaIf;
  *
  * @author zabal
  */
-public class Filter extends OperacionUnaria {
+public class Filter extends Sentencia {
     SentenciaIf sentenciaIf;
-
+    
+   
     public Filter(SentenciaIf sentenciaIf, Tipo tipo) {
-        super("FILTER", sentenciaIf.getExpresion(),tipo);
         this.sentenciaIf=sentenciaIf;
     }
     
@@ -36,10 +36,4 @@ public class Filter extends OperacionUnaria {
         sentenciaIf.graficar(miId);
         return grafico;
     }
-
-    
-    
-
-    
-    
 }

@@ -1,12 +1,11 @@
 DECLARE.SECTION
 INT : var1, var2, var3, var4;
 float: var5, var8, var6;
-BOOLEAN: varlogica;
+BOOLEAN: varlogica, varlogica2, varlogica3;
 ENDDECLARE.SECTION
 PROGRAM.SECTION
 #Esto es un comentario
 varlogica = false
-var1=5
-var2=3
-var6 = FILTER(_<4, [var1,var2])
+varlogica2 = true
+var4 = FILTER(_==1, [var1,var2,var3])
 ENDPROGRAM.SECTION

@@ -14,4 +14,17 @@ public class Input extends Expresion{
         setTipo(tipo);
         this.setIdVar(CodeGeneratorHelper.getNewPointer());
     }
+
+    @Override
+    public Expresion clonar() {
+         return new Input(this.getTipo());
+    }
+
+    @Override
+    public Expresion reemplazarExpresionIzquierda(String valor) {
+        throw new UnsupportedOperationException("El Input no soporta reemplazar la expresion izquierda."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+
+    
 }

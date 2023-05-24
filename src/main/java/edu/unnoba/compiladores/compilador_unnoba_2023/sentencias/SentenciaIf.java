@@ -48,13 +48,13 @@ public class SentenciaIf extends Sentencia{
         
         if(this.sentenciasElif != null && !this.sentenciasElif.isEmpty()){
             for(SentenciaElif senElif : sentenciasElif){
-                grafico += senElif.graficar(thenIf.getId());
+                grafico += senElif.graficar(miId);
             }
         }
         
         if(this.sentenciasElse != null && !this.sentenciasElse.isEmpty()){
             Then thenElse = new Then("ELSE");
-            grafico += thenElse.graficar(thenIf.getId());
+            grafico += thenElse.graficar(miId);
             for(Sentencia senElse : sentenciasElse){
                 grafico += senElse.graficar(thenElse.getId());
             }

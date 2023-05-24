@@ -1,6 +1,7 @@
 package edu.unnoba.compiladores.compilador_unnoba_2023.factor;
 
 import edu.unnoba.compiladores.compilador_unnoba_2023.ast.CodeGeneratorHelper;
+import edu.unnoba.compiladores.compilador_unnoba_2023.ast_expresiones_binarias.Expresion;
 
 /**
  *
@@ -22,5 +23,15 @@ public class StringLiteral extends Literal{
     @Override
     public String toString() {
         return valor;
+    }
+
+    @Override
+    public Expresion clonar() {
+        return new StringLiteral(this.valor);
+    }
+    
+    @Override
+    public Expresion reemplazarExpresionIzquierda(String valor) {
+        throw new UnsupportedOperationException("El StringLiteral no soporta reemplazar la expresion izquierda."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

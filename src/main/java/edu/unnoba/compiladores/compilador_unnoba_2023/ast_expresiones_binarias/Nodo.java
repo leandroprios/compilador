@@ -21,7 +21,7 @@ public abstract class  Nodo {
         return "nodo_" + this.hashCode();
     }
 
-    protected String getEtiqueta() {
+    public String getEtiqueta() {
         if (this.nombre != null) {
             return this.nombre;
         }

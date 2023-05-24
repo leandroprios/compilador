@@ -2,6 +2,7 @@ package edu.unnoba.compiladores.compilador_unnoba_2023.ast_expresiones;
 
 import edu.unnoba.compiladores.compilador_unnoba_2023.ast.CodeGeneratorHelper;
 import edu.unnoba.compiladores.compilador_unnoba_2023.ast.Tipo;
+import edu.unnoba.compiladores.compilador_unnoba_2023.ast_expresiones_binarias.Expresion;
 import edu.unnoba.compiladores.compilador_unnoba_2023.factor.Constante;
 
 
@@ -41,6 +42,17 @@ public class Identificador extends Constante {
             grafico.append(String.format("%1$s--%2$s\n", idPadre, this.getId()));
         return grafico.toString();
     }
+
+    @Override
+    public Expresion clonar() {
+        return new Identificador(this.getNombre(), this.getTipo());
+    }
+
+    @Override
+    public Expresion reemplazarExpresionIzquierda(String valor) {
+        throw new UnsupportedOperationException("El Identificador no soporta reemplazar la expresion izquierda."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+    
 
 }
 
