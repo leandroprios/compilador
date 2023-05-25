@@ -35,4 +35,12 @@ public class Menor extends OperacionBinaria{
         return this.clonar();
     }
 
+    @Override
+    public boolean ComparacionFor(String var) {
+        System.out.println("nombre var en menor " +var);
+
+        return this.izquierda.ComparacionFor(var);
+    }
+    
+
 }

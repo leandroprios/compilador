@@ -26,4 +26,9 @@ public class NegacionLogica extends OperacionUnaria {
         return this.clonar();  
     }
     
+    @Override
+    public boolean ComparacionFor(String var) {
+        return false;
+    }
+    
 }

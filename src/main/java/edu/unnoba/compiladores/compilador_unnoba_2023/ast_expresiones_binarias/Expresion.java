@@ -5,4 +5,7 @@ public abstract class Expresion extends Nodo {
      public abstract Expresion clonar();
      
      public abstract Expresion reemplazarExpresionIzquierda(String valor);
+     
+     //public Expresion obtenerDerecho 
+    public abstract boolean ComparacionFor(String var);
 }

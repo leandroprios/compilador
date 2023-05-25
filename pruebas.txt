@@ -7,5 +7,9 @@ PROGRAM.SECTION
 #Esto es un comentario
 varlogica = false
 varlogica2 = true
-var4 = FILTER(_==1, [var1,var2,var3])
+var4 = FILTER(_==true, [var1,var2,var3])
+
+for(var2 =0; var2++; var3<=2)  do
+ var1 = 1
+end
 ENDPROGRAM.SECTION

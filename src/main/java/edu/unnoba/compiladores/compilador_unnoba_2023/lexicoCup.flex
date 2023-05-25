@@ -108,10 +108,10 @@ floatLiteral = \d+\.\d* | \.\d+
    /* Operadores Comparacion */
   "=="                            { return new MiToken("OPERADOR_IGUAL", yytext()); }
   "!="                            { return new MiToken("OPERADOR_DISTINTO", yytext()); }
-  "<"                             { return new MiToken("OPERADOR_MAYOR", yytext()); }
-  "<="                            { return new MiToken("OPERADOR_MAYOR_IGUAL", yytext()); }
-  ">"                             { return new MiToken("OPERADOR_MENOR", yytext()); }
-  ">="                            { return new MiToken("OPERADOR_MENOR_IGUAL", yytext()); }
+  ">"                             { return new MiToken("OPERADOR_MAYOR", yytext()); }
+  ">="                            { return new MiToken("OPERADOR_MAYOR_IGUAL", yytext()); }
+  "<"                             { return new MiToken("OPERADOR_MENOR", yytext()); }
+  "<="                            { return new MiToken("OPERADOR_MENOR_IGUAL", yytext()); }
  /* Operadores Logicos */
  and | AND                    { return new MiToken("OPERADOR_AND", yytext()); }
  or | OR                      { return new MiToken("OPERADOR_OR", yytext()); }

@@ -35,5 +35,9 @@ public class MenorIgual extends OperacionBinaria{
         return this.clonar();
 
     }
-
+    
+    @Override
+    public boolean ComparacionFor(String var) {
+        return this.izquierda.ComparacionFor(var);
+    }
 }

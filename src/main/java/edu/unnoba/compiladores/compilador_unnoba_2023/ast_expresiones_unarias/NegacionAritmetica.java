@@ -35,4 +35,9 @@ public class NegacionAritmetica extends OperacionUnaria {
         this.getExpresion().reemplazarExpresionIzquierda(valor);
         return this.clonar();  
     }
+    
+    @Override
+    public boolean ComparacionFor(String var) {
+        return false;
+    }
 }

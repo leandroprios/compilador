@@ -35,4 +35,9 @@ public class Flotante extends Literal {
     public Expresion reemplazarExpresionIzquierda(String valor) {
         throw new UnsupportedOperationException("El Flotante no soporta reemplazar la expresion izquierda."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
+    
+    @Override
+    public boolean ComparacionFor(String var) {
+        return false;
+    }
 }

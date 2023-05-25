@@ -24,4 +24,9 @@ public class Resta extends OperacionBinaria {
     public Expresion clonar() {
         return new Resta(this.izquierda.clonar(), this.derecha.clonar(), this.getTipo());
     }
+    
+    @Override
+    public boolean ComparacionFor(String var) {
+        return false;
+    }
 }

@@ -32,4 +32,9 @@ public class GuionBajo extends Expresion {
         return this.clonar();
     }
     
+    @Override
+    public boolean ComparacionFor(String var) {
+        return false;
+    }
+    
 }

@@ -52,6 +52,17 @@ public class Identificador extends Constante {
     public Expresion reemplazarExpresionIzquierda(String valor) {
         throw new UnsupportedOperationException("El Identificador no soporta reemplazar la expresion izquierda."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
+
+    @Override
+    public boolean ComparacionFor(String var) {
+        if(this.getNombre().equals(var)){
+           return true;
+        }else{
+            return false;
+        }
+    }
+    
+    
     
 
 }

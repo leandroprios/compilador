@@ -33,7 +33,9 @@ public class SentenciaFor extends Sentencia{
     public String graficar(String idPadre){
         final String miId = this.getId();
         String grafico = super.graficar(idPadre) + 
-        expresionFor.graficar(miId);
+        asignacion.graficar(miId) +
+        expresionFor.graficar(miId) + 
+        operacion.graficar(miId);
 
         for(Sentencia sen : sentencias){
             grafico += sen.graficar(miId);

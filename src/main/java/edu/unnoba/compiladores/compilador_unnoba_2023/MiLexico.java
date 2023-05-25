@@ -1176,7 +1176,7 @@ public class MiLexico implements java_cup.runtime.Scanner {
           // fall through
           case 79: break;
           case 15:
-            { return new MiToken("OPERADOR_MAYOR", yytext());
+            { return new MiToken("OPERADOR_MENOR", yytext());
             }
           // fall through
           case 80: break;
@@ -1186,7 +1186,7 @@ public class MiLexico implements java_cup.runtime.Scanner {
           // fall through
           case 81: break;
           case 17:
-            { return new MiToken("OPERADOR_MENOR", yytext());
+            { return new MiToken("OPERADOR_MAYOR", yytext());
             }
           // fall through
           case 82: break;
@@ -1268,7 +1268,7 @@ public class MiLexico implements java_cup.runtime.Scanner {
           // fall through
           case 96: break;
           case 32:
-            { return new MiToken("OPERADOR_MAYOR_IGUAL", yytext());
+            { return new MiToken("OPERADOR_MENOR_IGUAL", yytext());
             }
           // fall through
           case 97: break;
@@ -1278,7 +1278,7 @@ public class MiLexico implements java_cup.runtime.Scanner {
           // fall through
           case 98: break;
           case 34:
-            { return new MiToken("OPERADOR_MENOR_IGUAL", yytext());
+            { return new MiToken("OPERADOR_MAYOR_IGUAL", yytext());
             }
           // fall through
           case 99: break;

@@ -310,7 +310,6 @@ bloque_sentencias ::= bloque_sentencias:bs sentencia:s {:
 
 
 sentencia ::= sentencia_for: sf{:
-            is_sentencia_for = true;
             produccionesRecorridas.add("sentencia -> sentencia_for");
             RESULT = sf;
        :}
@@ -439,7 +438,7 @@ comparacion ::= expresion_sr :esr1 OPERADOR_MAYOR expresion_sr: esr2{:
                 }else{
                     RESULT = new Mayor(esr1,esr2);
                 }*/
-                    RESULT = new Mayor(esr1,esr2);
+                RESULT = new Mayor(esr1,esr2);
 
             }
             else if(esr1.getTipo() == Tipo.FLOAT && esr2.getTipo() == Tipo.INTEGER){
@@ -459,7 +458,7 @@ comparacion ::= expresion_sr :esr1 OPERADOR_MAYOR expresion_sr: esr2{:
                 }else{
                     RESULT = new Mayor(flotante,esr2);
                 }*/
-                    RESULT = new Mayor(flotante,esr2);
+                RESULT = new Mayor(flotante,esr2);
 
 
             }
@@ -469,7 +468,7 @@ comparacion ::= expresion_sr :esr1 OPERADOR_MAYOR expresion_sr: esr2{:
                 }else{
                     RESULT = new Mayor(esr1,esr2);
                 }*/
-                    RESULT = new Mayor(esr1,esr2);
+                RESULT = new Mayor(esr1,esr2);
 
             }
             else if(isGuionBajoFilter && (esr2.getTipo() == Tipo.FLOAT || esr2.getTipo() == Tipo.INTEGER)){
@@ -479,7 +478,7 @@ comparacion ::= expresion_sr :esr1 OPERADOR_MAYOR expresion_sr: esr2{:
                 }else{
                     RESULT = new Mayor(esr1,esr2);
                 }*/
-                    RESULT = new Mayor(esr1,esr2);
+                RESULT = new Mayor(esr1,esr2);
 
             }
             else{
@@ -495,7 +494,7 @@ comparacion ::= expresion_sr :esr1 OPERADOR_MAYOR expresion_sr: esr2{:
                 }else{
                     RESULT = new MayorIgual(esr1,esr2);
                 }*/
-                    RESULT = new MayorIgual(esr1,esr2);
+                RESULT = new MayorIgual(esr1,esr2);
 
             }
             else if(esr1.getTipo() == Tipo.FLOAT && esr2.getTipo() == Tipo.INTEGER){
@@ -1301,7 +1300,7 @@ sentencia_elseif ::= sentencia_elseif: elseif ELIF PARENTESIS_ABRE expresion_or:
 :};
 
 
-expresion_incremento_decremento ::= OPERADOR_SUMA:op expresion_sr: esr2{:
+/*expresion_incremento_decremento ::= OPERADOR_SUMA:op expresion_sr: esr2{:
         produccionesRecorridas.add("expresion_incremento_decremento -> OPERADOR_SUMA expresion_sr");
         RESULT = new IncrementoDecrementoFor(esr2,op,Tipo.INTEGER);
     :}
@@ -1317,14 +1316,23 @@ expresion_incremento_decremento ::= OPERADOR_SUMA:op expresion_sr: esr2{:
     | OPERADOR_RESTA:op OPERADOR_RESTA: esr2{:
         produccionesRecorridas.add("expresion_incremento_decremento -> OPERADOR_RESTA OPERADOR_RESTA");
         RESULT = new IncrementoDecrementoFor(null,op,Tipo.INTEGER);
+:};*/
+//pasar el id 2
+expresion_incremento_decremento ::= OPERADOR_SUMA:op OPERADOR_SUMA: op2{:
+        produccionesRecorridas.add("expresion_incremento_decremento -> OPERADOR_SUMA OPERADOR_SUMA");
+        RESULT = new IncrementoDecrementoFor(null,op + op2,Tipo.INTEGER);
+    :}
+    | OPERADOR_RESTA:op OPERADOR_RESTA: op2{:
+        produccionesRecorridas.add("expresion_incremento_decremento -> OPERADOR_RESTA OPERADOR_RESTA");
+        RESULT = new IncrementoDecrementoFor(null,op + op2,Tipo.INTEGER);
 :};
-
-sentencia_for ::= FOR PARENTESIS_ABRE VAR:id1 ASIGNACION CONST_INT  PUNTO_COMA VAR:id2 expresion_incremento_decremento:e_id PUNTO_COMA comparacion:c_f  PARENTESIS_CIERRA DO bloque_sentencias:bs END{:
+sentencia_for ::= FOR PARENTESIS_ABRE VAR:id1 ASIGNACION CONST_INT:intAux  PUNTO_COMA VAR:id2 {::} expresion_incremento_decremento:e_id PUNTO_COMA comparacion:c_f  PARENTESIS_CIERRA DO {:is_sentencia_for = true;:} bloque_sentencias:bs END{:
         
     //Verificar que c_f contenga el mismo id que id1 y id2;
-    if((id1).equals(id2) && (id1).equals(c_f.getIdVar())){
-
-        //ht.put(id1+'VARIABLE_FOR',Tipo.INTEGER);
+    if((id1).equals(id2)){
+        if (!c_f.ComparacionFor(id1)){             
+            throw new ComparacionForException("El for no admite este tipo de comparacion"); //ademas compara la tercer variable del for 
+        }
         if(!ht.containsKey(id1)){
             throw new VarNotDeclaredTSException("La variable " + id1 + " no está declarada previamente.");
         }
@@ -1332,12 +1340,12 @@ sentencia_for ::= FOR PARENTESIS_ABRE VAR:id1 ASIGNACION CONST_INT  PUNTO_COMA V
         throw new VarForNotEqualException("La variable utlizada en el FOR debe ser la misma");
     }
 
-    //ArrayList<Sentencia> sentencias = new ArrayList<>();
     produccionesRecorridas.add("sentencia_for -> FOR PARENTESIS_ABRE VAR ASIGNACION CONST_INT PUNTO_COMA VAR expresion_incremento_decremento PUNTO_COMA comparacion PARENTESIS_CIERRA DO bloque_sentencias END");
-    Asignacion asignacion = new Asignacion(new Identificador(id1,Tipo.INTEGER),e_id);
+    
+    Entero entero = new Entero(Integer.parseInt(intAux));
+    Asignacion asignacion = new Asignacion(new Identificador(id1,Tipo.INTEGER),entero);
 
     is_sentencia_for = false;
 
-   // RESULT = new SentenciaFor(c_f,asignacion,e_id,sentencias);
     RESULT = new SentenciaFor(c_f,asignacion,e_id,bs);
 :};

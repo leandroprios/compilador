@@ -34,5 +34,10 @@ public class Or extends OperacionBinaria{
         this.izquierda.reemplazarExpresionIzquierda(valor);
         return this.izquierda.clonar();
     }
+    
+    @Override
+    public boolean ComparacionFor(String var) {
+        return false;
+    }
 
 }

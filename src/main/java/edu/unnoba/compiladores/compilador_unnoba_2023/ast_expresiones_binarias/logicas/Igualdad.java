@@ -34,5 +34,10 @@ public class Igualdad extends OperacionBinaria{
         this.izquierda.reemplazarExpresionIzquierda(valor);
         return this.clonar();
     }
+    
+    @Override
+    public boolean ComparacionFor(String var) {
+        return this.izquierda.ComparacionFor(var);
+    }
 
 }

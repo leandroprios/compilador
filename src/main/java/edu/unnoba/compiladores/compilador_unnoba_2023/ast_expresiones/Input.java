@@ -25,6 +25,11 @@ public class Input extends Expresion{
         throw new UnsupportedOperationException("El Input no soporta reemplazar la expresion izquierda."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
+    @Override
+    public boolean ComparacionFor(String var) {
+        return false;
+    }
+
 
     
 }

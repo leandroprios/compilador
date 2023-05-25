@@ -29,5 +29,10 @@ public class ExpresionFilter extends OperacionBinaria{
         return this.clonar(); 
     }
     
+    @Override
+    public boolean ComparacionFor(String var) {
+        return false;
+    }
+    
     
 }

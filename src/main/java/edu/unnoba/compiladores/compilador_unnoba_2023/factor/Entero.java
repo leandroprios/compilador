@@ -44,4 +44,9 @@ public class Entero extends Literal {
         throw new UnsupportedOperationException("El Entero no soporta reemplazar la expresion izquierda."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
     
+    @Override
+    public boolean ComparacionFor(String var) {
+        return true;
+    }
+    
 }

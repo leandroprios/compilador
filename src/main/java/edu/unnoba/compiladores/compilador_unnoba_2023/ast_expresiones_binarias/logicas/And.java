@@ -23,12 +23,17 @@ public class And extends OperacionBinaria{
     
     @Override
     public Expresion clonar() {
-        return new And(this.izquierda, this.derecha);
+        return new And(this.izquierda.clonar(), this.derecha.clonar());
     }
     
     @Override
     public Expresion reemplazarExpresionIzquierda(String valor) {
         return this.izquierda.reemplazarExpresionIzquierda(valor);
+    }
+    
+    @Override
+    public boolean ComparacionFor(String var) {
+        return false;
     }
 
 }
