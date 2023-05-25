@@ -2,6 +2,7 @@ package edu.unnoba.compiladores.compilador_unnoba_2023.ast_expresiones_unarias;
 import edu.unnoba.compiladores.compilador_unnoba_2023.ast.CodeGeneratorHelper;
 import edu.unnoba.compiladores.compilador_unnoba_2023.ast.Tipo;
 import edu.unnoba.compiladores.compilador_unnoba_2023.ast_expresiones_binarias.Expresion;
+import edu.unnoba.compiladores.compilador_unnoba_2023.sentencias.Sentencia;
 
 /**
  *
@@ -13,7 +14,6 @@ public class IncrementoDecrementoFor  extends OperacionUnaria{
         super(operacion, expresion, tipo);
         this.setIdVar(CodeGeneratorHelper.getNewPointer());
     }
-
 
     @Override
     public Expresion clonar() {
@@ -28,6 +28,14 @@ public class IncrementoDecrementoFor  extends OperacionUnaria{
     @Override
     public boolean ComparacionFor(String var) {
         return false;
+    }
+    
+        @Override
+    public String graficar(String idPadre){
+        final String miId = this.getId();
+        String grafico = super.graficar(idPadre);
+        
+        return grafico;
     }
  
     
