@@ -27,8 +27,8 @@ public class And extends OperacionBinaria{
     }
     
     @Override
-    public Expresion reemplazarExpresionIzquierda(String valor) {
-        return this.izquierda.reemplazarExpresionIzquierda(valor);
+    public Expresion reemplazarExpresionIzquierda(String valor, Tipo tipo) {
+        return this.izquierda.reemplazarExpresionIzquierda(valor, tipo);
     }
     
     @Override

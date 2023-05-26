@@ -15,8 +15,8 @@ public class Resta extends OperacionBinaria {
     }
 
     @Override
-    public Expresion reemplazarExpresionIzquierda(String valor) {
-        this.izquierda.reemplazarExpresionIzquierda(valor);
+    public Expresion reemplazarExpresionIzquierda(String valor, Tipo tipo) {
+        this.izquierda.reemplazarExpresionIzquierda(valor,tipo);
         return this.clonar();
     }
 

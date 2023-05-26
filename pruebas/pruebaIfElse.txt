@@ -7,10 +7,12 @@ PROGRAM.SECTION
 #Esto es un comentario
 varlogica = false
 var6 =3
-varlogica = input_boolean()
-if (var6 == 3) then
-	var5 = filter(_!=3, [var2,var3,var4,var5])
-end 
+
+if (i == 0) THEN
+  var2 = 2
+else
+ var6 =3
+end
 
 DISPLAY("literal string")
 ENDPROGRAM.SECTION

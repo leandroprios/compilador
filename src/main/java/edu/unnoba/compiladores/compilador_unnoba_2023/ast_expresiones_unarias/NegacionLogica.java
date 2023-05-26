@@ -21,8 +21,8 @@ public class NegacionLogica extends OperacionUnaria {
     }
     
     @Override
-    public Expresion reemplazarExpresionIzquierda(String valor) {
-        this.getExpresion().reemplazarExpresionIzquierda(valor);
+    public Expresion reemplazarExpresionIzquierda(String valor, Tipo tipo) {
+        this.getExpresion().reemplazarExpresionIzquierda(valor, tipo);
         return this.clonar();  
     }
     

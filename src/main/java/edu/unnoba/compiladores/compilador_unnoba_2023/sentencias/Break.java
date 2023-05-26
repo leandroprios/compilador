@@ -20,7 +20,7 @@ public class Break extends Sentencia{
         @Override
     public String graficar(String idPadre){
         String grafico = super.graficar(idPadre);
-        grafico += super.graficar("BREAK");
+        //grafico += super.graficar("BREAK");
         return grafico;
     }
 }

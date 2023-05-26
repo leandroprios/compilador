@@ -9,6 +9,7 @@ import edu.unnoba.compiladores.compilador_unnoba_2023.ast_expresiones_binarias.E
 import edu.unnoba.compiladores.compilador_unnoba_2023.ast_expresiones_binarias.OperacionBinaria;
 import edu.unnoba.compiladores.compilador_unnoba_2023.ast_expresiones_unarias.IncrementoDecrementoFor;
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  *
@@ -20,6 +21,8 @@ public class SentenciaFor extends Sentencia{
     IncrementoDecrementoFor expresionFor;
     ArrayList<Sentencia> sentencias;
     
+    static Integer idDo = 1;
+    
     public SentenciaFor(Expresion operacion, Asignacion asignacion, IncrementoDecrementoFor expresionFor, ArrayList<Sentencia> sentencias){
         setNombre("FOR");
         this.operacion = operacion;
@@ -27,6 +30,7 @@ public class SentenciaFor extends Sentencia{
         this.expresionFor = expresionFor;
         this.sentencias = sentencias;
         this.setIdVar(CodeGeneratorHelper.getNewPointer());
+        idDo = idDo + 1;
     }
     
     @Override
@@ -36,9 +40,18 @@ public class SentenciaFor extends Sentencia{
         asignacion.graficar(miId) +
         expresionFor.graficar(miId) + 
         operacion.graficar(miId);
+        
+        Random random = new Random();
+        
+        String idDo = "nodo_";
+        //idDo.hashCode() +
+        idDo = idDo + random.nextInt(1000000000);
+        //"nodo_" + this.hashCode();
+        grafico = grafico + miId + "--" + idDo + "\n" 
+        + idDo + "[label=\"DO" + "\"]\n";
 
         for(Sentencia sen : sentencias){
-            grafico += sen.graficar(miId);
+            grafico += sen.graficar(idDo);
         }
         return grafico;
     }

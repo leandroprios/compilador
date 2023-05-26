@@ -9,8 +9,7 @@ varlogica = false
 var6 =3
 varlogica = input_boolean()
 if (var6 == 3) then
-	var5 = filter(_!=3, [var2,var3,var4,var5])
+	var5 = filter(_!=true, [var2,var3,var4])
 end 
-
 DISPLAY("literal string")
 ENDPROGRAM.SECTION

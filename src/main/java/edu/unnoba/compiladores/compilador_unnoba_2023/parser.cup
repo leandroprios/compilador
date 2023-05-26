@@ -27,6 +27,8 @@ parser code
 {:
     Integer autoincrementalAuxFilter = 0;
 
+    boolean validarTipoInput = false;
+
     boolean is_sentencia_for = false;
 
     Boolean isGuionBajoFilter = false;
@@ -40,6 +42,9 @@ parser code
     ArrayList<Literal> constantesFilter = new ArrayList<>();
 
     List<String> produccionesRecorridas = new ArrayList<>();
+
+    ArrayList<String> pilaFor = new ArrayList<>();
+
     
     Boolean isAsignacionFilter = false;
     String idAsignacionFilter; 
@@ -358,6 +363,28 @@ sentencia_asignacion ::= VAR:id ASIGNACION {:
             throw new VarNotDeclaredTSException("La variable "+(String) id+" no está declarada previamente.");
         }
         Tipo tipoId = ht.get(id);
+
+        Asignacion asig =new Asignacion(new Identificador(id, tipoId),eo);
+
+        if (validarTipoInput == true){
+            Tipo tipoInput = eo.getTipo();
+            if(tipoInput == Tipo.BOOLEAN && tipoId != Tipo.BOOLEAN){
+                throw new Exception("No se puede realizar la asignacion con " + eo.getNombre() + " con el tipo " + Tipo.toString(tipoId));  
+            }
+            if(tipoInput != Tipo.BOOLEAN && tipoId == Tipo.BOOLEAN){
+                throw new Exception("No se puede realizar la asignacion con " + eo.getNombre() + " con el tipo " + Tipo.toString(tipoId));
+            }
+            if(tipoInput == Tipo.FLOAT && tipoId == Tipo.INTEGER ||tipoInput == Tipo.INTEGER && tipoId == Tipo.FLOAT){
+                asig = new Asignacion(new Identificador(id, Tipo.FLOAT),eo);
+                        }
+            if (tipoInput == Tipo.INTEGER && tipoId == Tipo.INTEGER){
+                asig = new Asignacion(new Identificador(id, Tipo.INTEGER),eo);
+            }
+            if(tipoInput == Tipo.BOOLEAN && tipoId == Tipo.BOOLEAN){
+                asig = new Asignacion(new Identificador(id, Tipo.BOOLEAN),eo);
+            }
+        }
+        validarTipoInput = false;
         RESULT = new Asignacion(new Identificador(id, tipoId),eo);
 :};
 
@@ -1067,6 +1094,7 @@ factor ::= constante: c{:
     |
     input: in{:
         produccionesRecorridas.add("factor ->  input");
+        validarTipoInput = true;
         RESULT = in;
 :};
 
@@ -1151,7 +1179,6 @@ filter::= FILTER PARENTESIS_ABRE {: isExpresionFilter = true;:} expresion_or:e_o
                  
 
             autoincrementalAuxFilter = autoincrementalAuxFilter +1;
-
             
             if(isAsignacionFilter==true){
                 resultadoFilter = new Identificador("_aux" + autoincrementalAuxFilter.toString(), tipoResultadosFilter);
@@ -1170,13 +1197,13 @@ filter::= FILTER PARENTESIS_ABRE {: isExpresionFilter = true;:} expresion_or:e_o
             if(j==0){ //si es la primera variable de la lista de variables 
                     Asignacion asignacion = new Asignacion(resultadoFilter, variable); //agrego la asignacion dentro del IF sentencia dentro del IF
                     sentenciasDentroIF.add(asignacion);
-                    expresionIF = e_o.reemplazarExpresionIzquierda(auxVar);
+                    expresionIF = e_o.reemplazarExpresionIzquierda(auxVar, tipoAuxVar);
             }
             if(j>0 && l_v.size()>1){ //sentencias dentro del elif  
                 Asignacion asignacion = new Asignacion(resultadoFilter, variable); //agrego la sentencias del elif
                 ArrayList<Sentencia> sentenciasDentroELIF = new ArrayList<>();
                 sentenciasDentroELIF.add(asignacion);
-                sentenciasELIF.add(new SentenciaElif(sentenciasDentroELIF, e_o.reemplazarExpresionIzquierda(auxVar)));
+                sentenciasELIF.add(new SentenciaElif(sentenciasDentroELIF, e_o.reemplazarExpresionIzquierda(auxVar,tipoAuxVar)));
             }
         }
     }
@@ -1248,19 +1275,19 @@ input ::= input_int:ii {:
 :};
 
 
-input_int ::= INPUT_INT PARENTESIS_ABRE PARENTESIS_CIERRA {:
+input_int ::= INPUT_INT:i_int PARENTESIS_ABRE PARENTESIS_CIERRA {:
     produccionesRecorridas.add("input_int -> INPUT_INT PARENTESIS_ABRE PARENTESIS_CIERRA");
-    RESULT = new Input(Tipo.INTEGER);
+    RESULT = new Input(Tipo.INTEGER, i_int);
 :};
 
-input_float ::= INPUT_FLOAT PARENTESIS_ABRE PARENTESIS_CIERRA {:
-    produccionesRecorridas.add("input_float -> INPUT_FLOAT PARENTESIS_ABRE PARENTESIS_CIERRA");
-    RESULT = new Input(Tipo.FLOAT);
+input_float ::= INPUT_FLOAT:i_float PARENTESIS_ABRE PARENTESIS_CIERRA {:
+    produccionesRecorridas.add("input_float -> INPUT_FLOAT PARENTESIS_ABRE PARENTESIS_CIERRA"); 
+    RESULT = new Input(Tipo.FLOAT, i_float);
 :};
 
-input_bool ::= INPUT_BOOL PARENTESIS_ABRE PARENTESIS_CIERRA {:
-    produccionesRecorridas.add("input_bool -> INPUT_BOOL PARENTESIS_ABRE PARENTESIS_CIERRA");
-    RESULT = new Input(Tipo.BOOLEAN);
+input_bool ::= INPUT_BOOL:i_bool PARENTESIS_ABRE PARENTESIS_CIERRA {:
+    produccionesRecorridas.add("input_bool -> INPUT_BOOL PARENTESIS_ABRE PARENTESIS_CIERRA"); 
+    RESULT = new Input(Tipo.BOOLEAN, i_bool);
 :};
 
 sentencia_if ::= IF PARENTESIS_ABRE expresion_or:eo PARENTESIS_CIERRA THEN bloque_sentencias:bs END {:
@@ -1300,35 +1327,36 @@ sentencia_elseif ::= sentencia_elseif: elseif ELIF PARENTESIS_ABRE expresion_or:
 :};
 
 
-/*expresion_incremento_decremento ::= OPERADOR_SUMA:op expresion_sr: esr2{:
-        produccionesRecorridas.add("expresion_incremento_decremento -> OPERADOR_SUMA expresion_sr");
-        RESULT = new IncrementoDecrementoFor(esr2,op,Tipo.INTEGER);
-    :}
-    |
-    OPERADOR_RESTA:op expresion_sr: esr2{:
-        produccionesRecorridas.add("expresion_incremento_decremento -> OPERADOR_RESTA expresion_sr");
-        RESULT = new IncrementoDecrementoFor(esr2,op,Tipo.INTEGER);
-    :}
-    | OPERADOR_SUMA:op OPERADOR_SUMA: esr2{:
+expresion_incremento_decremento ::= VAR:var OPERADOR_SUMA:op OPERADOR_SUMA: op2{:
         produccionesRecorridas.add("expresion_incremento_decremento -> OPERADOR_SUMA OPERADOR_SUMA");
-        RESULT = new IncrementoDecrementoFor(null,op,Tipo.INTEGER);
+        if(!ht.containsKey(var)){
+            throw new VarNotDeclaredTSException("La variable " + var + " no está declarada previamente.");
+        }else{
+            Tipo tipoVar = ht.get(var);
+            if(tipoVar != Tipo.INTEGER){
+                throw new Exception("La variable " + var + " es del tipo: " + tipoVar + ". En la sentencia FOR solo se acepta INTEGER");
+            }
+        }
+        Identificador identificador = new Identificador(var,Tipo.INTEGER);
+        RESULT = new IncrementoDecrementoFor(identificador,op + op2,Tipo.INTEGER);
     :}
-    | OPERADOR_RESTA:op OPERADOR_RESTA: esr2{:
+    | VAR:var OPERADOR_RESTA:op OPERADOR_RESTA: op2{:
         produccionesRecorridas.add("expresion_incremento_decremento -> OPERADOR_RESTA OPERADOR_RESTA");
-        RESULT = new IncrementoDecrementoFor(null,op,Tipo.INTEGER);
-:};*/
-//pasar el id 2
-expresion_incremento_decremento ::= OPERADOR_SUMA:op OPERADOR_SUMA: op2{:
-        produccionesRecorridas.add("expresion_incremento_decremento -> OPERADOR_SUMA OPERADOR_SUMA");
-        RESULT = new IncrementoDecrementoFor(null,op + op2,Tipo.INTEGER);
-    :}
-    | OPERADOR_RESTA:op OPERADOR_RESTA: op2{:
-        produccionesRecorridas.add("expresion_incremento_decremento -> OPERADOR_RESTA OPERADOR_RESTA");
-        RESULT = new IncrementoDecrementoFor(null,op + op2,Tipo.INTEGER);
+        if(!ht.containsKey(var)){
+            throw new VarNotDeclaredTSException("La variable " + var + " no está declarada previamente.");
+        }else{
+            Tipo tipoVar = ht.get(var);
+            if(tipoVar != Tipo.INTEGER){
+                throw new Exception("La variable " + var + " es del tipo: " + tipoVar + ". En la sentencia FOR solo se acepta INTEGER");
+            }
+        }
+        Identificador identificador = new Identificador(var,Tipo.INTEGER);
+        RESULT = new IncrementoDecrementoFor(identificador,op + op2,Tipo.INTEGER);
 :};
-sentencia_for ::= FOR PARENTESIS_ABRE VAR:id1 ASIGNACION CONST_INT:intAux  PUNTO_COMA VAR:id2 {::} expresion_incremento_decremento:e_id PUNTO_COMA comparacion:c_f  PARENTESIS_CIERRA DO {:is_sentencia_for = true;:} bloque_sentencias:bs END{:
-        
+sentencia_for ::= FOR PARENTESIS_ABRE VAR:id1 ASIGNACION CONST_INT:intAux  PUNTO_COMA expresion_incremento_decremento:e_id PUNTO_COMA comparacion:c_f  PARENTESIS_CIERRA DO {:pilaFor.add("for"); is_sentencia_for = true;:} bloque_sentencias:bs END{:
     //Verificar que c_f contenga el mismo id que id1 y id2;
+    String id2 = ((Identificador)e_id.getExpresion()).getNombre();
+    System.out.println("id2 en for " + id2);
     if((id1).equals(id2)){
         if (!c_f.ComparacionFor(id1)){             
             throw new ComparacionForException("El for no admite este tipo de comparacion"); //ademas compara la tercer variable del for 
@@ -1345,7 +1373,13 @@ sentencia_for ::= FOR PARENTESIS_ABRE VAR:id1 ASIGNACION CONST_INT:intAux  PUNTO
     Entero entero = new Entero(Integer.parseInt(intAux));
     Asignacion asignacion = new Asignacion(new Identificador(id1,Tipo.INTEGER),entero);
 
-    is_sentencia_for = false;
 
+    pilaFor.remove(pilaFor.size()-1);
+
+    if(pilaFor.isEmpty()){
+        is_sentencia_for = false;
+    }
+
+    
     RESULT = new SentenciaFor(c_f,asignacion,e_id,bs);
 :};

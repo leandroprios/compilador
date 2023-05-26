@@ -40,7 +40,7 @@ public class Entero extends Literal {
     }
     
     @Override
-    public Expresion reemplazarExpresionIzquierda(String valor) {
+    public Expresion reemplazarExpresionIzquierda(String valor, Tipo tipo) {
         throw new UnsupportedOperationException("El Entero no soporta reemplazar la expresion izquierda."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
     

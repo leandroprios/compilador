@@ -27,8 +27,8 @@ public class GuionBajo extends Expresion {
     }
 
     @Override
-    public Expresion reemplazarExpresionIzquierda(String valor) {
-        this.setNombre(valor);
+    public Expresion reemplazarExpresionIzquierda(String valor, Tipo tipo) {
+        this.setNombre("ID : "+ valor + "<" + Tipo.toString(tipo) + ">" );
         return this.clonar();
     }
     

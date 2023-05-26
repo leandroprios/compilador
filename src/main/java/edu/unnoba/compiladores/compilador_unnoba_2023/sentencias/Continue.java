@@ -20,7 +20,7 @@ public class Continue extends Sentencia{
     @Override
     public String graficar(String idPadre){
         String grafico = super.graficar(idPadre);
-        grafico += super.graficar("CONTINUE");
+        //grafico += super.graficar("CONTINUE");
         return grafico;
     }
     
