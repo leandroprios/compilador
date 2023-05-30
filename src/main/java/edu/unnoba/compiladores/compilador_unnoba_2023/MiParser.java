@@ -503,8 +503,6 @@ public class MiParser extends java_cup.runtime.lr_parser {
 
     Integer autoincrementalAuxFilter = 0;
 
-    boolean validarTipoInput = false;
-
     boolean isSentenciaFor = false;
     Boolean isAsignacionFilter = false;
     Boolean isGuionBajoFilter = false;
@@ -1075,7 +1073,10 @@ class CUP$MiParser$actions {
             throw new VarNotDeclaredTSException("La variable "+(String) id+" no está declarada previamente.");
         }
         
-        /*for(String auxVar : l_v)*/
+        if(pilaVariablesInFor.contains(id)){
+            throw new VarForException("No es posible editar la variable " + id + " ya que, es utilizada en un FOR");
+        }
+        
         
         Tipo tipoId = ht.get(id);
             
@@ -1088,12 +1089,6 @@ class CUP$MiParser$actions {
         }else{
             throw new Exception("No se puede realizar la asignacion de " + id + " de tipo " +  Tipo.toString(tipoId)  + " con " + eo.getNombre() + "  de tipo " + Tipo.toString(tipoExpresion));
         }
-
-        validarTipoInput = false;
-
-
-        
-
         RESULT = new Asignacion(new Identificador(id, tipoId),eo);
 
               CUP$MiParser$result = parser.getSymbolFactory().newSymbol("sentencia_asignacion",9, ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-3)), ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()), RESULT);
@@ -1768,7 +1763,6 @@ class CUP$MiParser$actions {
 		Expresion in = (Expresion)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
 		
         produccionesRecorridas.add("factor ->  input");
-        validarTipoInput = true;
         RESULT = in;
 
               CUP$MiParser$result = parser.getSymbolFactory().newSymbol("factor",19, ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()), RESULT);
@@ -2317,7 +2311,16 @@ class CUP$MiParser$actions {
 		int c_fleft = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-2)).left;
 		int c_fright = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-2)).right;
 		Expresion c_f = (Expresion)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-2)).value;
-pilaFor.add("for"); isSentenciaFor = true; pilaVariablesInFor.add(id1);
+
+    pilaFor.add("for"); 
+    isSentenciaFor = true;        
+    if (pilaVariablesInFor.contains(id1)) {
+        throw new VarForException("No es posible volver a utlizar la variable " + id1 + " ya que, es utilizada en otro FOR");
+    } else {
+        pilaVariablesInFor.add(id1);
+    }
+
+    
               CUP$MiParser$result = parser.getSymbolFactory().newSymbol("NT$1",29, ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()), RESULT);
             }
           return CUP$MiParser$result;
@@ -2351,7 +2354,7 @@ pilaFor.add("for"); isSentenciaFor = true; pilaVariablesInFor.add(id1);
         if (!c_f.ComparacionFor(id1)){       
             pilaVariablesInFor.remove(pilaVariablesInFor.size()-1);
             pilaFor.remove(pilaFor.size()-1);
-            throw new ComparacionForException("El for no admite este tipo de comparacion"); //ademas compara la tercer variable del for 
+            throw new ComparacionForException("El For no admite este tipo de comparacion"); //ademas compara la tercer variable del for 
         }
         if(!ht.containsKey(id1)){
             pilaVariablesInFor.remove(pilaVariablesInFor.size()-1);
@@ -2367,7 +2370,9 @@ pilaFor.add("for"); isSentenciaFor = true; pilaVariablesInFor.add(id1);
     
     Entero entero = new Entero(Integer.parseInt(intAux));
     Asignacion asignacion = new Asignacion(new Identificador(id1,Tipo.INTEGER),entero);
-
+    
+    pilaVariablesInFor.remove(pilaVariablesInFor.size()-1);
+    pilaFor.remove(pilaFor.size()-1);
 
     if(pilaFor.isEmpty()){
         isSentenciaFor = false;

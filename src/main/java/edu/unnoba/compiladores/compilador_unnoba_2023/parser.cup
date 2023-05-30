@@ -370,7 +370,10 @@ sentencia_asignacion ::= VAR:id ASIGNACION {:
             throw new VarNotDeclaredTSException("La variable "+(String) id+" no está declarada previamente.");
         }
         
-        /*for(String auxVar : l_v)*/
+        if(pilaVariablesInFor.contains(id)){
+            throw new VarForException("No es posible editar la variable " + id + " ya que, es utilizada en un FOR");
+        }
+        
         
         Tipo tipoId = ht.get(id);
             
@@ -1033,7 +1036,16 @@ expresion_incremento_decremento ::= VAR:var OPERADOR_SUMA:op OPERADOR_SUMA: op2{
         Identificador identificador = new Identificador(var,Tipo.INTEGER);
         RESULT = new IncrementoDecrementoFor(identificador,op + op2,Tipo.INTEGER);
 :};
-sentencia_for ::= FOR PARENTESIS_ABRE VAR:id1 ASIGNACION CONST_INT:intAux  PUNTO_COMA expresion_incremento_decremento:e_id PUNTO_COMA comparacion:c_f  PARENTESIS_CIERRA DO {:pilaFor.add("for"); isSentenciaFor = true; pilaVariablesInFor.add(id1);:} bloque_sentencias:bs END{:
+sentencia_for ::= FOR PARENTESIS_ABRE VAR:id1 ASIGNACION CONST_INT:intAux  PUNTO_COMA expresion_incremento_decremento:e_id PUNTO_COMA comparacion:c_f  PARENTESIS_CIERRA DO {:
+    pilaFor.add("for"); 
+    isSentenciaFor = true;        
+    if (pilaVariablesInFor.contains(id1)) {
+        throw new VarForException("No es posible volver a utlizar la variable " + id1 + " ya que, es utilizada en otro FOR");
+    } else {
+        pilaVariablesInFor.add(id1);
+    }
+
+    :} bloque_sentencias:bs END{:
     produccionesRecorridas.add("sentencia_for -> FOR PARENTESIS_ABRE VAR ASIGNACION CONST_INT PUNTO_COMA VAR expresion_incremento_decremento PUNTO_COMA comparacion PARENTESIS_CIERRA DO bloque_sentencias END");
     //Verificar que c_f contenga el mismo id que id1 y id2;
     String id2 = ((Identificador)e_id.getExpresion()).getNombre();
@@ -1041,23 +1053,34 @@ sentencia_for ::= FOR PARENTESIS_ABRE VAR:id1 ASIGNACION CONST_INT:intAux  PUNTO
         if (!c_f.ComparacionFor(id1)){       
             pilaVariablesInFor.remove(pilaVariablesInFor.size()-1);
             pilaFor.remove(pilaFor.size()-1);
-            throw new ComparacionForException("El for no admite este tipo de comparacion"); //ademas compara la tercer variable del for 
+            if(pilaFor.isEmpty()){
+                isSentenciaFor = false;
+            }
+            throw new ComparacionForException("El For no admite este tipo de comparacion"); //ademas compara la tercer variable del for 
         }
         if(!ht.containsKey(id1)){
             pilaVariablesInFor.remove(pilaVariablesInFor.size()-1);
             pilaFor.remove(pilaFor.size()-1);
+            if(pilaFor.isEmpty()){
+                isSentenciaFor = false;
+            }
             throw new VarNotDeclaredTSException("La variable " + id1 + " no está declarada previamente.");
         }
     }else{
         pilaVariablesInFor.remove(pilaVariablesInFor.size()-1);
         pilaFor.remove(pilaFor.size()-1);
+        if(pilaFor.isEmpty()){
+            isSentenciaFor = false;
+        }
         throw new VarForNotEqualException("La variable utlizada en el FOR debe ser la misma");
     }
 
     
     Entero entero = new Entero(Integer.parseInt(intAux));
     Asignacion asignacion = new Asignacion(new Identificador(id1,Tipo.INTEGER),entero);
-
+    
+    pilaVariablesInFor.remove(pilaVariablesInFor.size()-1);
+    pilaFor.remove(pilaFor.size()-1);
 
     if(pilaFor.isEmpty()){
         isSentenciaFor = false;

@@ -1,14 +1,18 @@
 DECLARE.SECTION
-INT : var1, var2, var3, var4,i;
+INT : var1, var2, var3, var4,i,j;
 float: var5, var8, var6;
 BOOLEAN: varlogica;
 ENDDECLARE.SECTION
 PROGRAM.SECTION
 #Esto es un comentario
-
-var1 = filter(_!=2.2, [var2,var3,var5])
-
-if (var6 == var1) then
-  var5= 4.3
-end 
+for(i = 0; i++; i<3) do
+	var2 = 2
+	for(j = 0; j++; j<3) do
+		var2 = 2
+		break
+	end
+	break
+	continue
+end
+continue
 ENDPROGRAM.SECTION
