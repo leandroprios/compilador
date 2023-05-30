@@ -48,5 +48,11 @@ public class EnteroAFlotante extends Expresion {
     public boolean ComparacionFor(String var) {
         return false;
     }
+    
+    @Override
+    public Tipo getTipoExpresionDerecha() {
+        return this.getTipo();
+    }
+
 
 }

@@ -3,6 +3,7 @@ package edu.unnoba.compiladores.compilador_unnoba_2023.ast_expresiones;
 import edu.unnoba.compiladores.compilador_unnoba_2023.ast.CodeGeneratorHelper;
 import edu.unnoba.compiladores.compilador_unnoba_2023.ast.Tipo;
 import edu.unnoba.compiladores.compilador_unnoba_2023.ast_expresiones_binarias.Expresion;
+import edu.unnoba.compiladores.compilador_unnoba_2023.exceptions.VarTypeNotEqualWithVarListTypes;
 import edu.unnoba.compiladores.compilador_unnoba_2023.factor.Constante;
 
 
@@ -61,6 +62,12 @@ public class Identificador extends Constante {
             return false;
         }
     }
+
+    @Override
+    public Tipo getTipoExpresionDerecha() {
+       return getTipo();
+    }
+    
     
     
     

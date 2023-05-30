@@ -42,5 +42,10 @@ public class Menor extends OperacionBinaria{
         return this.izquierda.ComparacionFor(var);
     }
     
+    @Override
+    public Tipo getTipoExpresionDerecha() {
+        return this.derecha.getTipoExpresionDerecha();
+    }
+    
 
 }

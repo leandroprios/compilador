@@ -7,6 +7,7 @@ package edu.unnoba.compiladores.compilador_unnoba_2023.sentencias;
 import edu.unnoba.compiladores.compilador_unnoba_2023.ast.CodeGeneratorHelper;
 import edu.unnoba.compiladores.compilador_unnoba_2023.ast_expresiones_binarias.Expresion;
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  *
@@ -26,15 +27,19 @@ public class SentenciaElif extends Sentencia {
     @Override
     public String graficar(String idPadre){
         final String miId = this.getId();
-        Then then = new Then("THEN");
-        String grafico = super.graficar(idPadre) + 
-        expresion.graficar(miId) + then.graficar(miId);
+       
+        Random random = new Random();
         
-        //setNombre("THEN");
-        //grafico += super.graficar(idPadre);
+        String grafico = super.graficar(idPadre) + 
+        expresion.graficar(miId);
+        
+        String idThenIf = "nodo_";
+        idThenIf = idThenIf + random.nextInt(1000000000);
+        grafico = grafico + miId + "--" + idThenIf + "\n" 
+        + idThenIf + "[label=\"THEN" + "\"]\n";
         
         for(Sentencia sen : sentencias){
-            grafico += sen.graficar(then.getId());
+            grafico += sen.graficar(idThenIf);
         }
         
 

@@ -40,4 +40,9 @@ public class Mayor extends OperacionBinaria{
         return false;
     }
 
+    @Override
+    public Tipo getTipoExpresionDerecha() {
+        return this.derecha.getTipoExpresionDerecha();
+    }
+    
 }

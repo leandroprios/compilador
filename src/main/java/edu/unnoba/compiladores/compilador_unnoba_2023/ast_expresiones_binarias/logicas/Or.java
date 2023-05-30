@@ -39,5 +39,10 @@ public class Or extends OperacionBinaria{
     public boolean ComparacionFor(String var) {
         return false;
     }
+    
+    @Override
+    public Tipo getTipoExpresionDerecha() {
+        return this.derecha.getTipoExpresionDerecha();
+    }
 
 }

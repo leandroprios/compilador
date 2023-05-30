@@ -41,5 +41,11 @@ public class Booleano extends Literal {
         return false;
     }
     
+    @Override
+    public Tipo getTipoExpresionDerecha() {
+        return this.getTipo();
+    }
+
+    
     
 }

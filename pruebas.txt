@@ -5,12 +5,10 @@ BOOLEAN: varlogica;
 ENDDECLARE.SECTION
 PROGRAM.SECTION
 #Esto es un comentario
-varlogica = false
-var6 =3
-varlogica = input_boolean()
-if (var6 == 3) then
-	var5 = filter(_!=3, [var2,var3,var4,var5])
-end 
 
-DISPLAY("literal string")
+var1 = filter(_!=2.2, [var2,var3,var5])
+
+if (var6 == var1) then
+  var5= 4.3
+end 
 ENDPROGRAM.SECTION

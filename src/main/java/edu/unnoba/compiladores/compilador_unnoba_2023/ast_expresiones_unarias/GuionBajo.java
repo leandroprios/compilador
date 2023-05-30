@@ -37,4 +37,9 @@ public class GuionBajo extends Expresion {
         return false;
     }
     
+    @Override
+    public Tipo getTipoExpresionDerecha() {
+        return Tipo.UNKNOWN;
+    }
+    
 }

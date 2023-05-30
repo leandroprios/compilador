@@ -31,4 +31,10 @@ public class NegacionLogica extends OperacionUnaria {
         return false;
     }
     
+    @Override
+    public Tipo getTipoExpresionDerecha() {
+        return this.getTipo();
+    }
+
+    
 }

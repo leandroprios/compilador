@@ -39,5 +39,10 @@ public class Igualdad extends OperacionBinaria{
     public boolean ComparacionFor(String var) {
         return this.izquierda.ComparacionFor(var);
     }
+    
+    @Override
+    public Tipo getTipoExpresionDerecha() {
+        return this.derecha.getTipoExpresionDerecha();
+    }
 
 }

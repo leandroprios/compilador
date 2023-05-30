@@ -7,6 +7,7 @@ package edu.unnoba.compiladores.compilador_unnoba_2023.sentencias;
 import edu.unnoba.compiladores.compilador_unnoba_2023.ast.CodeGeneratorHelper;
 import edu.unnoba.compiladores.compilador_unnoba_2023.ast_expresiones_binarias.Expresion;
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  *
@@ -38,12 +39,20 @@ public class SentenciaIf extends Sentencia{
     @Override
     public String graficar(String idPadre){
         final String miId = this.getId();
-        Then thenIf = new Then("THEN");
+        //Then thenIf = new Then("THEN");
         String grafico = super.graficar(idPadre) + 
-        expresion.graficar(miId) + thenIf.graficar(miId);
+        expresion.graficar(miId);
         
+        Random random = new Random();
+        
+        String idThenIf = "nodo_";
+        idThenIf = idThenIf + random.nextInt(1000000000);
+        grafico = grafico + miId + "--" + idThenIf + "\n" 
+        + idThenIf + "[label=\"THEN" + "\"]\n";
+
+
         for(Sentencia sen : sentenciasIf){
-            grafico += sen.graficar(thenIf.getId());
+            grafico += sen.graficar(idThenIf);
         }
         
         if(this.sentenciasElif != null && !this.sentenciasElif.isEmpty()){
@@ -53,10 +62,13 @@ public class SentenciaIf extends Sentencia{
         }
         
         if(this.sentenciasElse != null && !this.sentenciasElse.isEmpty()){
-            Then thenElse = new Then("ELSE");
-            grafico += thenElse.graficar(miId);
+            String idElse = "nodo_";
+            idElse = idElse + random.nextInt(1000000000);
+            grafico = grafico + miId + "--" + idElse + "\n" 
+            + idElse + "[label=\"ELSE" + "\"]\n";
+            
             for(Sentencia senElse : sentenciasElse){
-                grafico += senElse.graficar(thenElse.getId());
+                grafico += senElse.graficar(idElse);
             }
         }
         

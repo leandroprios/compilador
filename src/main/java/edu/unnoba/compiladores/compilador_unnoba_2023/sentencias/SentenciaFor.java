@@ -21,7 +21,6 @@ public class SentenciaFor extends Sentencia{
     IncrementoDecrementoFor expresionFor;
     ArrayList<Sentencia> sentencias;
     
-    static Integer idDo = 1;
     
     public SentenciaFor(Expresion operacion, Asignacion asignacion, IncrementoDecrementoFor expresionFor, ArrayList<Sentencia> sentencias){
         setNombre("FOR");
@@ -30,7 +29,6 @@ public class SentenciaFor extends Sentencia{
         this.expresionFor = expresionFor;
         this.sentencias = sentencias;
         this.setIdVar(CodeGeneratorHelper.getNewPointer());
-        idDo = idDo + 1;
     }
     
     @Override
@@ -44,9 +42,7 @@ public class SentenciaFor extends Sentencia{
         Random random = new Random();
         
         String idDo = "nodo_";
-        //idDo.hashCode() +
         idDo = idDo + random.nextInt(1000000000);
-        //"nodo_" + this.hashCode();
         grafico = grafico + miId + "--" + idDo + "\n" 
         + idDo + "[label=\"DO" + "\"]\n";
 

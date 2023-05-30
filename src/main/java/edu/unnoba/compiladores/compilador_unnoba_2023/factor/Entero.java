@@ -49,4 +49,10 @@ public class Entero extends Literal {
         return true;
     }
     
+    @Override
+    public Tipo getTipoExpresionDerecha() {
+        return this.getTipo();
+    }
+
+    
 }

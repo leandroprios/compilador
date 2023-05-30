@@ -27,29 +27,20 @@ parser code
 {:
     Integer autoincrementalAuxFilter = 0;
 
-    boolean validarTipoInput = false;
-
-    boolean is_sentencia_for = false;
-
+    boolean isSentenciaFor = false;
+    Boolean isAsignacionFilter = false;
     Boolean isGuionBajoFilter = false;
 
-    Boolean isConstante= false;
-
-    Boolean isExpresionFilter = false;
-
     ArrayList<Filter> pilaFilter = new ArrayList<>();
-
-    ArrayList<Literal> constantesFilter = new ArrayList<>();
 
     List<String> produccionesRecorridas = new ArrayList<>();
 
     ArrayList<String> pilaFor = new ArrayList<>();
 
+    ArrayList<String> pilaVariablesInFor = new ArrayList<>();
     
-    Boolean isAsignacionFilter = false;
     String idAsignacionFilter; 
-    String returnFilter;
-    ArrayList<String> lista_varFilter = new ArrayList<String>();
+    //String returnFilter;
 
     public List<String> getProduccionesList(){
         return this.produccionesRecorridas;
@@ -83,14 +74,31 @@ parser code
         return retorno;
     }
 
-    public Tipo obtenerTipoReturnFilter(ArrayList<String> l_v){
-        Tipo tipoReturn = ht.get(idAsignacionFilter);
-        if (!isAsignacionFilter){
-            for(String auxVar : l_v){
-                tipoReturn = ht.get(auxVar);
-                if(tipoReturn == Tipo.FLOAT){
-                    break;
+    public boolean validarTiposListaVariablesInFilter(ArrayList<String> l_v){
+        boolean retorno = true;
+        Tipo tipoVarAnterior = ht.get(l_v.get(0));
+        
+        for(String auxVar : l_v){
+            Tipo tipoVarActual = ht.get(auxVar);
+            if(tipoVarActual != tipoVarAnterior){
+                if(tipoVarActual == Tipo.BOOLEAN){
+                    retorno = false;
+                }else if(tipoVarAnterior == Tipo.BOOLEAN){
+                    retorno = false;
                 }
+                tipoVarAnterior = tipoVarActual; 
+            }
+        }
+     
+        return retorno;
+    }
+
+    public Tipo obtenerTipoReturnFilter(ArrayList<String> l_v){
+        Tipo tipoReturn = Tipo.UNKNOWN;
+        for(String auxVar : l_v){
+            tipoReturn = ht.get(auxVar);
+            if(tipoReturn == Tipo.FLOAT || tipoReturn == Tipo.BOOLEAN){
+                break;
             }
         }
         return tipoReturn;
@@ -335,7 +343,7 @@ sentencia ::= sentencia_for: sf{:
         :}
         |
         BREAK: b{:
-            if(!is_sentencia_for){
+            if(!isSentenciaFor){
                 throw new Exception("El BREAK no se encuentra dentro del FOR");
             }
             produccionesRecorridas.add("sentencia -> BREAK");
@@ -343,7 +351,7 @@ sentencia ::= sentencia_for: sf{:
         :}
         |
         CONTINUE: c{:
-            if(!is_sentencia_for){
+            if(!isSentenciaFor){
                 throw new Exception("El CONTINUE no se encuentra dentro del FOR");
             }
             produccionesRecorridas.add("sentencia -> CONTINUE");
@@ -357,34 +365,24 @@ sentencia_asignacion ::= VAR:id ASIGNACION {:
     idAsignacionFilter = id;
     :} expresion_or: eo {:
         produccionesRecorridas.add("sentencia_asignacion -> VAR ASIGNACION expresion_or");
-
-
+        
         if(!ht.containsKey(id)){
             throw new VarNotDeclaredTSException("La variable "+(String) id+" no está declarada previamente.");
         }
+        
+        /*for(String auxVar : l_v)*/
+        
         Tipo tipoId = ht.get(id);
-
+            
         Asignacion asig =new Asignacion(new Identificador(id, tipoId),eo);
-
-        if (validarTipoInput == true){
-            Tipo tipoInput = eo.getTipo();
-            if(tipoInput == Tipo.BOOLEAN && tipoId != Tipo.BOOLEAN){
-                throw new Exception("No se puede realizar la asignacion con " + eo.getNombre() + " con el tipo " + Tipo.toString(tipoId));  
-            }
-            if(tipoInput != Tipo.BOOLEAN && tipoId == Tipo.BOOLEAN){
-                throw new Exception("No se puede realizar la asignacion con " + eo.getNombre() + " con el tipo " + Tipo.toString(tipoId));
-            }
-            if(tipoInput == Tipo.FLOAT && tipoId == Tipo.INTEGER ||tipoInput == Tipo.INTEGER && tipoId == Tipo.FLOAT){
-                asig = new Asignacion(new Identificador(id, Tipo.FLOAT),eo);
-                        }
-            if (tipoInput == Tipo.INTEGER && tipoId == Tipo.INTEGER){
-                asig = new Asignacion(new Identificador(id, Tipo.INTEGER),eo);
-            }
-            if(tipoInput == Tipo.BOOLEAN && tipoId == Tipo.BOOLEAN){
-                asig = new Asignacion(new Identificador(id, Tipo.BOOLEAN),eo);
-            }
+        
+        Tipo tipoExpresion = eo.getTipo();
+        
+        if (tipoExpresion == tipoId || tipoId ==Tipo.FLOAT && tipoExpresion == Tipo.INTEGER){
+            asig = new Asignacion(new Identificador(id, tipoId),eo);
+        }else{
+            throw new Exception("No se puede realizar la asignacion de " + id + " de tipo " +  Tipo.toString(tipoId)  + " con " + eo.getNombre() + "  de tipo " + Tipo.toString(tipoExpresion));
         }
-        validarTipoInput = false;
         RESULT = new Asignacion(new Identificador(id, tipoId),eo);
 :};
 
@@ -393,13 +391,7 @@ expresion_or ::= expresion_or: eo OPERADOR_OR expresion_and :ea{:
         produccionesRecorridas.add("expresion_or -> expresion_or OPERADOR_OR expresion_and");
 
         if(eo.getTipo() == Tipo.BOOLEAN && ea.getTipo() == Tipo.BOOLEAN){
-            /*if (isExpresionFilter){
-                RESULT =new ExpresionFilter(eo,ea,Tipo.BOOLEAN);
-            }else{
-                RESULT =new Or(eo,ea);
-            }*/
-                RESULT =new Or(eo,ea);
-
+            RESULT =new Or(eo,ea);
         }
         else{
             throw new Exception("No se puede realizar la expresion OR entre una variable del tipo " + Tipo.toString(eo.getTipo()) + " y una variable de tipo " + Tipo.toString(ea.getTipo()));
@@ -415,13 +407,7 @@ expresion_or ::= expresion_or: eo OPERADOR_OR expresion_and :ea{:
 expresion_and ::= expresion_and: ea OPERADOR_AND expresion_not :en{:
         produccionesRecorridas.add("expresion_and -> expresion_and OPERADOR_AND expresion_not");
         if(ea.getTipo() == Tipo.BOOLEAN && en.getTipo() == Tipo.BOOLEAN){
-            /*if (isExpresionFilter){
-                RESULT =new ExpresionFilter(ea,en,Tipo.BOOLEAN);
-            }else{
-                RESULT =new And(ea,en);
-            }*/
-                RESULT =new And(ea,en);
-
+            RESULT =new And(ea,en);
         }
         else{
             throw new Exception("No se puede realizar la expresion AND entre una variable del tipo " + Tipo.toString(ea.getTipo()) + " y una variable de tipo " + Tipo.toString(en.getTipo()));
@@ -437,13 +423,7 @@ expresion_and ::= expresion_and: ea OPERADOR_AND expresion_not :en{:
 expresion_not ::= OPERADOR_NOT expresion_not :en{:
         produccionesRecorridas.add("expresion_not -> OPERADOR_NOT expresion_not");
         if(en.getTipo() == Tipo.BOOLEAN){
-            /*if (isExpresionFilter){
-                RESULT =new ExpresionFilter(new NegacionLogica(en),en,Tipo.BOOLEAN);
-            }else{
-                RESULT =new NegacionLogica(en);
-            }*/
             RESULT =new NegacionLogica(en);
-
         }
         else{
             throw new Exception("No se puede realizar la expresion NOT con una variable del tipo " +  Tipo.toString(en.getTipo()));
@@ -460,53 +440,22 @@ expresion_not ::= OPERADOR_NOT expresion_not :en{:
 comparacion ::= expresion_sr :esr1 OPERADOR_MAYOR expresion_sr: esr2{:
             produccionesRecorridas.add("comparacion -> expresion_sr OPERADOR_MAYOR expresion_sr");
             if(esr1.getTipo() == Tipo.INTEGER && esr2.getTipo() == Tipo.INTEGER){
-                /*if (isExpresionFilter){
-                    RESULT = new ExpresionFilter(esr1,esr2,Tipo.INTEGER);
-                }else{
-                    RESULT = new Mayor(esr1,esr2);
-                }*/
                 RESULT = new Mayor(esr1,esr2);
-
             }
             else if(esr1.getTipo() == Tipo.FLOAT && esr2.getTipo() == Tipo.INTEGER){
                 EnteroAFlotante flotante = new EnteroAFlotante(esr2);
-                /*if (isExpresionFilter){
-                    RESULT = new ExpresionFilter(esr1,flotante,Tipo.FLOAT);
-                }else{
-                    RESULT = new Mayor(esr1,flotante);
-                }*/
-                    RESULT = new Mayor(esr1,flotante);
-
+                RESULT = new Mayor(esr1,flotante);
             }
             else if(esr1.getTipo() == Tipo.INTEGER && esr2.getTipo() == Tipo.FLOAT){
                 EnteroAFlotante flotante = new EnteroAFlotante(esr1);
-                /*if (isExpresionFilter){
-                    RESULT = new ExpresionFilter(flotante,esr2,Tipo.FLOAT);
-                }else{
-                    RESULT = new Mayor(flotante,esr2);
-                }*/
                 RESULT = new Mayor(flotante,esr2);
-
-
             }
             else if(esr1.getTipo() == Tipo.FLOAT && esr2.getTipo() == Tipo.FLOAT){
-                /*if (isExpresionFilter){
-                    RESULT = new ExpresionFilter(esr1,esr2,Tipo.FLOAT);
-                }else{
-                    RESULT = new Mayor(esr1,esr2);
-                }*/
                 RESULT = new Mayor(esr1,esr2);
-
             }
             else if(isGuionBajoFilter && (esr2.getTipo() == Tipo.FLOAT || esr2.getTipo() == Tipo.INTEGER)){
                 esr1.setTipo(esr2.getTipo());
-                /*if (isExpresionFilter){
-                    RESULT = new ExpresionFilter(esr1,esr2,esr2.getTipo());
-                }else{
-                    RESULT = new Mayor(esr1,esr2);
-                }*/
                 RESULT = new Mayor(esr1,esr2);
-
             }
             else{
                 throw new Exception("La variable de tipo " + Tipo.toString(esr1.getTipo()) + " no puede compararse con el operador > con una variable del tipo " + Tipo.toString(esr2.getTipo()));
@@ -516,52 +465,23 @@ comparacion ::= expresion_sr :esr1 OPERADOR_MAYOR expresion_sr: esr2{:
        expresion_sr :esr1 OPERADOR_MAYOR_IGUAL expresion_sr: esr2{:
             produccionesRecorridas.add("comparacion -> expresion_sr OPERADOR_MAYOR_IGUAL expresion_sr");
             if(esr1.getTipo() == Tipo.INTEGER && esr2.getTipo() == Tipo.INTEGER){          
-                /*if (isExpresionFilter){
-                    RESULT = new ExpresionFilter(esr1,esr2,Tipo.INTEGER);
-                }else{
-                    RESULT = new MayorIgual(esr1,esr2);
-                }*/
                 RESULT = new MayorIgual(esr1,esr2);
-
             }
             else if(esr1.getTipo() == Tipo.FLOAT && esr2.getTipo() == Tipo.INTEGER){
                 EnteroAFlotante flotante = new EnteroAFlotante(esr2);
-                /*if (isExpresionFilter){
-                    RESULT = new ExpresionFilter(esr1,flotante,Tipo.FLOAT);
-                }else{
-                    RESULT = new MayorIgual(esr1,flotante);
-                }*/
-                    RESULT = new MayorIgual(esr1,flotante);
-
+                RESULT = new MayorIgual(esr1,flotante);
             }
             else if(esr1.getTipo() == Tipo.INTEGER && esr2.getTipo() == Tipo.FLOAT){
                 EnteroAFlotante flotante = new EnteroAFlotante(esr1);
-                /*if (isExpresionFilter){
-                    RESULT = new ExpresionFilter(flotante,esr2,Tipo.FLOAT);
-                }else{
-                    RESULT = new MayorIgual(flotante,esr2);
-                }*/
-                    RESULT = new MayorIgual(flotante,esr2);
-
+                RESULT = new MayorIgual(flotante,esr2);
             }
             else if(esr1.getTipo() == Tipo.FLOAT && esr2.getTipo() == Tipo.FLOAT){
-                /*if (isExpresionFilter){
-                    RESULT = new ExpresionFilter(esr1,esr2,Tipo.FLOAT);
-                }else{
-                    RESULT = new MayorIgual(esr1,esr2);
-                }*/
-                    RESULT = new MayorIgual(esr1,esr2);
+                RESULT = new MayorIgual(esr1,esr2);
 
             }
             else if(isGuionBajoFilter && (esr2.getTipo() == Tipo.FLOAT || esr2.getTipo() == Tipo.INTEGER)){
                 esr1.setTipo(esr2.getTipo());
-                /*if (isExpresionFilter){
-                    RESULT = new ExpresionFilter(esr1,esr2,esr2.getTipo());
-                }else{
-                    RESULT = new MayorIgual(esr1,esr2);
-                }*/
-                    RESULT = new MayorIgual(esr1,esr2);
-
+                RESULT = new MayorIgual(esr1,esr2);
             }
             else{
                 throw new Exception("La variable de tipo " + Tipo.toString(esr1.getTipo()) + " no puede compararse con el operador >= con una variable del tipo " + Tipo.toString(esr2.getTipo()));
@@ -571,52 +491,22 @@ comparacion ::= expresion_sr :esr1 OPERADOR_MAYOR expresion_sr: esr2{:
        expresion_sr :esr1 OPERADOR_MENOR expresion_sr: esr2{:
             produccionesRecorridas.add("comparacion -> expresion_sr OPERADOR_MENOR expresion_sr");
             if(esr1.getTipo() == Tipo.INTEGER && esr2.getTipo() == Tipo.INTEGER){
-                /*if (isExpresionFilter){
-                    RESULT = new ExpresionFilter(esr1,esr2,Tipo.INTEGER);
-                }else{
-                    RESULT = new Menor(esr1,esr2);
-                }*/
-                    RESULT = new Menor(esr1,esr2);
-
+                RESULT = new Menor(esr1,esr2);
             }
             else if(esr1.getTipo() == Tipo.FLOAT && esr2.getTipo() == Tipo.INTEGER){
                 EnteroAFlotante flotante = new EnteroAFlotante(esr2);
-                /*if (isExpresionFilter){
-                    RESULT = new ExpresionFilter(esr1,flotante,Tipo.FLOAT);
-                }else{
-                    RESULT = new Menor(esr1,flotante);
-                }*/
-                    RESULT = new Menor(esr1,flotante);
-
+                RESULT = new Menor(esr1,flotante);
             }
             else if(esr1.getTipo() == Tipo.INTEGER && esr2.getTipo() == Tipo.FLOAT){
                 EnteroAFlotante flotante = new EnteroAFlotante(esr1);
-                /*if (isExpresionFilter){
-                    RESULT = new ExpresionFilter(flotante,esr2,Tipo.FLOAT);
-                }else{
-                    RESULT = new Menor(flotante,esr2);
-                }*/
-                    RESULT = new Menor(flotante,esr2);
-
+                RESULT = new Menor(flotante,esr2);
             }
             else if(esr1.getTipo() == Tipo.FLOAT && esr2.getTipo() == Tipo.FLOAT){
-                /*if (isExpresionFilter){
-                    RESULT = new ExpresionFilter(esr1,esr2,Tipo.FLOAT);
-                }else{
-                    RESULT = new Menor(esr1,esr2);
-                }*/
-                    RESULT = new Menor(esr1,esr2);
-
+                RESULT = new Menor(esr1,esr2);
             }
             else if(isGuionBajoFilter && (esr2.getTipo() == Tipo.FLOAT || esr2.getTipo() == Tipo.INTEGER)){
                 esr1.setTipo(esr2.getTipo());
-                /*if (isExpresionFilter){
-                    RESULT = new ExpresionFilter(esr1,esr2,esr2.getTipo());
-                }else{
-                    RESULT = new Menor(esr1,esr2);
-                }*/
-                    RESULT = new Menor(esr1,esr2);
-
+                RESULT = new Menor(esr1,esr2);
             }
             else{
                 throw new Exception("La variable de tipo " + Tipo.toString(esr1.getTipo()) + " no puede compararse con el operador < con una variable del tipo " + Tipo.toString(esr2.getTipo()));
@@ -626,52 +516,23 @@ comparacion ::= expresion_sr :esr1 OPERADOR_MAYOR expresion_sr: esr2{:
        expresion_sr :esr1 OPERADOR_MENOR_IGUAL expresion_sr: esr2{:
             produccionesRecorridas.add("comparacion -> expresion_sr OPERADOR_MENOR_IGUAL expresion_s");
             if(esr1.getTipo() == Tipo.INTEGER && esr2.getTipo() == Tipo.INTEGER){
-                /*if (isExpresionFilter){
-                    RESULT = new ExpresionFilter(esr1,esr2,Tipo.INTEGER);
-                }else{
-                    RESULT = new MenorIgual(esr1,esr2);
-                }*/
-                    RESULT = new MenorIgual(esr1,esr2);
-
+                RESULT = new MenorIgual(esr1,esr2);
             }
             else if(esr1.getTipo() == Tipo.FLOAT && esr2.getTipo() == Tipo.INTEGER){
                 EnteroAFlotante flotante = new EnteroAFlotante(esr2);
-                /*if (isExpresionFilter){
-                    RESULT = new ExpresionFilter(esr1,flotante,Tipo.FLOAT);
-                }else{
-                    RESULT = new MenorIgual(esr1,flotante);
-                }*/
-                    RESULT = new MenorIgual(esr1,flotante);
-
+                RESULT = new MenorIgual(esr1,flotante);
             }
             else if(esr1.getTipo() == Tipo.INTEGER && esr2.getTipo() == Tipo.FLOAT){
                 EnteroAFlotante flotante = new EnteroAFlotante(esr1);
-                /*if (isExpresionFilter){
-                    RESULT = new ExpresionFilter(flotante,esr2,Tipo.FLOAT);
-                }else{
-                    RESULT = new MenorIgual(flotante,esr2);
-                }*/
-                    RESULT = new MenorIgual(flotante,esr2);
-
+                RESULT = new MenorIgual(flotante,esr2);
             }
             else if(esr1.getTipo() == Tipo.FLOAT && esr2.getTipo() == Tipo.FLOAT){
-                /*if (isExpresionFilter){
-                    RESULT = new ExpresionFilter(esr1,esr2,Tipo.FLOAT);
-                }else{
-                    RESULT = new MenorIgual(esr1,esr2);
-                }*/
-                    RESULT = new MenorIgual(esr1,esr2);
+                RESULT = new MenorIgual(esr1,esr2);
 
             }
             else if(isGuionBajoFilter && (esr2.getTipo() == Tipo.FLOAT || esr2.getTipo() == Tipo.INTEGER)){
                 esr1.setTipo(esr2.getTipo());
-                /*if (isExpresionFilter){
-                    RESULT = new ExpresionFilter(esr1,esr2,esr2.getTipo());
-                }else{
-                    RESULT = new MenorIgual(esr1,esr2);                
-                }*/
-                    RESULT = new MenorIgual(esr1,esr2);                
-
+                RESULT = new MenorIgual(esr1,esr2);                
             }
             else{
                 throw new Exception("La variable de tipo " + Tipo.toString(esr1.getTipo()) + " no puede compararse con el operador < con una variable del tipo " + Tipo.toString(esr2.getTipo()));
@@ -681,61 +542,25 @@ comparacion ::= expresion_sr :esr1 OPERADOR_MAYOR expresion_sr: esr2{:
        expresion_sr :esr1 OPERADOR_IGUAL expresion_sr: esr2{:
             produccionesRecorridas.add("comparacion -> expresion_sr OPERADOR_IGUAL expresion_sr");
             if(esr1.getTipo() == Tipo.INTEGER && esr2.getTipo() == Tipo.INTEGER){
-                /*if (isExpresionFilter){
-                    RESULT =new ExpresionFilter(esr1,esr2,Tipo.INTEGER);
-                }else{
-                    RESULT = new Igualdad(esr1,esr2);
-                }*/
-                    RESULT = new Igualdad(esr1,esr2);
-
+                RESULT = new Igualdad(esr1,esr2);
             }
             else if(esr1.getTipo() == Tipo.FLOAT && esr2.getTipo() == Tipo.INTEGER){
                 EnteroAFlotante flotante = new EnteroAFlotante(esr2);
-                /*if (isExpresionFilter){
-                    RESULT =new ExpresionFilter(esr1,flotante,Tipo.FLOAT);
-                }else{
-                    RESULT = new Igualdad(esr1,flotante);
-                }*/
-                    RESULT = new Igualdad(esr1,flotante);
-
+                RESULT = new Igualdad(esr1,flotante);
             }
             else if(esr1.getTipo() == Tipo.INTEGER && esr2.getTipo() == Tipo.FLOAT){
                 EnteroAFlotante flotante = new EnteroAFlotante(esr1);
-                /*if (isExpresionFilter){
-                    RESULT =new ExpresionFilter(flotante,esr2,Tipo.FLOAT);
-                }else{
-                    RESULT = new Igualdad(flotante,esr2);
-                }*/
-                    RESULT = new Igualdad(flotante,esr2);
-
+                RESULT = new Igualdad(flotante,esr2);
             }
             else if(esr1.getTipo() == Tipo.FLOAT && esr2.getTipo() == Tipo.FLOAT){
-                /*if (isExpresionFilter){
-                    RESULT =new ExpresionFilter(esr1,esr2,Tipo.FLOAT);
-                }else{
-                    RESULT = new Igualdad(esr1,esr2);
-                }*/
-                    RESULT = new Igualdad(esr1,esr2);
-
+                RESULT = new Igualdad(esr1,esr2);
             }
             else if(esr1.getTipo() == Tipo.BOOLEAN && esr2.getTipo() == Tipo.BOOLEAN){
-                /*if (isExpresionFilter){
-                    RESULT =new ExpresionFilter(esr1,esr2,Tipo.BOOLEAN);
-                }else{
-                    RESULT = new Igualdad(esr1,esr2);
-                }*/
-                    RESULT = new Igualdad(esr1,esr2);
-
+                RESULT = new Igualdad(esr1,esr2);
             }
             else if(isGuionBajoFilter && (esr2.getTipo() == Tipo.FLOAT || esr2.getTipo() == Tipo.INTEGER || esr2.getTipo() == Tipo.BOOLEAN)){
                 esr1.setTipo(esr2.getTipo());
-                /*if (isExpresionFilter){
-                    RESULT =new ExpresionFilter(esr1,esr2,esr2.getTipo());
-                }else{
-                    RESULT = new Igualdad(esr1,esr2);
-                }*/
-                    RESULT = new Igualdad(esr1,esr2);
-
+                RESULT = new Igualdad(esr1,esr2);
             }
             else{
                 throw new Exception("La variable de tipo " + Tipo.toString(esr1.getTipo()) + " no puede compararse con el operador == con una variable del tipo " + Tipo.toString(esr2.getTipo()));
@@ -745,61 +570,25 @@ comparacion ::= expresion_sr :esr1 OPERADOR_MAYOR expresion_sr: esr2{:
        expresion_sr :esr1 OPERADOR_DISTINTO expresion_sr: esr2{:
             produccionesRecorridas.add("comparacion -> expresion_sr OPERADOR_DISTINTO expresion_sr");
             if(esr1.getTipo() == Tipo.INTEGER && esr2.getTipo() == Tipo.INTEGER){
-                /*if (isExpresionFilter){
-                    RESULT =new ExpresionFilter(esr1,esr2,Tipo.INTEGER);
-                }else{
-                    RESULT = new Desigualdad(esr1,esr2);
-                }*/
-                    RESULT = new Desigualdad(esr1,esr2);
-
+                RESULT = new Desigualdad(esr1,esr2);
             }
             else if(esr1.getTipo() == Tipo.FLOAT && esr2.getTipo() == Tipo.INTEGER){
                 EnteroAFlotante flotante = new EnteroAFlotante(esr2);
-                /*if (isExpresionFilter){
-                    RESULT =new ExpresionFilter(esr1,flotante,Tipo.FLOAT);
-                }else{
-                    RESULT = new Desigualdad(esr1,flotante);
-                }*/
-                    RESULT = new Desigualdad(esr1,flotante);
-
+                RESULT = new Desigualdad(esr1,flotante);
             }
             else if(esr1.getTipo() == Tipo.INTEGER && esr2.getTipo() == Tipo.FLOAT){
                 EnteroAFlotante flotante = new EnteroAFlotante(esr1);
-                /*if (isExpresionFilter){
-                    RESULT =new ExpresionFilter(flotante,esr2,Tipo.FLOAT);
-                }else{
-                    RESULT = new Desigualdad(flotante,esr2);
-                }*/
-                    RESULT = new Desigualdad(flotante,esr2);
-
+                RESULT = new Desigualdad(flotante,esr2);
             }
             else if(esr1.getTipo() == Tipo.FLOAT && esr2.getTipo() == Tipo.FLOAT){
-                /*if (isExpresionFilter){
-                    RESULT =new ExpresionFilter(esr1,esr2,Tipo.FLOAT);
-                }else{
-                    RESULT = new Desigualdad(esr1,esr2);
-                }*/
-                    RESULT = new Desigualdad(esr1,esr2);
-
+                RESULT = new Desigualdad(esr1,esr2);
             }
             else if(esr1.getTipo() == Tipo.BOOLEAN && esr2.getTipo() == Tipo.BOOLEAN){
-                /*if (isExpresionFilter){
-                    RESULT =new ExpresionFilter(esr1,esr2,Tipo.BOOLEAN);
-                }else{
-                    RESULT = new Desigualdad(esr1,esr2);
-                }*/
-                    RESULT = new Desigualdad(esr1,esr2);
-
+                RESULT = new Desigualdad(esr1,esr2);
             }
             else if(isGuionBajoFilter && (esr2.getTipo() == Tipo.FLOAT || esr2.getTipo() == Tipo.INTEGER || esr2.getTipo() == Tipo.BOOLEAN)){
                 esr1.setTipo(esr2.getTipo());
-                /*if (isExpresionFilter){
-                    RESULT =new ExpresionFilter(esr1,esr2,esr2.getTipo());
-                }else{
-                    RESULT = new Desigualdad(esr1,esr2);
-                }*/
-                    RESULT = new Desigualdad(esr1,esr2);
-
+                RESULT = new Desigualdad(esr1,esr2);
             }
             else{
                 throw new Exception("La variable de tipo " + Tipo.toString(esr1.getTipo()) + " no puede compararse con el operador != con una variable del tipo " + Tipo.toString(esr2.getTipo()));
@@ -815,50 +604,24 @@ comparacion ::= expresion_sr :esr1 OPERADOR_MAYOR expresion_sr: esr2{:
 expresion_sr ::= expresion_sr :esr OPERADOR_SUMA expresion_md: emd{:
             produccionesRecorridas.add("expresion_sr ->expresion_sr OPERADOR_SUMA expresion_md");
              if(esr.getTipo() == Tipo.INTEGER && emd.getTipo() == Tipo.INTEGER){
-                if (isExpresionFilter){
-                    RESULT =new ExpresionFilter(esr,emd,Tipo.INTEGER);
-                }else{
-                    RESULT = new Suma(esr,emd , Tipo.INTEGER);
-                };
+                RESULT = new Suma(esr,emd , Tipo.INTEGER);
             }
             else if(esr.getTipo() == Tipo.FLOAT && emd.getTipo() == Tipo.INTEGER){
                 EnteroAFlotante flotante = new EnteroAFlotante(emd);
-                /*if (isExpresionFilter){
-                    RESULT =new ExpresionFilter(esr,flotante,Tipo.FLOAT);
-                }else{
-                    RESULT = new Suma(esr,flotante , Tipo.FLOAT);
-                }*/
-                    RESULT = new Suma(esr,flotante , Tipo.FLOAT);
+                RESULT = new Suma(esr,flotante , Tipo.FLOAT);
 
             }
             else if(esr.getTipo() == Tipo.INTEGER && emd.getTipo() == Tipo.FLOAT){
                 EnteroAFlotante flotante = new EnteroAFlotante(esr);
-                /*if (isExpresionFilter){
-                    RESULT =new ExpresionFilter(flotante,emd,Tipo.FLOAT);
-                }else{
-                    RESULT = new Suma(flotante,emd, Tipo.FLOAT);
-                }*/
-                    RESULT = new Suma(flotante,emd, Tipo.FLOAT);
-
+                RESULT = new Suma(flotante,emd, Tipo.FLOAT);
             }
             else if(esr.getTipo() == Tipo.FLOAT && emd.getTipo() == Tipo.FLOAT){
-                /*if (isExpresionFilter){
-                    RESULT =new ExpresionFilter(esr,emd,Tipo.FLOAT);
-                }else{
-                    RESULT = new Suma(esr,emd, Tipo.FLOAT);
-                }*/
-                    RESULT = new Suma(esr,emd, Tipo.FLOAT);
+                RESULT = new Suma(esr,emd, Tipo.FLOAT);
 
             }
             else if(isGuionBajoFilter && (emd.getTipo() == Tipo.FLOAT || emd.getTipo() == Tipo.INTEGER)){
                 esr.setTipo(emd.getTipo());
-                /*if (isExpresionFilter){
-                    RESULT =new ExpresionFilter(esr,emd,emd.getTipo());
-                }else{
-                    RESULT = new Suma(esr,emd, emd.getTipo());
-                };*/
-                    RESULT = new Suma(esr,emd, emd.getTipo());
-
+                RESULT = new Suma(esr,emd, emd.getTipo());
             }
             else{
                 throw new Exception("No se puede sumar entre una variable de tipo " + Tipo.toString(esr.getTipo()) + " y una variable de tipo " + Tipo.toString(emd.getTipo()));
@@ -868,51 +631,26 @@ expresion_sr ::= expresion_sr :esr OPERADOR_SUMA expresion_md: emd{:
        expresion_sr :esr OPERADOR_RESTA expresion_md: emd{:
             produccionesRecorridas.add("expresion_sr -> expresion_sr OPERADOR_RESTA expresion_md");
             if(esr.getTipo() == Tipo.INTEGER && emd.getTipo() == Tipo.INTEGER){
-                /*if (isExpresionFilter){
-                    RESULT =new ExpresionFilter(esr,emd,Tipo.INTEGER);
-                }else{
-                    RESULT = new Resta(esr,emd,Tipo.INTEGER);
-                };*/
-                    RESULT = new Resta(esr,emd,Tipo.INTEGER);
+                RESULT = new Resta(esr,emd,Tipo.INTEGER);
 
             }
             else if(esr.getTipo() == Tipo.FLOAT && emd.getTipo() == Tipo.INTEGER){
                 EnteroAFlotante flotante = new EnteroAFlotante(emd);
-                /*if (isExpresionFilter){
-                    RESULT =new ExpresionFilter(esr,flotante,Tipo.FLOAT);
-                }else{
-                    RESULT = new Resta(esr,flotante,Tipo.FLOAT);
-                };*/
-                    RESULT = new Resta(esr,flotante,Tipo.FLOAT);
+                RESULT = new Resta(esr,flotante,Tipo.FLOAT);
 
             }
             else if(esr.getTipo() == Tipo.INTEGER && emd.getTipo() == Tipo.FLOAT){
                 EnteroAFlotante flotante = new EnteroAFlotante(esr);
-                /*if (isExpresionFilter){
-                    RESULT =new ExpresionFilter(flotante,emd,Tipo.FLOAT);
-                }else{
-                    RESULT = new Resta(flotante,emd,Tipo.FLOAT);
-                };*/
-                    RESULT = new Resta(flotante,emd,Tipo.FLOAT);
+                RESULT = new Resta(flotante,emd,Tipo.FLOAT);
 
             }
             else if(esr.getTipo() == Tipo.FLOAT && emd.getTipo() == Tipo.FLOAT){
-                /*if (isExpresionFilter){
-                    RESULT =new ExpresionFilter(esr,emd,Tipo.FLOAT);
-                }else{
-                    RESULT = new Resta(esr,emd, Tipo.FLOAT);
-                };*/
-                    RESULT = new Resta(esr,emd, Tipo.FLOAT);
+                RESULT = new Resta(esr,emd, Tipo.FLOAT);
 
             }
             else if(isGuionBajoFilter && (emd.getTipo() == Tipo.FLOAT || emd.getTipo() == Tipo.INTEGER)){
                 esr.setTipo(emd.getTipo());
-                /*if (isExpresionFilter){
-                    RESULT =new ExpresionFilter(esr,emd,emd.getTipo());
-                }else{
-                    RESULT = new Resta(esr,emd, emd.getTipo());
-                };*/
-                    RESULT = new Resta(esr,emd, emd.getTipo());
+                RESULT = new Resta(esr,emd, emd.getTipo());
 
             }
             else{
@@ -929,51 +667,25 @@ expresion_sr ::= expresion_sr :esr OPERADOR_SUMA expresion_md: emd{:
 expresion_md ::= expresion_md :emd OPERADOR_MULTI menos_unario:mu{:
         produccionesRecorridas.add("expresion_md -> expresion_md OPERADOR_MULTI menos_unario");
         if(emd.getTipo() == Tipo.INTEGER && mu.getTipo() == Tipo.INTEGER){
-            /*if (isExpresionFilter){
-                RESULT =new ExpresionFilter(emd,mu,Tipo.INTEGER);
-            }else{
-                RESULT = new Multiplicacion(emd,mu, Tipo.INTEGER);
-            };*/
-                RESULT = new Multiplicacion(emd,mu, Tipo.INTEGER);
-
+            RESULT = new Multiplicacion(emd,mu, Tipo.INTEGER);
         }
         else if(emd.getTipo() == Tipo.FLOAT && mu.getTipo() == Tipo.INTEGER){
             EnteroAFlotante flotante = new EnteroAFlotante(mu);
-            /*if (isExpresionFilter){
-                RESULT =new ExpresionFilter(emd,flotante,Tipo.FLOAT);
-            }else{
-                RESULT = new Multiplicacion(emd,flotante, Tipo.FLOAT);
-            };*/
-                RESULT = new Multiplicacion(emd,flotante, Tipo.FLOAT);
+            RESULT = new Multiplicacion(emd,flotante, Tipo.FLOAT);
 
         }
         else if(emd.getTipo() == Tipo.INTEGER && mu.getTipo() == Tipo.FLOAT){
             EnteroAFlotante flotante = new EnteroAFlotante(emd);
-            /*if (isExpresionFilter){
-                RESULT =new ExpresionFilter(flotante,mu,Tipo.FLOAT);
-            }else{
-                RESULT = new Multiplicacion(flotante,mu,Tipo.FLOAT);
-            };*/
-                RESULT = new Multiplicacion(flotante,mu,Tipo.FLOAT);
+            RESULT = new Multiplicacion(flotante,mu,Tipo.FLOAT);
 
         }
         else if(emd.getTipo() == Tipo.FLOAT && mu.getTipo() == Tipo.FLOAT){
-            /*if (isExpresionFilter){
-                RESULT =new ExpresionFilter(emd,mu,Tipo.FLOAT);
-            }else{
-                RESULT = new Multiplicacion(emd,mu,Tipo.FLOAT);
-            };*/
-                RESULT = new Multiplicacion(emd,mu,Tipo.FLOAT);
+            RESULT = new Multiplicacion(emd,mu,Tipo.FLOAT);
 
         }
         else if(isGuionBajoFilter && (mu.getTipo() == Tipo.FLOAT || mu.getTipo() == Tipo.INTEGER)){
             emd.setTipo(mu.getTipo());
-            /*if (isExpresionFilter){
-                RESULT =new ExpresionFilter(emd,mu,mu.getTipo());
-            }else{
-                RESULT = new Multiplicacion(emd,mu,mu.getTipo());
-            };*/
-                RESULT = new Multiplicacion(emd,mu,mu.getTipo());
+            RESULT = new Multiplicacion(emd,mu,mu.getTipo());
 
         }
         else{
@@ -984,50 +696,25 @@ expresion_md ::= expresion_md :emd OPERADOR_MULTI menos_unario:mu{:
     expresion_md :emd OPERADOR_DIV menos_unario:mu{:
         produccionesRecorridas.add("expresion_md -> expresion_md OPERADOR_DIV menos_unario");
         if(emd.getTipo() == Tipo.INTEGER && mu.getTipo() == Tipo.INTEGER){
-            /*if (isExpresionFilter){
-                RESULT =new ExpresionFilter(emd,mu,Tipo.INTEGER);
-            }else{
-                RESULT = new Division(emd,mu, Tipo.INTEGER);
-            };*/
             RESULT = new Division(emd,mu, Tipo.INTEGER);
 
         }
         else if(emd.getTipo() == Tipo.FLOAT && mu.getTipo() == Tipo.INTEGER){
             EnteroAFlotante flotante = new EnteroAFlotante(mu);
-            /*if (isExpresionFilter){
-                RESULT =new ExpresionFilter(emd,flotante,Tipo.FLOAT);
-            }else{
-                RESULT = new Division(emd,flotante, Tipo.FLOAT);
-            };*/
             RESULT = new Division(emd,flotante, Tipo.FLOAT);
 
         }
         else if(emd.getTipo() == Tipo.INTEGER && mu.getTipo() == Tipo.FLOAT){
             EnteroAFlotante flotante = new EnteroAFlotante(emd);
-            /*if (isExpresionFilter){
-                RESULT =new ExpresionFilter(flotante,mu,Tipo.FLOAT);
-            }else{
-                RESULT = new Division(flotante,mu, Tipo.FLOAT);
-            };*/
             RESULT = new Division(flotante,mu, Tipo.FLOAT);
 
         }
         else if(emd.getTipo() == Tipo.FLOAT && mu.getTipo() == Tipo.FLOAT){
-            /*if (isExpresionFilter){
-                RESULT =new ExpresionFilter(emd,mu,Tipo.FLOAT);
-            }else{
-                RESULT = new Division(emd,mu, Tipo.FLOAT);
-            };*/
             RESULT = new Division(emd,mu, Tipo.FLOAT);
 
         }
         else if(isGuionBajoFilter && (mu.getTipo() == Tipo.FLOAT || mu.getTipo() == Tipo.INTEGER)){
             emd.setTipo(mu.getTipo());
-            /*if(isExpresionFilter){
-                RESULT =new ExpresionFilter(emd,mu,mu.getTipo());
-            }else{
-                RESULT = new Division(emd,mu, mu.getTipo());
-            };*/
             RESULT = new Division(emd,mu, mu.getTipo());
 
         }
@@ -1044,20 +731,9 @@ expresion_md ::= expresion_md :emd OPERADOR_MULTI menos_unario:mu{:
 menos_unario ::= OPERADOR_RESTA menos_unario:mu{:
         produccionesRecorridas.add("menos_unario -> OPERADOR_RESTA menos_unario");
         if(mu.getTipo() == Tipo.INTEGER){
-            /*if (isExpresionFilter){
-                RESULT = new ExpresionFilter(new NegacionAritmetica(mu,"sub",Tipo.INTEGER),mu,Tipo.INTEGER);
-            }else{
-                RESULT = new NegacionAritmetica(mu,"sub",Tipo.INTEGER);
-            };*/
-        RESULT = new NegacionAritmetica(mu,"sub",Tipo.INTEGER);
+            RESULT = new NegacionAritmetica(mu,"sub",Tipo.INTEGER);
         }else if(mu.getTipo() == Tipo.FLOAT){
-            /*if (isExpresionFilter){
-                RESULT = new ExpresionFilter(new NegacionAritmetica(mu,"fsub",Tipo.FLOAT),mu,Tipo.FLOAT);
-            }else{
-                RESULT =  new NegacionAritmetica(mu,"fsub",Tipo.FLOAT);
-            };*/
             RESULT =  new NegacionAritmetica(mu,"fsub",Tipo.FLOAT);
-
         }
         else{
             throw new Exception("No se puede negar una variable de tipo " + Tipo.toString(mu.getTipo()));
@@ -1072,7 +748,6 @@ menos_unario ::= OPERADOR_RESTA menos_unario:mu{:
 
 factor ::= constante: c{:
         produccionesRecorridas.add("factor -> constante");
-        isConstante = true;
         RESULT = c;
        :}
        |
@@ -1094,36 +769,27 @@ factor ::= constante: c{:
     |
     input: in{:
         produccionesRecorridas.add("factor ->  input");
-        validarTipoInput = true;
         RESULT = in;
 :};
 
 
 constante::= CONST_BOOL:bl{:
         produccionesRecorridas.add("constante -> CONST_BOOL");
-        constantesFilter.add(new Booleano(Boolean.parseBoolean(bl)));
         RESULT = new Booleano(Boolean.parseBoolean(bl));
     :}
     |
     CONST_INT:il{:
         produccionesRecorridas.add("constante -> CONST_INT");
-        constantesFilter.add(new Entero(Integer.parseInt(il)));
         RESULT = new Entero(Integer.parseInt(il));
     :}
     |
     CONST_FLOAT:fl{:
-        produccionesRecorridas.add("constante -> CONST_FLOAT");
-        
-        constantesFilter.add(new Flotante(Float.parseFloat(fl)));
-        
+        produccionesRecorridas.add("constante -> CONST_FLOAT");        
         RESULT = new Flotante(Float.parseFloat(fl));
     :}
     |
     STRING_LITERAL:fl{:
-        produccionesRecorridas.add("constante -> STRING_LITERAL");
-        
-        constantesFilter.add(new StringLiteral(fl));
-        
+        produccionesRecorridas.add("constante -> STRING_LITERAL");        
         RESULT = new StringLiteral(fl);
     :}
     |
@@ -1137,7 +803,10 @@ constante::= CONST_BOOL:bl{:
  :};
 
 
-filter::= FILTER PARENTESIS_ABRE {: isExpresionFilter = true;:} expresion_or:e_o COMA CORCHETE_ABRE lista_var:l_v CORCHETE_CIERRA PARENTESIS_CIERRA {:
+filter::= FILTER PARENTESIS_ABRE expresion_or:e_o COMA CORCHETE_ABRE lista_var:l_v CORCHETE_CIERRA PARENTESIS_CIERRA {:
+    produccionesRecorridas.add("filter -> FILTER PARENTESIS_ABRE expresion_or COMA CORCHETE_ABRE lista_var CORCHETE_CIERRA PARENTESIS_CIERRA");
+
+
     SentenciaIf sentenciaIf;
     ArrayList<SentenciaElif> sentenciasELIF = new ArrayList<SentenciaElif>();
     ArrayList<Sentencia> sentenciasDentroIF = new ArrayList<>();
@@ -1145,21 +814,16 @@ filter::= FILTER PARENTESIS_ABRE {: isExpresionFilter = true;:} expresion_or:e_o
 
     Filter filter;
     
-    produccionesRecorridas.add("filter -> FILTER PARENTESIS_ABRE expresion_or COMA CORCHETE_ABRE lista_var CORCHETE_CIERRA PARENTESIS_CIERRA");
     
     Tipo tipoIdAsignacion = ht.get(idAsignacionFilter);
     Tipo tipoResultadosFilter = obtenerTipoReturnFilter(l_v);
-
-    Tipo tipoExpresion = e_o.getTipo();
-    String nombreOperacion = e_o.getEtiqueta();
-
-    System.out.println("nombreOperacion: " + nombreOperacion);
-    System.out.println("tipoExpresion: " + Tipo.toString(tipoExpresion));
 
     Identificador resultadoFilter;
     Identificador variable;
     
     Expresion expresionIF = null;
+
+    Tipo tipoExpresionDerecha = e_o.getTipoExpresionDerecha();
 
     for(int j =0; j < l_v.size(); j++){
         String auxVar = l_v.get(j);
@@ -1167,18 +831,25 @@ filter::= FILTER PARENTESIS_ABRE {: isExpresionFilter = true;:} expresion_or:e_o
             throw new VarNotDeclaredTSException("La variable " + auxVar + " no esta declarada previamente\n");
         }else{
             Tipo tipoAuxVar = ht.get(auxVar);
+            if (l_v.size() > 1){
+                if (!validarTiposListaVariablesInFilter(l_v)){
+                    throw new VarTypeNotCompatibleWithVarListTypes("El Tipo de las variables debe ser una combinacion de FLOAT/INTEGER o solo BOOLEAN\n");
+                }
+            }
+            if (tipoExpresionDerecha != tipoAuxVar){
+                if(tipoExpresionDerecha == Tipo.BOOLEAN){
+                    throw new VarTypeNotEqualWithVarListTypes("El Tipo " + Tipo.toString(tipoAuxVar) +  " de la variable "+ auxVar +" no coincide con el Tipo " + Tipo.toString(tipoExpresionDerecha) + " de la Expresion \n");
+                }else if(tipoAuxVar == Tipo.BOOLEAN){
+                    throw new VarTypeNotEqualWithVarListTypes("El Tipo " + Tipo.toString(tipoAuxVar) +  " de la variable "+ auxVar +" no coincide con el Tipo " + Tipo.toString(tipoExpresionDerecha) + " de la Expresion \n");
+                }
+            }
+
             if(isAsignacionFilter==true){
                 if(!validarTiposVariablesConTipoAsignacionId(auxVar)){
                     throw new VarTypeNotCompatibleWithVarListTypes("El Tipo " + Tipo.toString(tipoAuxVar) +  " de la variable "+ auxVar +" no coincide con el Tipo " + tipoIdAsignacion + " de la Asignacion con la variable " + idAsignacionFilter + " \n");
                 }
-            }else{
-                /*if(!validarTiposVariablesConExpresion(auxVar,e_o)){
-                    throw new VarTypeNotEqualWithVarListTypes("El Tipo " + Tipo.toString(tipoAuxVar) +  " de la variable "+ auxVar +" no coincide con el Tipo " + e_o.getTipo() + " de la Expresion \n");
-                }*/
             }
-                 
-
-            autoincrementalAuxFilter = autoincrementalAuxFilter +1;
+            //autoincrementalAuxFilter = autoincrementalAuxFilter +1;
             
             if(isAsignacionFilter==true){
                 resultadoFilter = new Identificador("_aux" + autoincrementalAuxFilter.toString(), tipoResultadosFilter);
@@ -1234,8 +905,6 @@ filter::= FILTER PARENTESIS_ABRE {: isExpresionFilter = true;:} expresion_or:e_o
     }
 
     pilaFilter.add(filter);
-
-    autoincrementalAuxFilter = autoincrementalAuxFilter +1;
     
     if(isAsignacionFilter==true){
         resultadoFilter = new Identificador("_aux" + autoincrementalAuxFilter.toString(), tipoResultadosFilter);
@@ -1246,10 +915,21 @@ filter::= FILTER PARENTESIS_ABRE {: isExpresionFilter = true;:} expresion_or:e_o
             resultadoFilter = new Identificador("_aux" + autoincrementalAuxFilter.toString(), Tipo.BOOLEAN);
         }
     }
-
+    
+    autoincrementalAuxFilter = autoincrementalAuxFilter +1;
     isAsignacionFilter = false;
     isGuionBajoFilter = false;
-    isExpresionFilter = false;
+
+    RESULT = resultadoFilter;
+:} 
+|
+FILTER PARENTESIS_ABRE expresion_or:e_o COMA CORCHETE_ABRE PARENTESIS_ABRE PARENTESIS_CIERRA CORCHETE_CIERRA PARENTESIS_CIERRA {:
+    Tipo tipoResultadosFilter = Tipo.UNKNOWN;
+    Identificador resultadoFilter = new Identificador("_aux" + autoincrementalAuxFilter.toString(), tipoResultadosFilter);
+    
+    if (tipoResultadosFilter ==Tipo.UNKNOWN ){
+        throw new ListVarEmptyException("La lista de variables no puede estar vacia.");
+    }
 
     RESULT = resultadoFilter;
 :};
@@ -1295,8 +975,8 @@ sentencia_if ::= IF PARENTESIS_ABRE expresion_or:eo PARENTESIS_CIERRA THEN bloqu
         RESULT = new SentenciaIf(bs,eo);
     :}
     |
-    IF PARENTESIS_ABRE expresion_or:eo PARENTESIS_CIERRA THEN bloque_sentencias:bs1 ELSE THEN bloque_sentencias:bs2 END{:
-        produccionesRecorridas.add("sentencia_if -> IF PARENTESIS_ABRE expresion_or PARENTESIS_CIERRA THEN bloque_sentencias ELSE THEN bloque_sentencias END");
+    IF PARENTESIS_ABRE expresion_or:eo PARENTESIS_CIERRA THEN bloque_sentencias:bs1 ELSE bloque_sentencias:bs2 END{:
+        produccionesRecorridas.add("sentencia_if -> IF PARENTESIS_ABRE expresion_or PARENTESIS_CIERRA THEN bloque_sentencias ELSE bloque_sentencias END");
         ArrayList<SentenciaElif> sentenciasElif = new ArrayList<>();
         RESULT = new SentenciaIf(bs1,eo, sentenciasElif,bs2);
     :}
@@ -1307,8 +987,8 @@ sentencia_if ::= IF PARENTESIS_ABRE expresion_or:eo PARENTESIS_CIERRA THEN bloqu
         RESULT = new SentenciaIf(bs1,eo,elseif, sentenciasElse);
     :}
     |
-    IF PARENTESIS_ABRE expresion_or:eo PARENTESIS_CIERRA THEN bloque_sentencias:bs1 sentencia_elseif: elseif ELSE THEN bloque_sentencias:bs2 END{:
-        produccionesRecorridas.add("sentencia_if -> IF PARENTESIS_ABRE expresion_or PARENTESIS_CIERRA THEN bloque_sentencias sentencia_elseif ELSE THEN bloque_sentencias END");
+    IF PARENTESIS_ABRE expresion_or:eo PARENTESIS_CIERRA THEN bloque_sentencias:bs1 sentencia_elseif: elseif ELSE bloque_sentencias:bs2 END{:
+        produccionesRecorridas.add("sentencia_if -> IF PARENTESIS_ABRE expresion_or PARENTESIS_CIERRA THEN bloque_sentencias sentencia_elseif ELSE bloque_sentencias END");
         RESULT = new SentenciaIf(bs1,eo,elseif, bs2);
 :};
 
@@ -1353,33 +1033,36 @@ expresion_incremento_decremento ::= VAR:var OPERADOR_SUMA:op OPERADOR_SUMA: op2{
         Identificador identificador = new Identificador(var,Tipo.INTEGER);
         RESULT = new IncrementoDecrementoFor(identificador,op + op2,Tipo.INTEGER);
 :};
-sentencia_for ::= FOR PARENTESIS_ABRE VAR:id1 ASIGNACION CONST_INT:intAux  PUNTO_COMA expresion_incremento_decremento:e_id PUNTO_COMA comparacion:c_f  PARENTESIS_CIERRA DO {:pilaFor.add("for"); is_sentencia_for = true;:} bloque_sentencias:bs END{:
+sentencia_for ::= FOR PARENTESIS_ABRE VAR:id1 ASIGNACION CONST_INT:intAux  PUNTO_COMA expresion_incremento_decremento:e_id PUNTO_COMA comparacion:c_f  PARENTESIS_CIERRA DO {:pilaFor.add("for"); isSentenciaFor = true; pilaVariablesInFor.add(id1);:} bloque_sentencias:bs END{:
+    produccionesRecorridas.add("sentencia_for -> FOR PARENTESIS_ABRE VAR ASIGNACION CONST_INT PUNTO_COMA VAR expresion_incremento_decremento PUNTO_COMA comparacion PARENTESIS_CIERRA DO bloque_sentencias END");
     //Verificar que c_f contenga el mismo id que id1 y id2;
     String id2 = ((Identificador)e_id.getExpresion()).getNombre();
-    System.out.println("id2 en for " + id2);
     if((id1).equals(id2)){
-        if (!c_f.ComparacionFor(id1)){             
+        if (!c_f.ComparacionFor(id1)){       
+            pilaVariablesInFor.remove(pilaVariablesInFor.size()-1);
+            pilaFor.remove(pilaFor.size()-1);
             throw new ComparacionForException("El for no admite este tipo de comparacion"); //ademas compara la tercer variable del for 
         }
         if(!ht.containsKey(id1)){
+            pilaVariablesInFor.remove(pilaVariablesInFor.size()-1);
+            pilaFor.remove(pilaFor.size()-1);
             throw new VarNotDeclaredTSException("La variable " + id1 + " no está declarada previamente.");
         }
     }else{
+        pilaVariablesInFor.remove(pilaVariablesInFor.size()-1);
+        pilaFor.remove(pilaFor.size()-1);
         throw new VarForNotEqualException("La variable utlizada en el FOR debe ser la misma");
     }
 
-    produccionesRecorridas.add("sentencia_for -> FOR PARENTESIS_ABRE VAR ASIGNACION CONST_INT PUNTO_COMA VAR expresion_incremento_decremento PUNTO_COMA comparacion PARENTESIS_CIERRA DO bloque_sentencias END");
     
     Entero entero = new Entero(Integer.parseInt(intAux));
     Asignacion asignacion = new Asignacion(new Identificador(id1,Tipo.INTEGER),entero);
 
 
-    pilaFor.remove(pilaFor.size()-1);
-
     if(pilaFor.isEmpty()){
-        is_sentencia_for = false;
+        isSentenciaFor = false;
     }
-
+    
     
     RESULT = new SentenciaFor(c_f,asignacion,e_id,bs);
 :};

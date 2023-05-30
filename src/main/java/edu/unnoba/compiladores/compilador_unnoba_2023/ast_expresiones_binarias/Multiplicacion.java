@@ -29,5 +29,10 @@ public class Multiplicacion extends OperacionBinaria {
         return false;
     }
     
+    @Override
+    public Tipo getTipoExpresionDerecha() {
+        return this.derecha.getTipoExpresionDerecha();
+    }
+
     
 }

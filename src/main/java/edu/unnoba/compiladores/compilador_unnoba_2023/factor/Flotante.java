@@ -40,4 +40,10 @@ public class Flotante extends Literal {
     public boolean ComparacionFor(String var) {
         return false;
     }
+    
+    @Override
+    public Tipo getTipoExpresionDerecha() {
+        return this.getTipo();
+    }
+
 }

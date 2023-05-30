@@ -3,19 +3,12 @@ import edu.unnoba.compiladores.compilador_unnoba_2023.ast.CodeGeneratorHelper;
 import edu.unnoba.compiladores.compilador_unnoba_2023.ast.Tipo;
 import edu.unnoba.compiladores.compilador_unnoba_2023.ast_expresiones.Identificador;
 import edu.unnoba.compiladores.compilador_unnoba_2023.ast_expresiones_binarias.Expresion;
-import edu.unnoba.compiladores.compilador_unnoba_2023.sentencias.Sentencia;
-
 /**
  *
  * @author julianzabala
  */
 public class IncrementoDecrementoFor  extends OperacionUnaria{
     
-    
-    /*public IncrementoDecrementoFor(Expresion expresion, String operacion, Tipo tipo) {
-        super(operacion, expresion, tipo);
-        this.setIdVar(CodeGeneratorHelper.getNewPointer());
-    }*/
     
     public IncrementoDecrementoFor(Identificador identificador, String operacion, Tipo tipo) {
         super(operacion, identificador, tipo);
@@ -47,6 +40,9 @@ public class IncrementoDecrementoFor  extends OperacionUnaria{
         return grafico;
     }
  
-    
+    @Override
+    public Tipo getTipoExpresionDerecha() {
+        return this.getTipo();
+    }
 
 }

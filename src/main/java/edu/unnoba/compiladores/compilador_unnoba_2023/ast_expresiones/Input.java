@@ -34,16 +34,14 @@ public class Input extends Expresion{
 
     @Override
     public String graficar(String idPadre) {
-        //final String miId = this.getId();
         final String miId = this.getId();
         String grafico = idPadre + "--" + this.getId() + "\n" +
         this.getId() + "[label=\"" + this.getEtiqueta() + "<" +Tipo.toString(this.getTipo()) + ">" + "\"]\n";
-//String grafico = super.graficar(idPadre);
         return grafico;
     }
-    
-    
 
-
-    
+    @Override
+    public Tipo getTipoExpresionDerecha() {
+        return getTipo();
+    }
 }

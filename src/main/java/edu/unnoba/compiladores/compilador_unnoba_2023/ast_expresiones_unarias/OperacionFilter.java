@@ -36,4 +36,10 @@ public class OperacionFilter extends OperacionUnaria {
         return false;
     }
     
+    @Override
+    public Tipo getTipoExpresionDerecha() {
+        return Tipo.UNKNOWN;
+    }
+
+    
 }

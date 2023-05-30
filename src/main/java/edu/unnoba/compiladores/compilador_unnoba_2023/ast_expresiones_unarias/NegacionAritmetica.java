@@ -40,4 +40,10 @@ public class NegacionAritmetica extends OperacionUnaria {
     public boolean ComparacionFor(String var) {
         return false;
     }
+    
+    @Override
+    public Tipo getTipoExpresionDerecha() {
+        return this.getTipo();
+    }
+
 }
