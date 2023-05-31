@@ -32,7 +32,9 @@ public enum Tipo {
                 return "INTEGER";
             case FLOAT :
                 return "FLOAT";
+            default : 
+                return "UNKNOWN";   
         }
-        return "UNKNOWN";
+        //return "UNKNOWN";
     }
 }

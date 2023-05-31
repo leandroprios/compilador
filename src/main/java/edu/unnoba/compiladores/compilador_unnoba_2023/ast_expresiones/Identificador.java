@@ -55,6 +55,13 @@ public class Identificador extends Constante {
     }
 
     @Override
+    public Expresion reemplazarExpresionDerecha(String valor, Tipo tipo) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+    
+    
+
+    @Override
     public boolean ComparacionFor(String var) {
         if(this.getNombre().equals(var)){
            return true;

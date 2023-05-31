@@ -1,18 +1,16 @@
 DECLARE.SECTION
-INT : var1, var2, var3, var4,i,j;
+INT : var1, var2, var3, var4,i;
 float: var5, var8, var6;
 BOOLEAN: varlogica;
 ENDDECLARE.SECTION
 PROGRAM.SECTION
 #Esto es un comentario
-for(i = 0; i++; i<3) do
-	var2 = 2
-	for(j = 0; j++; j<3) do
-		var2 = 2
-		break
-	end
-	break
-	continue
-end
-continue
+varlogica = false
+var6 =3
+varlogica = input_boolean()
+if (var5 == 3) then
+	var8 = filter(_!=3.3, [var1])
+end 
+
+DISPLAY("literal string")
 ENDPROGRAM.SECTION

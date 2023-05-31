@@ -20,7 +20,7 @@ public class Filter extends Sentencia {
     public Filter(SentenciaIf sentenciaIf, Tipo tipo) {
         this.sentenciaIf=sentenciaIf;
     }
-    
+     
     public SentenciaIf getSentenciaIf() {
         return sentenciaIf;
     }

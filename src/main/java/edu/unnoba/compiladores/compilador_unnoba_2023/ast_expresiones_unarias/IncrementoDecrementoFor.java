@@ -24,6 +24,11 @@ public class IncrementoDecrementoFor  extends OperacionUnaria{
     public Expresion reemplazarExpresionIzquierda(String valor, Tipo tipo) {
         throw new UnsupportedOperationException("El IncrementoDecrementoFor no soporta reemplazar la expresion izquierda."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
+
+    @Override
+    public Expresion reemplazarExpresionDerecha(String valor, Tipo tipo) {
+        throw new UnsupportedOperationException("El IncrementoDecrementoFor no soporta reemplazar la expresion derecha."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
     
     @Override
     public boolean ComparacionFor(String var) {

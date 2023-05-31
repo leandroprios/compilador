@@ -24,6 +24,14 @@ public class Division extends OperacionBinaria {
         this.izquierda.reemplazarExpresionIzquierda(valor,tipo);
         return this.clonar();
     }
+
+    @Override
+    public Expresion reemplazarExpresionDerecha(String valor, Tipo tipo) {
+        this.derecha.reemplazarExpresionDerecha(valor,tipo);
+        return this.clonar();    
+    }
+    
+    
     
     @Override
     public boolean ComparacionFor(String var) {

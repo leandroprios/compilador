@@ -8,6 +8,9 @@ public abstract class Expresion extends Nodo {
      
      public abstract Expresion reemplazarExpresionIzquierda(String valor, Tipo tipo);
      
+    public abstract Expresion reemplazarExpresionDerecha(String valor, Tipo tipo);
+
+     
     public abstract Tipo getTipoExpresionDerecha();
     
     public abstract boolean ComparacionFor(String var);

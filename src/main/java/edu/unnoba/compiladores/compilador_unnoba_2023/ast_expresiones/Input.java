@@ -28,6 +28,13 @@ public class Input extends Expresion{
     }
 
     @Override
+    public Expresion reemplazarExpresionDerecha(String valor, Tipo tipo) {
+        throw new UnsupportedOperationException("El Input no soporta reemplazar la expresion derecha."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+    
+    
+
+    @Override
     public boolean ComparacionFor(String var) {
         return false;
     }

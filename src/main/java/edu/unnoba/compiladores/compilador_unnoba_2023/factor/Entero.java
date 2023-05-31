@@ -12,9 +12,19 @@ import edu.unnoba.compiladores.compilador_unnoba_2023.ast_expresiones_binarias.E
 public class Entero extends Literal {
     
     private Integer valor;
+    
+    private EnteroAFlotante enteroAFlotante;
 
     public Entero(Integer valor) {
         setTipo(Tipo.INTEGER);
+        this.valor = valor;
+        setNombre("Integer");
+        this.setIdVar(CodeGeneratorHelper.getNewPointer());
+    }
+    
+    public Entero(Integer valor,EnteroAFlotante enteroAFlotante) {
+        setTipo(Tipo.INTEGER);
+        this.enteroAFlotante = enteroAFlotante;
         this.valor = valor;
         setNombre("Integer");
         this.setIdVar(CodeGeneratorHelper.getNewPointer());
@@ -36,12 +46,26 @@ public class Entero extends Literal {
 
    @Override
     public Expresion clonar() {
-        return new Entero(this.valor);
+        Entero enteroClonado= new Entero(this.valor);
+        if (this.enteroAFlotante != null){
+            enteroClonado= new Entero(this.valor, this.enteroAFlotante);
+        }
+        return enteroClonado;
     }
     
     @Override
     public Expresion reemplazarExpresionIzquierda(String valor, Tipo tipo) {
         throw new UnsupportedOperationException("El Entero no soporta reemplazar la expresion izquierda."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+    
+    @Override
+    public Expresion reemplazarExpresionDerecha(String valor, Tipo tipo) {
+        System.out.println("entro al if  " + Tipo.toString(tipo));
+        if(tipo == Tipo.FLOAT){
+            System.out.println("entro al if  " + Tipo.toString(tipo));
+            this.enteroAFlotante = new EnteroAFlotante(this.clonar());
+        }
+        return this.clonar();
     }
     
     @Override
@@ -54,5 +78,20 @@ public class Entero extends Literal {
         return this.getTipo();
     }
 
+    @Override
+    public String graficar(String idPadre) {
+        final String miId = this.getId();
+        String grafico = "";
+        
+        if(this.enteroAFlotante != null){
+            grafico += enteroAFlotante.graficar(idPadre);
+        }else{
+            grafico += super.graficar(idPadre);
+        }
+
+        return grafico;
+    }
+
+    
     
 }

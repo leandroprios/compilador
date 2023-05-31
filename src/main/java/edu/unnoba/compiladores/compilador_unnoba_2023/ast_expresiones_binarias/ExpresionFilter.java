@@ -21,15 +21,15 @@ public class ExpresionFilter extends OperacionBinaria{
 
     @Override
     public Expresion reemplazarExpresionIzquierda(String valor, Tipo tipo) {
-        /*if(this.izquierda.getIdVar()=="_"){
-            this.izquierda.setIdVar(valor);
-        }else{
-            this.izquierda.reemplazarExpresionIzquierda(valor, tipo);
-        }*/
         throw new UnsupportedOperationException("El IncrementoDecrementoFor no soporta reemplazar la expresion izquierda."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-
-        //return this.clonar(); 
     }
+
+    @Override
+    public Expresion reemplazarExpresionDerecha(String valor, Tipo tipo) {
+        throw new UnsupportedOperationException("El IncrementoDecrementoFor no soporta reemplazar la expresion derecha."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+    
+    
     
     @Override
     public boolean ComparacionFor(String var) {

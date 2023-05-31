@@ -45,6 +45,11 @@ public class EnteroAFlotante extends Expresion {
     }
     
     @Override
+    public Expresion reemplazarExpresionDerecha(String valor, Tipo tipo) {
+        throw new UnsupportedOperationException("El Booleano no soporta reemplazar la expresion derecha."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+    
+    @Override
     public boolean ComparacionFor(String var) {
         return false;
     }

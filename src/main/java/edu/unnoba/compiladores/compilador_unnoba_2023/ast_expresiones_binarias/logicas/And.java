@@ -30,6 +30,12 @@ public class And extends OperacionBinaria{
     public Expresion reemplazarExpresionIzquierda(String valor, Tipo tipo) {
         return this.izquierda.reemplazarExpresionIzquierda(valor, tipo);
     }
+
+    @Override
+    public Expresion reemplazarExpresionDerecha(String valor, Tipo tipo) {
+       this.derecha.reemplazarExpresionDerecha(valor, tipo);
+       return this.clonar();
+    }
     
     @Override
     public boolean ComparacionFor(String var) {
