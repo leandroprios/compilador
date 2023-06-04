@@ -6,6 +6,9 @@ import edu.unnoba.compiladores.compilador_unnoba_2023.exceptions.VarNotDeclaredT
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java_cup.runtime.Symbol;
@@ -43,13 +46,14 @@ public class FrmPrincipal extends javax.swing.JFrame {
         jScrollPane4 = new javax.swing.JScrollPane();
         parserResult = new javax.swing.JTextArea();
         btnExport = new javax.swing.JButton();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        ASTResult = new javax.swing.JTextPane();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        codigoLLVM = new javax.swing.JTextPane();
         MenuAnalizar = new javax.swing.JMenuBar();
         btnImportar = new javax.swing.JMenu();
         btnAnalizar = new javax.swing.JMenu();
         jMenu1 = new javax.swing.JMenu();
-
-        jScrollPane5 = new javax.swing.JScrollPane();
-        ASTResult = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(1024, 768));
@@ -103,11 +107,14 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
         tabs.addTab("Análisis Sintáctico", jPanel2);
 
-        ASTResult.setColumns(20);
-        ASTResult.setRows(5);
-        jScrollPane5.setViewportView(ASTResult);
+        ASTResult.setName("ASTResult"); // NOI18N
+        jScrollPane3.setViewportView(ASTResult);
 
-        tabs.addTab("Análisis AST ", jScrollPane5);
+        tabs.addTab("AST", jScrollPane3);
+
+        jScrollPane5.setViewportView(codigoLLVM);
+
+        tabs.addTab("Codigo LLVM", jScrollPane5);
 
         btnImportar.setText("Importar");
         btnImportar.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -190,13 +197,57 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 MiParser sintactico2= new MiParser(new MiLexico(new FileReader("pruebas.txt")));
 
                 Programa programa = (Programa) sintactico2.parse().value;
+                
+                PrintWriter grafico;
                 try {
                     this.ASTResult.setText(programa.graficar());
-                    PrintWriter grafico = new PrintWriter(new FileWriter("arbol.dot"));
+                    grafico = new PrintWriter(new FileWriter("arbol.dot"));
                     grafico.println(programa.graficar());
                     grafico.close();
                     String cmdDot = "dot -Tpng arbol.dot -o arbol.png";
                     Runtime.getRuntime().exec(cmdDot);
+                    
+                    
+                    //genera codigo IR para el LLVM
+                    try {
+                        MiParser sintactico3= new MiParser(new MiLexico(new FileReader("pruebas.txt")));
+
+                        programa = (Programa) sintactico3.parse().value;
+                        
+                        String codigo = programa.generarCodigo();
+                        codigoLLVM.setText(codigo);
+                        grafico = new PrintWriter(new FileWriter("programa.ll"));
+                        grafico.println(codigo);
+                        grafico.close();
+                        System.out.println("Código generado");
+
+                        file = new File("programa.ll");
+                        if (!file.exists()) {
+                            file.delete();
+                            file.createNewFile();
+                        }
+                        Files.write(Paths.get("programa.ll"), codigo.getBytes(), StandardOpenOption.TRUNCATE_EXISTING);
+
+                        Process process = Runtime.getRuntime().exec("clang -c -o programa.o programa.ll");
+                        BufferedReader reader1 = new BufferedReader(new InputStreamReader(process.getInputStream()));
+                        String line;
+                        while ((line = reader1.readLine()) != null) {
+                            System.out.println(line);
+                        }
+                        System.out.println("Archivo objeto generado");
+
+                        Process process2 = Runtime.getRuntime().exec("clang -o programa.exe programa.o scanf.o");
+                        BufferedReader reader2 = new BufferedReader(new InputStreamReader(process2.getInputStream()));
+                        String line2;
+                        while ((line2 = reader2.readLine()) != null) {
+                            System.out.println(line2);
+                        }
+                        System.out.println("Ejecutable generado");
+                    } catch (Error e) {
+                        System.out.println("Error: " + e.getMessage());
+                        codigoLLVM.setText("Error: " + e.getMessage());
+                    }
+                    //*/
 
                 } catch (Error e) {
                     System.out.println("Error: " + e.getMessage());
@@ -324,24 +375,22 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextPane ASTResult;
     private javax.swing.JMenuBar MenuAnalizar;
     private javax.swing.JTextArea analisisResult;
     private javax.swing.JMenu btnAnalizar;
     private javax.swing.JButton btnExport;
     private javax.swing.JMenu btnImportar;
     private javax.swing.JTextArea codigo;
+    private javax.swing.JTextPane codigoLLVM;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JTextArea parserResult;
     private javax.swing.JTabbedPane tabs;
-
-
-    private javax.swing.JScrollPane jScrollPane5;
-    private javax.swing.JTextArea ASTResult;
-
-
     // End of variables declaration//GEN-END:variables
 }

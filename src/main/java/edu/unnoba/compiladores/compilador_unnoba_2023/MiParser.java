@@ -46,7 +46,7 @@ public class MiParser extends java_cup.runtime.lr_parser {
   /** Production table. */
   protected static final short _production_table[][] = 
     unpackFromStrings(new String[] {
-    "\000\112\000\002\002\004\000\002\002\004\000\002\002" +
+    "\000\111\000\002\002\004\000\002\002\004\000\002\002" +
     "\003\000\002\006\005\000\002\003\004\000\002\003\003" +
     "\000\002\035\005\000\002\035\003\000\002\004\006\000" +
     "\002\004\006\000\002\004\006\000\002\005\005\000\002" +
@@ -66,9 +66,9 @@ public class MiParser extends java_cup.runtime.lr_parser {
     "\012\000\002\027\013\000\002\014\006\000\002\016\003" +
     "\000\002\016\003\000\002\016\003\000\002\030\005\000" +
     "\002\031\005\000\002\032\005\000\002\012\011\000\002" +
-    "\012\014\000\002\012\012\000\002\012\015\000\002\040" +
-    "\002\000\002\034\013\000\002\034\011\000\002\033\005" +
-    "\000\002\033\005\000\002\041\002\000\002\011\020" });
+    "\012\014\000\002\012\012\000\002\012\015\000\002\034" +
+    "\012\000\002\034\011\000\002\033\005\000\002\033\005" +
+    "\000\002\040\002\000\002\011\020" });
 
   /** Access to production table. */
   public short[][] production_table() {return _production_table;}
@@ -76,8 +76,8 @@ public class MiParser extends java_cup.runtime.lr_parser {
   /** Parse-action table. */
   protected static final short[][] _action_table = 
     unpackFromStrings(new String[] {
-    "\000\245\000\006\045\010\047\006\001\002\000\004\047" +
-    "\006\001\002\000\004\002\246\001\002\000\016\025\034" +
+    "\000\244\000\006\045\010\047\006\001\002\000\004\047" +
+    "\006\001\002\000\004\002\245\001\002\000\016\025\034" +
     "\035\047\036\045\044\036\054\040\062\042\001\002\000" +
     "\004\002\uffff\001\002\000\010\037\014\040\013\042\015" +
     "\001\002\000\004\046\033\001\002\000\012\037\014\040" +
@@ -92,11 +92,11 @@ public class MiParser extends java_cup.runtime.lr_parser {
     "\004\054\017\001\002\000\006\031\021\033\031\001\002" +
     "\000\012\037\ufff8\040\ufff8\042\ufff8\046\ufff8\001\002\000" +
     "\004\046\ufffd\001\002\000\004\047\ufffe\001\002\000\004" +
-    "\010\224\001\002\000\022\025\ufff4\034\ufff4\035\ufff4\036" +
+    "\010\223\001\002\000\022\025\ufff4\034\ufff4\035\ufff4\036" +
     "\ufff4\044\ufff4\050\ufff4\054\ufff4\062\ufff4\001\002\000\004" +
-    "\010\221\001\002\000\022\025\ufff3\034\ufff3\035\ufff3\036" +
+    "\010\220\001\002\000\022\025\ufff3\034\ufff3\035\ufff3\036" +
     "\ufff3\044\ufff3\050\ufff3\054\ufff3\062\ufff3\001\002\000\004" +
-    "\055\216\001\002\000\022\025\ufff1\034\ufff1\035\ufff1\036" +
+    "\055\215\001\002\000\022\025\ufff1\034\ufff1\035\ufff1\036" +
     "\ufff1\044\ufff1\050\ufff1\054\ufff1\062\ufff1\001\002\000\004" +
     "\010\052\001\002\000\022\025\ufff0\034\ufff0\035\ufff0\036" +
     "\ufff0\044\ufff0\050\ufff0\054\ufff0\062\ufff0\001\002\000\020" +
@@ -295,54 +295,52 @@ public class MiParser extends java_cup.runtime.lr_parser {
     "\000\006\011\174\023\121\001\002\000\004\065\175\001" +
     "\002\000\016\025\034\035\047\036\045\044\036\054\040" +
     "\062\042\001\002\000\020\025\034\034\177\035\047\036" +
-    "\045\044\036\054\040\062\042\001\002\000\026\025\uffbc" +
-    "\034\uffbc\035\uffbc\036\uffbc\044\uffbc\050\uffbc\054\uffbc\062" +
-    "\uffbc\063\uffbc\064\uffbc\001\002\000\020\025\034\034\201" +
+    "\045\044\036\054\040\062\042\001\002\000\026\025\uffbd" +
+    "\034\uffbd\035\uffbd\036\uffbd\044\uffbd\050\uffbd\054\uffbd\062" +
+    "\uffbd\063\uffbd\064\uffbd\001\002\000\020\025\034\034\201" +
     "\035\047\036\045\044\036\054\040\062\042\001\002\000" +
     "\022\025\uffc1\034\uffc1\035\uffc1\036\uffc1\044\uffc1\050\uffc1" +
     "\054\uffc1\062\uffc1\001\002\000\016\025\034\035\047\036" +
     "\045\044\036\054\040\062\042\001\002\000\004\010\204" +
-    "\001\002\000\034\005\uffbe\010\uffbe\024\uffbe\041\uffbe\043" +
-    "\uffbe\051\uffbe\052\uffbe\053\uffbe\054\uffbe\056\uffbe\057\uffbe" +
-    "\060\uffbe\061\uffbe\001\002\000\034\005\064\010\060\024" +
-    "\054\041\067\043\073\051\074\052\102\053\101\054\104" +
-    "\056\062\057\103\060\105\061\057\001\002\000\006\011" +
-    "\207\023\121\001\002\000\004\065\210\001\002\000\016" +
-    "\025\034\035\047\036\045\044\036\054\040\062\042\001" +
-    "\002\000\020\025\034\034\212\035\047\036\045\044\036" +
-    "\054\040\062\042\001\002\000\026\025\uffbd\034\uffbd\035" +
-    "\uffbd\036\uffbd\044\uffbd\050\uffbd\054\uffbd\062\uffbd\063\uffbd" +
-    "\064\uffbd\001\002\000\020\025\034\034\214\035\047\036" +
-    "\045\044\036\054\040\062\042\001\002\000\022\025\uffbf" +
-    "\034\uffbf\035\uffbf\036\uffbf\044\uffbf\050\uffbf\054\uffbf\062" +
-    "\uffbf\001\002\000\032\011\uffe7\022\uffe7\023\uffe7\025\uffe7" +
-    "\031\uffe7\034\uffe7\035\uffe7\036\uffe7\044\uffe7\050\uffe7\054" +
-    "\uffe7\062\uffe7\001\002\000\034\005\uffed\010\uffed\024\uffed" +
-    "\041\uffed\043\uffed\051\uffed\052\uffed\053\uffed\054\uffed\056" +
-    "\uffed\057\uffed\060\uffed\061\uffed\001\002\000\034\005\064" +
-    "\010\060\024\054\041\067\043\073\051\074\052\102\053" +
-    "\101\054\104\056\062\057\103\060\105\061\057\001\002" +
-    "\000\024\023\121\025\uffec\034\uffec\035\uffec\036\uffec\044" +
-    "\uffec\050\uffec\054\uffec\062\uffec\001\002\000\034\005\064" +
-    "\010\060\024\054\041\067\043\073\051\074\052\102\053" +
-    "\101\054\104\056\062\057\103\060\105\061\057\001\002" +
-    "\000\006\011\223\023\121\001\002\000\022\025\uffc9\034" +
-    "\uffc9\035\uffc9\036\uffc9\044\uffc9\050\uffc9\054\uffc9\062\uffc9" +
-    "\001\002\000\004\054\225\001\002\000\004\055\226\001" +
-    "\002\000\004\052\227\001\002\000\004\033\230\001\002" +
-    "\000\004\054\231\001\002\000\006\004\242\005\243\001" +
-    "\002\000\004\033\233\001\002\000\032\005\064\010\060" +
+    "\001\002\000\034\005\064\010\060\024\054\041\067\043" +
+    "\073\051\074\052\102\053\101\054\104\056\062\057\103" +
+    "\060\105\061\057\001\002\000\006\011\206\023\121\001" +
+    "\002\000\004\065\207\001\002\000\016\025\034\035\047" +
+    "\036\045\044\036\054\040\062\042\001\002\000\020\025" +
+    "\034\034\211\035\047\036\045\044\036\054\040\062\042" +
+    "\001\002\000\026\025\uffbe\034\uffbe\035\uffbe\036\uffbe\044" +
+    "\uffbe\050\uffbe\054\uffbe\062\uffbe\063\uffbe\064\uffbe\001\002" +
+    "\000\020\025\034\034\213\035\047\036\045\044\036\054" +
+    "\040\062\042\001\002\000\022\025\uffbf\034\uffbf\035\uffbf" +
+    "\036\uffbf\044\uffbf\050\uffbf\054\uffbf\062\uffbf\001\002\000" +
+    "\032\011\uffe7\022\uffe7\023\uffe7\025\uffe7\031\uffe7\034\uffe7" +
+    "\035\uffe7\036\uffe7\044\uffe7\050\uffe7\054\uffe7\062\uffe7\001" +
+    "\002\000\034\005\uffed\010\uffed\024\uffed\041\uffed\043\uffed" +
+    "\051\uffed\052\uffed\053\uffed\054\uffed\056\uffed\057\uffed\060" +
+    "\uffed\061\uffed\001\002\000\034\005\064\010\060\024\054" +
     "\041\067\043\073\051\074\052\102\053\101\054\104\056" +
-    "\062\057\103\060\105\061\057\001\002\000\004\011\235" +
-    "\001\002\000\004\026\236\001\002\000\016\025\uffb9\035" +
-    "\uffb9\036\uffb9\044\uffb9\054\uffb9\062\uffb9\001\002\000\016" +
-    "\025\034\035\047\036\045\044\036\054\040\062\042\001" +
-    "\002\000\020\025\034\034\241\035\047\036\045\044\036" +
-    "\054\040\062\042\001\002\000\022\025\uffb8\034\uffb8\035" +
-    "\uffb8\036\uffb8\044\uffb8\050\uffb8\054\uffb8\062\uffb8\001\002" +
-    "\000\004\004\245\001\002\000\004\005\244\001\002\000" +
-    "\004\033\uffba\001\002\000\004\033\uffbb\001\002\000\004" +
-    "\002\001\001\002\000\004\002\000\001\002" });
+    "\062\057\103\060\105\061\057\001\002\000\024\023\121" +
+    "\025\uffec\034\uffec\035\uffec\036\uffec\044\uffec\050\uffec\054" +
+    "\uffec\062\uffec\001\002\000\034\005\064\010\060\024\054" +
+    "\041\067\043\073\051\074\052\102\053\101\054\104\056" +
+    "\062\057\103\060\105\061\057\001\002\000\006\011\222" +
+    "\023\121\001\002\000\022\025\uffc9\034\uffc9\035\uffc9\036" +
+    "\uffc9\044\uffc9\050\uffc9\054\uffc9\062\uffc9\001\002\000\004" +
+    "\054\224\001\002\000\004\055\225\001\002\000\004\052" +
+    "\226\001\002\000\004\033\227\001\002\000\004\054\230" +
+    "\001\002\000\006\004\241\005\242\001\002\000\004\033" +
+    "\232\001\002\000\032\005\064\010\060\041\067\043\073" +
+    "\051\074\052\102\053\101\054\104\056\062\057\103\060" +
+    "\105\061\057\001\002\000\004\011\234\001\002\000\004" +
+    "\026\235\001\002\000\016\025\uffba\035\uffba\036\uffba\044" +
+    "\uffba\054\uffba\062\uffba\001\002\000\016\025\034\035\047" +
+    "\036\045\044\036\054\040\062\042\001\002\000\020\025" +
+    "\034\034\240\035\047\036\045\044\036\054\040\062\042" +
+    "\001\002\000\022\025\uffb9\034\uffb9\035\uffb9\036\uffb9\044" +
+    "\uffb9\050\uffb9\054\uffb9\062\uffb9\001\002\000\004\004\244" +
+    "\001\002\000\004\005\243\001\002\000\004\033\uffbb\001" +
+    "\002\000\004\033\uffbc\001\002\000\004\002\001\001\002" +
+    "\000\004\002\000\001\002" });
 
   /** Access to parse-action table. */
   public short[][] action_table() {return _action_table;}
@@ -350,8 +348,8 @@ public class MiParser extends java_cup.runtime.lr_parser {
   /** <code>reduce_goto</code> table. */
   protected static final short[][] _reduce_table = 
     unpackFromStrings(new String[] {
-    "\000\245\000\010\002\004\005\006\006\003\001\001\000" +
-    "\004\005\246\001\001\000\002\001\001\000\016\007\043" +
+    "\000\244\000\010\002\004\005\006\006\003\001\001\000" +
+    "\004\005\245\001\001\000\002\001\001\000\016\007\043" +
     "\010\034\011\036\012\045\013\040\014\042\001\001\000" +
     "\002\001\001\000\006\003\010\004\011\001\001\000\002" +
     "\001\001\000\006\003\031\004\011\001\001\000\002\001" +
@@ -368,7 +366,7 @@ public class MiParser extends java_cup.runtime.lr_parser {
     "\002\001\001\000\002\001\001\000\036\015\055\016\070" +
     "\017\064\020\075\021\077\022\067\023\076\024\071\025" +
     "\074\026\060\027\065\030\062\031\052\032\054\001\001" +
-    "\000\002\001\001\000\032\016\070\020\214\021\077\022" +
+    "\000\002\001\001\000\032\016\070\020\213\021\077\022" +
     "\067\023\076\024\071\025\074\026\060\027\065\030\062" +
     "\031\052\032\054\001\001\000\002\001\001\000\002\001" +
     "\001\000\002\001\001\000\004\037\157\001\001\000\002" +
@@ -428,32 +426,32 @@ public class MiParser extends java_cup.runtime.lr_parser {
     "\040\014\042\001\001\000\014\010\047\011\036\012\045" +
     "\013\040\014\042\001\001\000\002\001\001\000\014\010" +
     "\047\011\036\012\045\013\040\014\042\001\001\000\002" +
-    "\001\001\000\016\007\212\010\034\011\036\012\045\013" +
-    "\040\014\042\001\001\000\002\001\001\000\004\040\204" +
-    "\001\001\000\036\015\205\016\070\017\064\020\075\021" +
-    "\077\022\067\023\076\024\071\025\074\026\060\027\065" +
-    "\030\062\031\052\032\054\001\001\000\002\001\001\000" +
-    "\002\001\001\000\016\007\210\010\034\011\036\012\045" +
-    "\013\040\014\042\001\001\000\014\010\047\011\036\012" +
-    "\045\013\040\014\042\001\001\000\002\001\001\000\014" +
-    "\010\047\011\036\012\045\013\040\014\042\001\001\000" +
-    "\002\001\001\000\002\001\001\000\004\036\216\001\001" +
-    "\000\036\015\217\016\070\017\064\020\075\021\077\022" +
-    "\067\023\076\024\071\025\074\026\060\027\065\030\062" +
-    "\031\052\032\054\001\001\000\002\001\001\000\036\015" +
-    "\221\016\070\017\064\020\075\021\077\022\067\023\076" +
-    "\024\071\025\074\026\060\027\065\030\062\031\052\032" +
-    "\054\001\001\000\002\001\001\000\002\001\001\000\002" +
-    "\001\001\000\002\001\001\000\002\001\001\000\002\001" +
-    "\001\000\004\033\231\001\001\000\002\001\001\000\002" +
-    "\001\001\000\030\016\070\021\233\022\067\023\076\024" +
+    "\001\001\000\016\007\211\010\034\011\036\012\045\013" +
+    "\040\014\042\001\001\000\002\001\001\000\036\015\204" +
+    "\016\070\017\064\020\075\021\077\022\067\023\076\024" +
     "\071\025\074\026\060\027\065\030\062\031\052\032\054" +
-    "\001\001\000\002\001\001\000\002\001\001\000\004\041" +
-    "\236\001\001\000\016\007\237\010\034\011\036\012\045" +
-    "\013\040\014\042\001\001\000\014\010\047\011\036\012" +
-    "\045\013\040\014\042\001\001\000\002\001\001\000\002" +
-    "\001\001\000\002\001\001\000\002\001\001\000\002\001" +
-    "\001\000\002\001\001\000\002\001\001" });
+    "\001\001\000\002\001\001\000\002\001\001\000\016\007" +
+    "\207\010\034\011\036\012\045\013\040\014\042\001\001" +
+    "\000\014\010\047\011\036\012\045\013\040\014\042\001" +
+    "\001\000\002\001\001\000\014\010\047\011\036\012\045" +
+    "\013\040\014\042\001\001\000\002\001\001\000\002\001" +
+    "\001\000\004\036\215\001\001\000\036\015\216\016\070" +
+    "\017\064\020\075\021\077\022\067\023\076\024\071\025" +
+    "\074\026\060\027\065\030\062\031\052\032\054\001\001" +
+    "\000\002\001\001\000\036\015\220\016\070\017\064\020" +
+    "\075\021\077\022\067\023\076\024\071\025\074\026\060" +
+    "\027\065\030\062\031\052\032\054\001\001\000\002\001" +
+    "\001\000\002\001\001\000\002\001\001\000\002\001\001" +
+    "\000\002\001\001\000\002\001\001\000\004\033\230\001" +
+    "\001\000\002\001\001\000\002\001\001\000\030\016\070" +
+    "\021\232\022\067\023\076\024\071\025\074\026\060\027" +
+    "\065\030\062\031\052\032\054\001\001\000\002\001\001" +
+    "\000\002\001\001\000\004\040\235\001\001\000\016\007" +
+    "\236\010\034\011\036\012\045\013\040\014\042\001\001" +
+    "\000\014\010\047\011\036\012\045\013\040\014\042\001" +
+    "\001\000\002\001\001\000\002\001\001\000\002\001\001" +
+    "\000\002\001\001\000\002\001\001\000\002\001\001\000" +
+    "\002\001\001" });
 
   /** Access to <code>reduce_goto</code> table. */
   public short[][] reduce_table() {return _reduce_table;}
@@ -683,7 +681,7 @@ class CUP$MiParser$actions {
 		ArrayList<Sentencia> bp = (ArrayList<Sentencia>)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
 		
         produccionesRecorridas.add("programa ->");
-        RESULT = new Programa(bp,bd);
+        RESULT = new Programa(bp,bd, ht);
     
               CUP$MiParser$result = parser.getSymbolFactory().newSymbol("programa",0, ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-1)), ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()), RESULT);
             }
@@ -698,7 +696,7 @@ class CUP$MiParser$actions {
 		ArrayList<Sentencia> bp = (ArrayList<Sentencia>)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
 		
         produccionesRecorridas.add("programa ->");
-        RESULT = new Programa(bp);
+        RESULT = new Programa(bp, ht);
 
               CUP$MiParser$result = parser.getSymbolFactory().newSymbol("programa",0, ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()), RESULT);
             }
@@ -957,7 +955,6 @@ class CUP$MiParser$actions {
 		Sentencia sif = (Sentencia)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
 		
             produccionesRecorridas.add("sentencia -> sentencia_if");
-            isExpresionFilter = true;
             RESULT = sif;
        
               CUP$MiParser$result = parser.getSymbolFactory().newSymbol("sentencia",6, ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()), RESULT);
@@ -1963,7 +1960,6 @@ class CUP$MiParser$actions {
 
     sentenciaIf = new SentenciaIf(sentenciasDentroIF,expresionIF,sentenciasELIF, sentenciasDentroELSE);
     
-    System.out.println("dentro del filter isExpresionFilter : " + String.valueOf(isExpresionFilter));
 
     filter = new Filter(sentenciaIf, tipoResultadoFilter, isExpresionFilter);
     
@@ -2121,7 +2117,6 @@ class CUP$MiParser$actions {
 		ArrayList<Sentencia> bs = (ArrayList<Sentencia>)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-1)).value;
 		
         produccionesRecorridas.add("sentencia_if -> IF PARENTESIS_ABRE expresion_or PARENTESIS_CIERRA THEN bloque_sentencias END");
-        isExpresionFilter = false;
         RESULT = new SentenciaIf(bs,eo);
     
               CUP$MiParser$result = parser.getSymbolFactory().newSymbol("sentencia_if",8, ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-6)), ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()), RESULT);
@@ -2144,7 +2139,6 @@ class CUP$MiParser$actions {
 		
         produccionesRecorridas.add("sentencia_if -> IF PARENTESIS_ABRE expresion_or PARENTESIS_CIERRA THEN bloque_sentencias ELSE bloque_sentencias END");
         ArrayList<SentenciaElif> sentenciasElif = new ArrayList<>();
-        isExpresionFilter = false;
         RESULT = new SentenciaIf(bs1,eo, sentenciasElif,bs2);
     
               CUP$MiParser$result = parser.getSymbolFactory().newSymbol("sentencia_if",8, ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-9)), ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()), RESULT);
@@ -2167,7 +2161,6 @@ class CUP$MiParser$actions {
 		
         produccionesRecorridas.add("sentencia_if -> IF PARENTESIS_ABRE expresion_or PARENTESIS_CIERRA THEN bloque_sentencias sentencia_elseif END");
         ArrayList<Sentencia> sentenciasElse = new ArrayList<>();
-        isExpresionFilter = false;
         RESULT = new SentenciaIf(bs1,eo,elseif, sentenciasElse);
     
               CUP$MiParser$result = parser.getSymbolFactory().newSymbol("sentencia_if",8, ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-7)), ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()), RESULT);
@@ -2192,7 +2185,6 @@ class CUP$MiParser$actions {
 		ArrayList<Sentencia> bs2 = (ArrayList<Sentencia>)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-1)).value;
 		
         produccionesRecorridas.add("sentencia_if -> IF PARENTESIS_ABRE expresion_or PARENTESIS_CIERRA THEN bloque_sentencias sentencia_elseif ELSE bloque_sentencias END");
-        isExpresionFilter = false;
         RESULT = new SentenciaIf(bs1,eo,elseif, bs2);
 
               CUP$MiParser$result = parser.getSymbolFactory().newSymbol("sentencia_if",8, ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-10)), ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()), RESULT);
@@ -2200,26 +2192,12 @@ class CUP$MiParser$actions {
           return CUP$MiParser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 67: // NT$2 ::= 
+          case 67: // sentencia_elseif ::= sentencia_elseif ELIF PARENTESIS_ABRE expresion_or PARENTESIS_CIERRA THEN bloque_sentencias END 
             {
               ArrayList<SentenciaElif> RESULT =null;
-		int elseifleft = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-2)).left;
-		int elseifright = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-2)).right;
-		ArrayList<SentenciaElif> elseif = (ArrayList<SentenciaElif>)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-2)).value;
- isExpresionFilter = true;
-              CUP$MiParser$result = parser.getSymbolFactory().newSymbol("NT$2",30, ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()), RESULT);
-            }
-          return CUP$MiParser$result;
-
-          /*. . . . . . . . . . . . . . . . . . . .*/
-          case 68: // sentencia_elseif ::= sentencia_elseif ELIF PARENTESIS_ABRE NT$2 expresion_or PARENTESIS_CIERRA THEN bloque_sentencias END 
-            {
-              ArrayList<SentenciaElif> RESULT =null;
-              // propagate RESULT from NT$2
-                RESULT = (ArrayList<SentenciaElif>) ((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-5)).value;
-		int elseifleft = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-8)).left;
-		int elseifright = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-8)).right;
-		ArrayList<SentenciaElif> elseif = (ArrayList<SentenciaElif>)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-8)).value;
+		int elseifleft = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-7)).left;
+		int elseifright = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-7)).right;
+		ArrayList<SentenciaElif> elseif = (ArrayList<SentenciaElif>)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-7)).value;
 		int eoleft = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-4)).left;
 		int eoright = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-4)).right;
 		Expresion eo = (Expresion)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-4)).value;
@@ -2229,15 +2207,14 @@ class CUP$MiParser$actions {
 		
         produccionesRecorridas.add("sentencia_elseif -> sentencia_elseif ELIF PARENTESIS_ABRE expresion_or PARENTESIS_CIERRA THEN bloque_sentencias");
         elseif.add(new SentenciaElif(bs2,eo));
-        isExpresionFilter = false;
         RESULT = elseif;
     
-              CUP$MiParser$result = parser.getSymbolFactory().newSymbol("sentencia_elseif",26, ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-8)), ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()), RESULT);
+              CUP$MiParser$result = parser.getSymbolFactory().newSymbol("sentencia_elseif",26, ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-7)), ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()), RESULT);
             }
           return CUP$MiParser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 69: // sentencia_elseif ::= ELIF PARENTESIS_ABRE expresion_or PARENTESIS_CIERRA THEN bloque_sentencias END 
+          case 68: // sentencia_elseif ::= ELIF PARENTESIS_ABRE expresion_or PARENTESIS_CIERRA THEN bloque_sentencias END 
             {
               ArrayList<SentenciaElif> RESULT =null;
 		int eoleft = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-4)).left;
@@ -2250,7 +2227,6 @@ class CUP$MiParser$actions {
         produccionesRecorridas.add("sentencia_elseif -> ELIF PARENTESIS_ABRE expresion_or PARENTESIS_CIERRA THEN bloque_sentencias");
         ArrayList<SentenciaElif> listaElif = new ArrayList<>();
         listaElif.add(new SentenciaElif(bs2,eo));
-        isExpresionFilter = false;
         RESULT = listaElif;
 
               CUP$MiParser$result = parser.getSymbolFactory().newSymbol("sentencia_elseif",26, ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-6)), ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()), RESULT);
@@ -2258,7 +2234,7 @@ class CUP$MiParser$actions {
           return CUP$MiParser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 70: // expresion_incremento_decremento ::= VAR OPERADOR_SUMA OPERADOR_SUMA 
+          case 69: // expresion_incremento_decremento ::= VAR OPERADOR_SUMA OPERADOR_SUMA 
             {
               IncrementoDecrementoFor RESULT =null;
 		int varleft = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-2)).left;
@@ -2288,7 +2264,7 @@ class CUP$MiParser$actions {
           return CUP$MiParser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 71: // expresion_incremento_decremento ::= VAR OPERADOR_RESTA OPERADOR_RESTA 
+          case 70: // expresion_incremento_decremento ::= VAR OPERADOR_RESTA OPERADOR_RESTA 
             {
               IncrementoDecrementoFor RESULT =null;
 		int varleft = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-2)).left;
@@ -2318,7 +2294,7 @@ class CUP$MiParser$actions {
           return CUP$MiParser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 72: // NT$3 ::= 
+          case 71: // NT$2 ::= 
             {
               Sentencia RESULT =null;
 		int id1left = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-8)).left;
@@ -2343,15 +2319,15 @@ class CUP$MiParser$actions {
     }
 
     
-              CUP$MiParser$result = parser.getSymbolFactory().newSymbol("NT$3",31, ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()), RESULT);
+              CUP$MiParser$result = parser.getSymbolFactory().newSymbol("NT$2",30, ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()), RESULT);
             }
           return CUP$MiParser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 73: // sentencia_for ::= FOR PARENTESIS_ABRE VAR ASIGNACION CONST_INT PUNTO_COMA expresion_incremento_decremento PUNTO_COMA comparacion PARENTESIS_CIERRA DO NT$3 bloque_sentencias END 
+          case 72: // sentencia_for ::= FOR PARENTESIS_ABRE VAR ASIGNACION CONST_INT PUNTO_COMA expresion_incremento_decremento PUNTO_COMA comparacion PARENTESIS_CIERRA DO NT$2 bloque_sentencias END 
             {
               Sentencia RESULT =null;
-              // propagate RESULT from NT$3
+              // propagate RESULT from NT$2
                 RESULT = (Sentencia) ((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-2)).value;
 		int id1left = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-11)).left;
 		int id1right = ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-11)).right;

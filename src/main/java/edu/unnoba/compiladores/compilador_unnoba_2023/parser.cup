@@ -202,12 +202,12 @@ start with programa;
 
 programa ::= bloque_declaraciones:bd bloque_programa: bp{:
         produccionesRecorridas.add("programa ->");
-        RESULT = new Programa(bp,bd);
+        RESULT = new Programa(bp,bd, ht);
     :}
     |
    bloque_programa: bp{:
         produccionesRecorridas.add("programa ->");
-        RESULT = new Programa(bp);
+        RESULT = new Programa(bp, ht);
 :};
 
 

@@ -19,6 +19,12 @@
             <artifactId>jflex</artifactId>
             <version>1.9.1</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.lwjgl/lwjgl-llvm -->
+        <dependency>
+            <groupId>org.lwjgl</groupId>
+            <artifactId>lwjgl-llvm</artifactId>
+            <version>3.3.2</version>
+        </dependency>
         <!-- https://mvnrepository.com/artifact/com.github.vbmacher/java-cup -->
         <dependency>
             <groupId>com.github.vbmacher</groupId>
