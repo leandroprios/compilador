@@ -75,7 +75,10 @@ public class Identificador extends Constante {
        return getTipo();
     }
     
-    
+    @Override
+    public String generarCodigo() {
+        return "%var"+getIdVar()+" = load "+get_llvm_type_code()+", "+get_llvm_type_code()+"* @"+getNombre()+"\n";
+    }
     
     
 

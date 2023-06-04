@@ -38,4 +38,18 @@ public abstract class OperacionBinaria extends Expresion {
                 izquierda.graficar(miId) +
                 derecha.graficar(miId);
     }
+    
+    public abstract String get_llvm_op_code();
+
+    public String get_llvm_arithmetic_op_code() {
+        return getIzquierda().getTipo().equals(Tipo.FLOAT) ? "fcmp" : "icmp";
+    }
+    
+    @Override
+    public String generarCodigo(){
+        String codigo = getIzquierda().generarCodigo();
+        codigo += getDerecha().generarCodigo();
+        codigo += "%var"+getIdVar()+" = "+get_llvm_op_code()+" "+get_llvm_type_code()+" %var"+getIzquierda().getIdVar()+", %var"+getDerecha().getIdVar()+"\n";
+        return codigo;
+    }
 }

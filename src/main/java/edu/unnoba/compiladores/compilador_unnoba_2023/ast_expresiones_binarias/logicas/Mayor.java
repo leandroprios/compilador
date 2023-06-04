@@ -51,4 +51,22 @@ public class Mayor extends OperacionBinaria{
         return this.derecha.getTipoExpresionDerecha();
     }
     
+    @Override
+    public String get_llvm_op_code() {
+        return getIzquierda().getTipo().equals(Tipo.FLOAT) ? "ogt" : "sgt";
+    }
+    
+    @Override
+    public String get_llvm_type_code(){
+        return getIzquierda().getTipo().equals(Tipo.INTEGER) ? "i32" : "double";
+    }
+
+    @Override
+    public String generarCodigo(){
+        String codigo = getIzquierda().generarCodigo();
+        codigo += getDerecha().generarCodigo();
+        codigo += "%var"+getIdVar()+" = "+get_llvm_arithmetic_op_code()+" "+get_llvm_op_code()+" "+get_llvm_type_code()+" %var"+getIzquierda().getIdVar()+", %var"+getDerecha().getIdVar()+"\n";
+        return codigo;
+    }
+    
 }

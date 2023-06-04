@@ -329,7 +329,6 @@ sentencia ::= sentencia_for: sf{:
        |
        sentencia_if: sif{:
             produccionesRecorridas.add("sentencia -> sentencia_if");
-            isExpresionFilter = true;
             RESULT = sif;
        :}
        |
@@ -910,7 +909,6 @@ filter::= FILTER PARENTESIS_ABRE expresion_or:e_o COMA CORCHETE_ABRE lista_var:l
 
     sentenciaIf = new SentenciaIf(sentenciasDentroIF,expresionIF,sentenciasELIF, sentenciasDentroELSE);
     
-    System.out.println("dentro del filter isExpresionFilter : " + String.valueOf(isExpresionFilter));
 
     filter = new Filter(sentenciaIf, tipoResultadoFilter, isExpresionFilter);
     
@@ -977,35 +975,30 @@ input_bool ::= INPUT_BOOL:i_bool PARENTESIS_ABRE PARENTESIS_CIERRA {:
 sentencia_if ::= IF PARENTESIS_ABRE 
     expresion_or:eo PARENTESIS_CIERRA THEN bloque_sentencias:bs END {:
         produccionesRecorridas.add("sentencia_if -> IF PARENTESIS_ABRE expresion_or PARENTESIS_CIERRA THEN bloque_sentencias END");
-        isExpresionFilter = false;
         RESULT = new SentenciaIf(bs,eo);
     :}
     |
     IF PARENTESIS_ABRE expresion_or:eo PARENTESIS_CIERRA THEN bloque_sentencias:bs1 END ELSE bloque_sentencias:bs2 END{:
         produccionesRecorridas.add("sentencia_if -> IF PARENTESIS_ABRE expresion_or PARENTESIS_CIERRA THEN bloque_sentencias ELSE bloque_sentencias END");
         ArrayList<SentenciaElif> sentenciasElif = new ArrayList<>();
-        isExpresionFilter = false;
         RESULT = new SentenciaIf(bs1,eo, sentenciasElif,bs2);
     :}
     |
     IF PARENTESIS_ABRE expresion_or:eo PARENTESIS_CIERRA THEN bloque_sentencias:bs1 END sentencia_elseif: elseif{:
         produccionesRecorridas.add("sentencia_if -> IF PARENTESIS_ABRE expresion_or PARENTESIS_CIERRA THEN bloque_sentencias sentencia_elseif END");
         ArrayList<Sentencia> sentenciasElse = new ArrayList<>();
-        isExpresionFilter = false;
         RESULT = new SentenciaIf(bs1,eo,elseif, sentenciasElse);
     :}
     |
     IF PARENTESIS_ABRE expresion_or:eo PARENTESIS_CIERRA THEN bloque_sentencias:bs1 END sentencia_elseif: elseif ELSE bloque_sentencias:bs2 END{:
         produccionesRecorridas.add("sentencia_if -> IF PARENTESIS_ABRE expresion_or PARENTESIS_CIERRA THEN bloque_sentencias sentencia_elseif ELSE bloque_sentencias END");
-        isExpresionFilter = false;
         RESULT = new SentenciaIf(bs1,eo,elseif, bs2);
 :};
 
 
-sentencia_elseif ::= sentencia_elseif: elseif ELIF PARENTESIS_ABRE {: isExpresionFilter = true;:} expresion_or:eo PARENTESIS_CIERRA THEN bloque_sentencias:bs2 END{:
+sentencia_elseif ::= sentencia_elseif: elseif ELIF PARENTESIS_ABRE expresion_or:eo PARENTESIS_CIERRA THEN bloque_sentencias:bs2 END{:
         produccionesRecorridas.add("sentencia_elseif -> sentencia_elseif ELIF PARENTESIS_ABRE expresion_or PARENTESIS_CIERRA THEN bloque_sentencias");
         elseif.add(new SentenciaElif(bs2,eo));
-        isExpresionFilter = false;
         RESULT = elseif;
     :}
     |
@@ -1013,7 +1006,6 @@ sentencia_elseif ::= sentencia_elseif: elseif ELIF PARENTESIS_ABRE {: isExpresio
         produccionesRecorridas.add("sentencia_elseif -> ELIF PARENTESIS_ABRE expresion_or PARENTESIS_CIERRA THEN bloque_sentencias");
         ArrayList<SentenciaElif> listaElif = new ArrayList<>();
         listaElif.add(new SentenciaElif(bs2,eo));
-        isExpresionFilter = false;
         RESULT = listaElif;
 :};
 

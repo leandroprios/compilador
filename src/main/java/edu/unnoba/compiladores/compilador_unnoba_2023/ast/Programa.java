@@ -31,15 +31,6 @@ public class Programa extends Nodo {
         StringBuilder resultado = new StringBuilder();
         resultado.append("graph G {");
         resultado.append(this.graficar(null));
-        /*
-        if(declaraciones != null && !declaraciones.isEmpty()){
-            for(ArrayList<Declaracion> declaracionesPrograma : declaraciones){
-                for(Declaracion dec : declaracionesPrograma){
-                    resultado.append(dec.graficar(this.getId()));
-                }
-            }
-        }
-        */
 
         for(Sentencia sentencia : sentencias){
             resultado.append(sentencia.graficar(this.getId()));
@@ -48,6 +39,16 @@ public class Programa extends Nodo {
 
         resultado.append("}");
         return resultado.toString();
+    }
+    
+    @Override
+    public String generarCodigo() {
+        StringBuilder codigo = new StringBuilder();
+        for(Sentencia sentencia : sentencias){
+            codigo.append(sentencia.generarCodigo());
+        }
+        
+        return codigo.toString();
     }
 
 }

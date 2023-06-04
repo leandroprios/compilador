@@ -40,5 +40,10 @@ public class Suma extends OperacionBinaria {
     public Tipo getTipoExpresionDerecha() {
         return this.derecha.getTipoExpresionDerecha();
     }
+    
+    @Override
+    public String get_llvm_op_code() {
+        return getTipo().equals(Tipo.FLOAT) ? "fadd" : "add";
+    }
 
 }

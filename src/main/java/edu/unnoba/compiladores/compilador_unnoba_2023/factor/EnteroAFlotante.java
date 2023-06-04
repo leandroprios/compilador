@@ -61,5 +61,11 @@ public class EnteroAFlotante extends Expresion {
         return this.getTipo();
     }
 
+    @Override
+    public String generarCodigo(){
+        String codigo = getEntero().generarCodigo();
+        codigo += "%var"+getIdVar()+" = sitofp i32 %var"+getEntero().getIdVar()+" to double\n";
+        return codigo;
+    }
 
 }

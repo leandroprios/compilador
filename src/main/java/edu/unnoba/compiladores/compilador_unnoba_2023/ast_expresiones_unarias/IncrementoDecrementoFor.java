@@ -50,4 +50,14 @@ public class IncrementoDecrementoFor  extends OperacionUnaria{
         return this.getTipo();
     }
 
+    @Override
+    public String get_llvm_op_code() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public String generarCodigo() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
 }

@@ -47,4 +47,9 @@ public class And extends OperacionBinaria{
         return this.derecha.getTipoExpresionDerecha();
     }
 
+    
+    @Override
+    public String get_llvm_op_code() {
+        return "and";
+    }
 }

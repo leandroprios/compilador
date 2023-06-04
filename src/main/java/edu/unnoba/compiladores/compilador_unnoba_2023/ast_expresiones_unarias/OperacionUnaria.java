@@ -29,4 +29,6 @@ public abstract class OperacionUnaria extends Expresion {
     public void setExpresion(Expresion expresion) {
         this.expresion = expresion;
     }
+    
+    public abstract String get_llvm_op_code();
 }

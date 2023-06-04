@@ -51,4 +51,12 @@ public class StringLiteral extends Literal{
         return Tipo.UNKNOWN;
     }
 
+    
+        @Override
+    public String generarCodigo() {
+        StringBuilder codigo = new StringBuilder();
+        codigo.append(String.format("@str%1$s = private constant [%2$s x i8] c\"%3$s\\00\"\n", 
+                getIdVar(), (getValor().length()+1), getValor()));
+        return codigo.toString();
+    }
 }

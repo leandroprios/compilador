@@ -41,6 +41,19 @@ public class NegacionLogica extends OperacionUnaria {
     public Tipo getTipoExpresionDerecha() {
         return this.getTipo();
     }
+    
+    @Override
+    public String get_llvm_op_code() {
+        return "xor";
+    }
+    
+    @Override
+    public String generarCodigo() {
+        StringBuilder resultado = new StringBuilder();     
+        resultado.append(this.getExpresion().generarCodigo());
+        resultado.append(String.format("%%var%s = xor i1 %%var%s, 1\n", getIdVar(), getExpresion().getIdVar()));
+        return resultado.toString();
+    }  
 
     
 }

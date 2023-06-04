@@ -96,6 +96,9 @@ public class Entero extends Literal {
         return grafico;
     }
 
-    
+    @Override
+    public String generarCodigo(){
+        return "%var"+getIdVar()+" = add i32 0, "+getValor()+"\n";
+    }
     
 }

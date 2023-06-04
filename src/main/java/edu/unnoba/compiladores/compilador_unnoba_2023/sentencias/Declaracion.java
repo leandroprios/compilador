@@ -49,4 +49,9 @@ public class Declaracion extends Sentencia {
         grafico += ident.graficar(getId());
         return grafico;
     }
+    
+    @Override
+    public String generarCodigo() {
+        return "";
+    }
 }

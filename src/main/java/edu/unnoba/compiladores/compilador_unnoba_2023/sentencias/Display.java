@@ -31,6 +31,33 @@ public class Display extends Sentencia{
         String grafico = super.graficar(idPadre);
         grafico += display.graficar(getId());
         return grafico;
-    }   
+    }
+    
+        @Override
+    public String generarCodigo() {
+        String codigo = "";
+        switch (getDisplay().getTipo()){
+            case INTEGER:
+                codigo += getDisplay().generarCodigo();
+                codigo += "%dest"+getIdVar()+" = call i32 (i8*, ...) @printf(i8* getelementptr([4 x i8], [4 x i8]* @.integer, i32 0, i32 0), i32"
+                        + " %var"+ getDisplay().getIdVar()+")\n";
+                break;
+            case FLOAT:
+                codigo += getDisplay().generarCodigo();
+                codigo += "%dest"+getIdVar()+" = call i32 (i8*, ...) @printf(i8* getelementptr([5 x i8], [5 x i8]* @.float, i32 0, i32 0), double"
+                        + " %var"+ getDisplay().getIdVar()+")\n";
+                break;
+            case BOOLEAN:
+                codigo += getDisplay().generarCodigo();
+                codigo += "%dest"+getIdVar()+" = call i32 (i8*, ...) @printf(i8* getelementptr([4 x i8], [4 x i8]* @.integer, i32 0, i32 0), i1"
+                        + " %var"+ getDisplay().getIdVar()+")\n";
+                break;
+            /*default:
+                codigo += "%dest"+getIdVar()+" = call i32 @puts(i8* getelementptr (["+(getCantidadDigitos()+1)+" x i8], ["+(getCantidadDigitos()+1)
+                        +" x i8] * @str"+getDisplay().getIdVar()+", i32 0, i32 0))\n";
+                break;*/
+        }
+        return codigo;
+    }
     
 }

@@ -51,6 +51,9 @@ public class Booleano extends Literal {
         return this.getTipo();
     }
 
-    
+    @Override
+    public String generarCodigo(){
+        return (getValor()) ? "%var"+getIdVar()+" = add i1 0, 1\n" : "%var"+getIdVar()+" = add i1 0, 0\n";
+    }
     
 }

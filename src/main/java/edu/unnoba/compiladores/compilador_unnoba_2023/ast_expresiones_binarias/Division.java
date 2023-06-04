@@ -43,6 +43,11 @@ public class Division extends OperacionBinaria {
         return this.derecha.getTipoExpresionDerecha();
     }
     
+    @Override
+    public String get_llvm_op_code() {
+        return this.getTipo().equals(Tipo.FLOAT) ? "fdiv" : "sdiv"; 
+    }
+    
     
     
     

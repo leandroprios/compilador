@@ -50,5 +50,10 @@ public class Flotante extends Literal {
     public Tipo getTipoExpresionDerecha() {
         return this.getTipo();
     }
+    
+    @Override
+    public String generarCodigo(){
+        return "%var"+getIdVar()+" = fadd double 0.0, "+getValor()+"\n";
+    }
 
 }

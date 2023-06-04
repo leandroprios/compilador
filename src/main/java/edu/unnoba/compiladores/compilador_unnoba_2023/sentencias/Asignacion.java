@@ -41,4 +41,11 @@ public class Asignacion extends Sentencia {
         grafico += expresion.graficar(getId());
         return grafico;
     }
+    
+    @Override
+    public String generarCodigo() {
+        String codigo = getExpresion().generarCodigo();
+        codigo += "store "+getExpresion().get_llvm_type_code()+" %var"+getExpresion().getIdVar()+", "+getIdent().get_llvm_type_code()+"* @"+getIdent().getNombre()+"\n";
+        return codigo;
+    }
 }

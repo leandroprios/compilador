@@ -114,4 +114,9 @@ public class SentenciaIf extends Sentencia{
     public void setExpresion(Expresion expresion) {
         this.expresion = expresion;
     }
+
+    @Override
+    public String generarCodigo() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }

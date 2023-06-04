@@ -24,5 +24,10 @@ public class Continue extends Sentencia{
         //grafico += super.graficar("CONTINUE");
         return grafico;
     }
+
+    @Override
+    public String generarCodigo() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
     
 }
