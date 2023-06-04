@@ -15,6 +15,7 @@ public class Continue extends Sentencia{
     public Continue(){
         setNombre("CONTINUE");
         this.setIdVar(CodeGeneratorHelper.getNewPointer());
+        this.IsExpresion = false;
     }
     
     @Override

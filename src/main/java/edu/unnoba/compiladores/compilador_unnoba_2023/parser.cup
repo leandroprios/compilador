@@ -31,7 +31,7 @@ parser code
 
     Boolean isAsignacionFilter = false;
     Boolean isGuionBajoFilter = false;
-    Tipo tipoFilter = Tipo.UNKNOWN;
+    boolean isExpresionFilter = false;
 
     ArrayList<Filter> pilaFilter = new ArrayList<>();
 
@@ -42,7 +42,6 @@ parser code
     ArrayList<String> pilaVariablesInFor = new ArrayList<>();
     
     String idAsignacionFilter; 
-    //String returnFilter;
 
     public List<String> getProduccionesList(){
         return this.produccionesRecorridas;
@@ -330,6 +329,7 @@ sentencia ::= sentencia_for: sf{:
        |
        sentencia_if: sif{:
             produccionesRecorridas.add("sentencia -> sentencia_if");
+            isExpresionFilter = true;
             RESULT = sif;
        :}
        |
@@ -765,8 +765,12 @@ factor ::= constante: c{:
         RESULT = f;
     :}
     |
-    PARENTESIS_ABRE expresion_or:eo PARENTESIS_CIERRA{:
+    PARENTESIS_ABRE         {:
+        isExpresionFilter = true;
+    :}
+     expresion_or:eo PARENTESIS_CIERRA{:
         produccionesRecorridas.add("factor -> PARENTESIS_ABRE expresion_or PARENTESIS_CIERRA");
+        isExpresionFilter = false;
         RESULT = eo;
     :}
     |
@@ -812,7 +816,7 @@ constante::= CONST_BOOL:bl{:
  :};
 
 
-filter::= FILTER PARENTESIS_ABRE expresion_or:e_o COMA CORCHETE_ABRE lista_var:l_v {: tipoFilter = obtenerTipoReturnFilter(l_v); :} CORCHETE_CIERRA PARENTESIS_CIERRA {:
+filter::= FILTER PARENTESIS_ABRE expresion_or:e_o COMA CORCHETE_ABRE lista_var:l_v CORCHETE_CIERRA PARENTESIS_CIERRA {:
     produccionesRecorridas.add("filter -> FILTER PARENTESIS_ABRE expresion_or COMA CORCHETE_ABRE lista_var CORCHETE_CIERRA PARENTESIS_CIERRA");
 
 
@@ -856,16 +860,19 @@ filter::= FILTER PARENTESIS_ABRE expresion_or:e_o COMA CORCHETE_ABRE lista_var:l
                     throw new VarTypeNotEqualWithVarListTypes("El Tipo " + Tipo.toString(tipoAuxVar) +  " de la variable "+ auxVar +" no coincide con el Tipo " + Tipo.toString(tipoExpresionDerecha) + " de la Expresion \n");
                 }else {
                     expresionNueva = e_o.reemplazarExpresionIzquierda(auxVar, tipoAuxVar);
-                    if (tipoExpresionDerecha == Tipo.FLOAT){
-                        expresionNueva = e_o.reemplazarExpresionDerecha(auxVar, tipoAuxVar);
+                    if (tipoExpresionDerecha == Tipo.INTEGER && tipoAuxVar==Tipo.FLOAT){
+                    // por descarte tipoAuxVar siempre va a ser Tipo.INTEGER
+                       expresionNueva = e_o.reemplazarExpresionDerecha(auxVar, tipoAuxVar);
                     }
                 }
 
      
             }else{
                 expresionNueva = e_o.reemplazarExpresionIzquierda(auxVar, tipoAuxVar);
-                expresionNueva = e_o.reemplazarExpresionDerecha(auxVar, tipoAuxVar);
+                //expresionNueva = e_o.reemplazarExpresionDerecha(auxVar, tipoAuxVar);
             }
+
+            
 
             if(isAsignacionFilter==true){
                 if(!validarTiposVariablesConTipoAsignacionId(auxVar)){
@@ -903,8 +910,9 @@ filter::= FILTER PARENTESIS_ABRE expresion_or:e_o COMA CORCHETE_ABRE lista_var:l
 
     sentenciaIf = new SentenciaIf(sentenciasDentroIF,expresionIF,sentenciasELIF, sentenciasDentroELSE);
     
+    System.out.println("dentro del filter isExpresionFilter : " + String.valueOf(isExpresionFilter));
 
-    filter = new Filter(sentenciaIf, tipoResultadoFilter);
+    filter = new Filter(sentenciaIf, tipoResultadoFilter, isExpresionFilter);
     
 
     pilaFilter.add(filter);
@@ -966,39 +974,46 @@ input_bool ::= INPUT_BOOL:i_bool PARENTESIS_ABRE PARENTESIS_CIERRA {:
     RESULT = new Input(Tipo.BOOLEAN, i_bool);
 :};
 
-sentencia_if ::= IF PARENTESIS_ABRE expresion_or:eo PARENTESIS_CIERRA THEN bloque_sentencias:bs END {:
+sentencia_if ::= IF PARENTESIS_ABRE 
+    expresion_or:eo PARENTESIS_CIERRA THEN bloque_sentencias:bs END {:
         produccionesRecorridas.add("sentencia_if -> IF PARENTESIS_ABRE expresion_or PARENTESIS_CIERRA THEN bloque_sentencias END");
+        isExpresionFilter = false;
         RESULT = new SentenciaIf(bs,eo);
     :}
     |
-    IF PARENTESIS_ABRE expresion_or:eo PARENTESIS_CIERRA THEN bloque_sentencias:bs1 ELSE bloque_sentencias:bs2 END{:
+    IF PARENTESIS_ABRE expresion_or:eo PARENTESIS_CIERRA THEN bloque_sentencias:bs1 END ELSE bloque_sentencias:bs2 END{:
         produccionesRecorridas.add("sentencia_if -> IF PARENTESIS_ABRE expresion_or PARENTESIS_CIERRA THEN bloque_sentencias ELSE bloque_sentencias END");
         ArrayList<SentenciaElif> sentenciasElif = new ArrayList<>();
+        isExpresionFilter = false;
         RESULT = new SentenciaIf(bs1,eo, sentenciasElif,bs2);
     :}
     |
-    IF PARENTESIS_ABRE expresion_or:eo PARENTESIS_CIERRA THEN bloque_sentencias:bs1 sentencia_elseif: elseif END{:
+    IF PARENTESIS_ABRE expresion_or:eo PARENTESIS_CIERRA THEN bloque_sentencias:bs1 END sentencia_elseif: elseif{:
         produccionesRecorridas.add("sentencia_if -> IF PARENTESIS_ABRE expresion_or PARENTESIS_CIERRA THEN bloque_sentencias sentencia_elseif END");
         ArrayList<Sentencia> sentenciasElse = new ArrayList<>();
+        isExpresionFilter = false;
         RESULT = new SentenciaIf(bs1,eo,elseif, sentenciasElse);
     :}
     |
-    IF PARENTESIS_ABRE expresion_or:eo PARENTESIS_CIERRA THEN bloque_sentencias:bs1 sentencia_elseif: elseif ELSE bloque_sentencias:bs2 END{:
+    IF PARENTESIS_ABRE expresion_or:eo PARENTESIS_CIERRA THEN bloque_sentencias:bs1 END sentencia_elseif: elseif ELSE bloque_sentencias:bs2 END{:
         produccionesRecorridas.add("sentencia_if -> IF PARENTESIS_ABRE expresion_or PARENTESIS_CIERRA THEN bloque_sentencias sentencia_elseif ELSE bloque_sentencias END");
+        isExpresionFilter = false;
         RESULT = new SentenciaIf(bs1,eo,elseif, bs2);
 :};
 
 
-sentencia_elseif ::= sentencia_elseif: elseif ELIF PARENTESIS_ABRE expresion_or:eo PARENTESIS_CIERRA THEN bloque_sentencias:bs2{:
+sentencia_elseif ::= sentencia_elseif: elseif ELIF PARENTESIS_ABRE {: isExpresionFilter = true;:} expresion_or:eo PARENTESIS_CIERRA THEN bloque_sentencias:bs2 END{:
         produccionesRecorridas.add("sentencia_elseif -> sentencia_elseif ELIF PARENTESIS_ABRE expresion_or PARENTESIS_CIERRA THEN bloque_sentencias");
         elseif.add(new SentenciaElif(bs2,eo));
+        isExpresionFilter = false;
         RESULT = elseif;
     :}
     |
-    ELIF PARENTESIS_ABRE expresion_or:eo PARENTESIS_CIERRA THEN bloque_sentencias:bs2{:
+    ELIF PARENTESIS_ABRE expresion_or:eo PARENTESIS_CIERRA THEN bloque_sentencias:bs2 END{:
         produccionesRecorridas.add("sentencia_elseif -> ELIF PARENTESIS_ABRE expresion_or PARENTESIS_CIERRA THEN bloque_sentencias");
         ArrayList<SentenciaElif> listaElif = new ArrayList<>();
         listaElif.add(new SentenciaElif(bs2,eo));
+        isExpresionFilter = false;
         RESULT = listaElif;
 :};
 

@@ -15,6 +15,7 @@ public class Asignacion extends Sentencia {
         this.ident = ident;
         this.expresion = e;
         this.setIdVar(CodeGeneratorHelper.getNewPointer());
+        this.IsExpresion = false;
     }
 
     public Identificador getIdent() {

@@ -37,7 +37,7 @@ public class GuionBajo extends Expresion {
     public Expresion clonar() {
         GuionBajo nuevoGuionBajo = new GuionBajo(this.getNombre());
         if(this.enteroAFlotante != null){
-            nuevoGuionBajo = new GuionBajo(this.getNombre(), this.enteroAFlotante);
+            nuevoGuionBajo = new GuionBajo(this.getNombre(), (EnteroAFlotante)this.enteroAFlotante.clonar());
         }
         return nuevoGuionBajo;
     }
@@ -46,8 +46,12 @@ public class GuionBajo extends Expresion {
     public Expresion reemplazarExpresionIzquierda(String valor, Tipo tipo) {
         this.setNombre("ID : "+ valor + " \n <" + Tipo.toString(tipo) + ">" );
         if(tipo == Tipo.INTEGER && this.getTipo() == Tipo.FLOAT){
-            System.out.println("entro al if  " + Tipo.toString(tipo));
-            this.enteroAFlotante = new EnteroAFlotante(this.clonar());
+            System.out.println("entro al if tipo " + Tipo.toString(tipo));
+            System.out.println("entro al if valor " + valor);
+            if (this.enteroAFlotante == null) this.enteroAFlotante = new EnteroAFlotante(this.clonar());
+            this.enteroAFlotante.reemplazarExpresionIzquierda(valor, tipo);
+        }else{
+            this.enteroAFlotante = null;
         }
         
         return this.clonar();

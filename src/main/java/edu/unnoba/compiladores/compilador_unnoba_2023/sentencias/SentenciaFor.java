@@ -29,6 +29,7 @@ public class SentenciaFor extends Sentencia{
         this.expresionFor = expresionFor;
         this.sentencias = sentencias;
         this.setIdVar(CodeGeneratorHelper.getNewPointer());
+        this.IsExpresion = false;
     }
     
     @Override

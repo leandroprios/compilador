@@ -15,10 +15,16 @@ import edu.unnoba.compiladores.compilador_unnoba_2023.sentencias.SentenciaIf;
  */
 public class Filter extends Sentencia {
     SentenciaIf sentenciaIf;
-    
+    //boolean IsExpresion = false;
    
     public Filter(SentenciaIf sentenciaIf, Tipo tipo) {
         this.sentenciaIf=sentenciaIf;
+    }
+    
+    public Filter(SentenciaIf sentenciaIf, Tipo tipo, boolean IsExpresion) {
+        this.sentenciaIf=sentenciaIf;
+        this.IsExpresion=IsExpresion;
+        //super.IsExpresion = IsExpresion;
     }
      
     public SentenciaIf getSentenciaIf() {
@@ -28,6 +34,10 @@ public class Filter extends Sentencia {
     public void setSentenciaIf(SentenciaIf sentenciaIf) {
         this.sentenciaIf = sentenciaIf;
     }
+    
+    /*public boolean getIsExpresion(){
+        return this.IsExpresion;
+    }*/
     
     @Override
     public String graficar(String idPadre){

@@ -15,6 +15,7 @@ public class Break extends Sentencia{
     public Break(){
         setNombre("BREAK");
         this.setIdVar(CodeGeneratorHelper.getNewPointer());
+        this.IsExpresion = false;
     }
     
         @Override

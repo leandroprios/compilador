@@ -15,6 +15,7 @@ public class Display extends Sentencia{
         setNombre("DISPLAY");
         this.display = display;
         this.setIdVar(CodeGeneratorHelper.getNewPointer());
+        this.IsExpresion = false;
     }   
 
     public Expresion getDisplay() {

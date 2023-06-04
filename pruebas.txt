@@ -7,10 +7,8 @@ PROGRAM.SECTION
 #Esto es un comentario
 varlogica = false
 var6 =3
-varlogica = input_boolean()
-if (var5 == 3) then
-	var8 = filter(_!=3.3, [var1])
+if (var3 ==(filter(_!=3, [var2,var5]))) then
+ var6 =filter(_!=3, [var2,var5])
 end 
 
-DISPLAY("literal string")
 ENDPROGRAM.SECTION

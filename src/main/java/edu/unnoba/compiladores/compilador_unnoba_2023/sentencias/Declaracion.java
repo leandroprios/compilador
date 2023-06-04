@@ -11,6 +11,7 @@ public class Declaracion extends Sentencia {
     public Declaracion(Tipo tipo, Identificador ident){
         this.tipo = tipo;
         this.ident = ident;
+        this.IsExpresion = false;
     }
 
     public Identificador getIdent() {

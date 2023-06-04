@@ -38,7 +38,7 @@ public class Flotante extends Literal {
     
     @Override
     public Expresion reemplazarExpresionDerecha(String valor, Tipo tipo) {
-        throw new UnsupportedOperationException("El Booleano no soporta reemplazar la expresion derecha."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        throw new UnsupportedOperationException("El Flotante no soporta reemplazar la expresion derecha."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
     
     @Override

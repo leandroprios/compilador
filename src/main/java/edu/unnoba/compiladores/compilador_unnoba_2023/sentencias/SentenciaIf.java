@@ -6,6 +6,7 @@ package edu.unnoba.compiladores.compilador_unnoba_2023.sentencias;
 
 import edu.unnoba.compiladores.compilador_unnoba_2023.ast.CodeGeneratorHelper;
 import edu.unnoba.compiladores.compilador_unnoba_2023.ast_expresiones_binarias.Expresion;
+import edu.unnoba.compiladores.compilador_unnoba_2023.ast_expresiones_binarias.Filter;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -25,6 +26,7 @@ public class SentenciaIf extends Sentencia{
         this.sentenciasIf = sentenciasIf;
         this.expresion = expresion;
         this.setIdVar(CodeGeneratorHelper.getNewPointer());
+        this.IsExpresion = false;
     }
     
     public SentenciaIf(ArrayList<Sentencia> sentenciasIf, Expresion expresion, ArrayList<SentenciaElif> sentenciasElif, ArrayList<Sentencia> sentenciasElse){
@@ -34,26 +36,31 @@ public class SentenciaIf extends Sentencia{
         this.sentenciasElse = sentenciasElse;
         this.sentenciasElif = sentenciasElif;
         this.setIdVar(CodeGeneratorHelper.getNewPointer());
+        this.IsExpresion = false;
     }
     
     @Override
     public String graficar(String idPadre){
         final String miId = this.getId();
-        //Then thenIf = new Then("THEN");
         String grafico = super.graficar(idPadre) + 
         expresion.graficar(miId);
         
         Random random = new Random();
-        
+
         String idThenIf = "nodo_";
         idThenIf = idThenIf + random.nextInt(1000000000);
+
+        for (int i = 0; i<this.sentenciasIf.size() ; i++){
+            Sentencia sen = this.sentenciasIf.get(i);
+            if (sen.getEtiqueta().equals("Filter") && sen.IsExpresion==true){
+                grafico += sen.graficar(miId);
+            }else{
+                grafico += sen.graficar(idThenIf);
+            }
+        }
+        
         grafico = grafico + miId + "--" + idThenIf + "\n" 
         + idThenIf + "[label=\"THEN" + "\"]\n";
-
-
-        for(Sentencia sen : sentenciasIf){
-            grafico += sen.graficar(idThenIf);
-        }
         
         if(this.sentenciasElif != null && !this.sentenciasElif.isEmpty()){
             for(SentenciaElif senElif : sentenciasElif){

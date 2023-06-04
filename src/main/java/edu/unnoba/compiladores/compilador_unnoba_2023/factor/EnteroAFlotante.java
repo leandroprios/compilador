@@ -36,12 +36,14 @@ public class EnteroAFlotante extends Expresion {
 
     @Override
     public Expresion clonar() {
-        return new EnteroAFlotante(this.entero);
+        return new EnteroAFlotante(this.entero.clonar());
     }
     
     @Override
     public Expresion reemplazarExpresionIzquierda(String valor, Tipo tipo) {
-        throw new UnsupportedOperationException("El EnteroAFlotante no soporta reemplazar la expresion izquierda."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        //this.entero = new Entero(1);
+        return this.clonar();
+        //throw new UnsupportedOperationException("El EnteroAFlotante no soporta reemplazar la expresion izquierda."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
     
     @Override

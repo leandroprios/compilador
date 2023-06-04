@@ -48,7 +48,7 @@ public class Entero extends Literal {
     public Expresion clonar() {
         Entero enteroClonado= new Entero(this.valor);
         if (this.enteroAFlotante != null){
-            enteroClonado= new Entero(this.valor, this.enteroAFlotante);
+            enteroClonado= new Entero(this.valor, (EnteroAFlotante)this.enteroAFlotante.clonar());
         }
         return enteroClonado;
     }
@@ -60,10 +60,14 @@ public class Entero extends Literal {
     
     @Override
     public Expresion reemplazarExpresionDerecha(String valor, Tipo tipo) {
-        System.out.println("entro al if  " + Tipo.toString(tipo));
+        System.out.println("entro al reemplazarExpresionDerecha DENTRO de la clase Entero tipo: " + Tipo.toString(tipo));
+        System.out.println("entro al reemplazarExpresionDerecha DENTRO de la clase Entero valor: " + valor);
+
         if(tipo == Tipo.FLOAT){
-            System.out.println("entro al if  " + Tipo.toString(tipo));
-            this.enteroAFlotante = new EnteroAFlotante(this.clonar());
+            if (this.enteroAFlotante == null) this.enteroAFlotante = new EnteroAFlotante(this.clonar());
+            this.enteroAFlotante.reemplazarExpresionIzquierda(valor, tipo);
+        }else{
+            this.enteroAFlotante = null;
         }
         return this.clonar();
     }
