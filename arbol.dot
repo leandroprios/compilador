@@ -1,126 +1,48 @@
-graph G {nodo_1133165420[label="Programa"]
-nodo_1943682896[label="="]
-nodo_1133165420--nodo_1943682896
-nodo_1982006564[label="ID : varlogica\n<BOOLEAN>"]
-nodo_1943682896--nodo_1982006564
-nodo_1010000960[label="Boolean : false\n<BOOLEAN>"]
-nodo_1943682896--nodo_1010000960
-nodo_720697713[label="="]
-nodo_1133165420--nodo_720697713
-nodo_150365120[label="ID : var6\n<FLOAT>"]
-nodo_720697713--nodo_150365120
-nodo_1720864223[label="IntegerToFloat"]
-nodo_720697713--nodo_1720864223
-nodo_1101280297[label="Integer : 3\n<INTEGER>"]
-nodo_1720864223--nodo_1101280297
-nodo_1276539421[label="IF"]
-nodo_1133165420--nodo_1276539421
-nodo_2001068092[label="=="]
-nodo_1276539421--nodo_2001068092
-nodo_55420862[label="IntegerToFloat"]
-nodo_2001068092--nodo_55420862
-nodo_1663618690[label="ID : var3\n<INTEGER>"]
-nodo_55420862--nodo_1663618690
-nodo_483511904[label="ID : _aux0\n<FLOAT>"]
-nodo_2001068092--nodo_483511904
-nodo_1154324934[label="Filter"]
-nodo_1276539421--nodo_1154324934
-nodo_710125238[label="IF"]
-nodo_1154324934--nodo_710125238
-nodo_262807968[label="!="]
-nodo_710125238--nodo_262807968
-nodo_488267003[label="ID : var2 
- <INTEGER>"]
-nodo_262807968--nodo_488267003
-nodo_900850999[label="Integer : 3\n<INTEGER>"]
-nodo_262807968--nodo_900850999
-nodo_39883553[label="="]
-nodo_811299206--nodo_39883553
-nodo_1545143788[label="ID : _aux0\n<FLOAT>"]
-nodo_39883553--nodo_1545143788
-nodo_330004240[label="ID : var2\n<FLOAT>"]
-nodo_39883553--nodo_330004240
-nodo_710125238--nodo_811299206
-nodo_811299206[label="THEN"]
-nodo_696889359[label="ELIF"]
-nodo_710125238--nodo_696889359
-nodo_804702084[label="!="]
-nodo_696889359--nodo_804702084
-nodo_995398131[label="ID : var5 
- <FLOAT>"]
-nodo_804702084--nodo_995398131
-nodo_400735704[label="IntegerToFloat"]
-nodo_804702084--nodo_400735704
-nodo_246518343[label="Integer : 3\n<INTEGER>"]
-nodo_400735704--nodo_246518343
-nodo_696889359--nodo_266010171
-nodo_266010171[label="THEN"]
-nodo_292901227[label="="]
-nodo_266010171--nodo_292901227
-nodo_434228649[label="ID : _aux0\n<FLOAT>"]
-nodo_292901227--nodo_434228649
-nodo_468696880[label="ID : var5\n<FLOAT>"]
-nodo_292901227--nodo_468696880
-nodo_710125238--nodo_596064665
-nodo_596064665[label="ELSE"]
-nodo_432944544[label="="]
-nodo_596064665--nodo_432944544
-nodo_571195899[label="ID : _aux0\n<FLOAT>"]
-nodo_432944544--nodo_571195899
-nodo_898682006[label="ID : _retornoFilterDefault\n<FLOAT>"]
-nodo_432944544--nodo_898682006
-nodo_1407247147[label="Filter"]
-nodo_250039569--nodo_1407247147
-nodo_1005305794[label="IF"]
-nodo_1407247147--nodo_1005305794
-nodo_1200858461[label="!="]
-nodo_1005305794--nodo_1200858461
-nodo_1960060229[label="ID : var2 
- <INTEGER>"]
-nodo_1200858461--nodo_1960060229
-nodo_544831823[label="Integer : 3\n<INTEGER>"]
-nodo_1200858461--nodo_544831823
-nodo_1175115565[label="="]
-nodo_669403998--nodo_1175115565
-nodo_476658684[label="ID : _aux1\n<FLOAT>"]
-nodo_1175115565--nodo_476658684
-nodo_1237502777[label="ID : var2\n<FLOAT>"]
-nodo_1175115565--nodo_1237502777
-nodo_1005305794--nodo_669403998
-nodo_669403998[label="THEN"]
-nodo_572158031[label="ELIF"]
-nodo_1005305794--nodo_572158031
-nodo_842627230[label="!="]
-nodo_572158031--nodo_842627230
-nodo_1742341118[label="ID : var5 
- <FLOAT>"]
-nodo_842627230--nodo_1742341118
-nodo_1232535675[label="IntegerToFloat"]
-nodo_842627230--nodo_1232535675
-nodo_821263427[label="Integer : 3\n<INTEGER>"]
-nodo_1232535675--nodo_821263427
-nodo_572158031--nodo_579009826
-nodo_579009826[label="THEN"]
-nodo_117525584[label="="]
-nodo_579009826--nodo_117525584
-nodo_1265243376[label="ID : _aux1\n<FLOAT>"]
-nodo_117525584--nodo_1265243376
-nodo_988787006[label="ID : var5\n<FLOAT>"]
-nodo_117525584--nodo_988787006
-nodo_1005305794--nodo_230420610
-nodo_230420610[label="ELSE"]
-nodo_290837316[label="="]
-nodo_230420610--nodo_290837316
-nodo_473661170[label="ID : _aux1\n<FLOAT>"]
-nodo_290837316--nodo_473661170
-nodo_132981777[label="ID : _retornoFilterDefault\n<FLOAT>"]
-nodo_290837316--nodo_132981777
-nodo_1078723475[label="="]
-nodo_250039569--nodo_1078723475
-nodo_2134648621[label="ID : var6\n<FLOAT>"]
-nodo_1078723475--nodo_2134648621
-nodo_943131350[label="ID : _aux1\n<FLOAT>"]
-nodo_1078723475--nodo_943131350
-nodo_1276539421--nodo_250039569
-nodo_250039569[label="THEN"]
+graph G {nodo_1434603845[label="Programa"]
+nodo_643704641[label="DISPLAY"]
+nodo_1434603845--nodo_643704641
+nodo_2004958536[label="String : inicio de programa\n<UNKNOWN>"]
+nodo_643704641--nodo_2004958536
+nodo_2103593534[label="DISPLAY"]
+nodo_1434603845--nodo_2103593534
+nodo_976037038[label="String : ingrese un numero entero:\n<UNKNOWN>"]
+nodo_2103593534--nodo_976037038
+nodo_1830713477[label="="]
+nodo_1434603845--nodo_1830713477
+nodo_319517459[label="ID : var1\n<INTEGER>"]
+nodo_1830713477--nodo_319517459
+nodo_1830713477--nodo_2094524662
+nodo_2094524662[label="input_int<INTEGER>"]
+nodo_789363606[label="DISPLAY"]
+nodo_1434603845--nodo_789363606
+nodo_835200162[label="ID : var1\n<INTEGER>"]
+nodo_789363606--nodo_835200162
+nodo_2039695971[label="DISPLAY"]
+nodo_1434603845--nodo_2039695971
+nodo_985697791[label="String : ingrese un numero float:\n<UNKNOWN>"]
+nodo_2039695971--nodo_985697791
+nodo_1893351738[label="="]
+nodo_1434603845--nodo_1893351738
+nodo_13080247[label="ID : var5\n<FLOAT>"]
+nodo_1893351738--nodo_13080247
+nodo_1893351738--nodo_1675891870
+nodo_1675891870[label="input_float<FLOAT>"]
+nodo_1576387176[label="DISPLAY"]
+nodo_1434603845--nodo_1576387176
+nodo_2139396989[label="ID : var5\n<FLOAT>"]
+nodo_1576387176--nodo_2139396989
+nodo_1128974356[label="DISPLAY"]
+nodo_1434603845--nodo_1128974356
+nodo_4813831[label="String : ingrese un booleano:\n<UNKNOWN>"]
+nodo_1128974356--nodo_4813831
+nodo_1943797988[label="="]
+nodo_1434603845--nodo_1943797988
+nodo_685257361[label="ID : varlogica\n<BOOLEAN>"]
+nodo_1943797988--nodo_685257361
+nodo_1943797988--nodo_1028081142
+nodo_1028081142[label="input_boolean<BOOLEAN>"]
+nodo_1986389781[label="DISPLAY"]
+nodo_1434603845--nodo_1986389781
+nodo_1705837085[label="ID : varlogica\n<BOOLEAN>"]
+nodo_1986389781--nodo_1705837085
 }

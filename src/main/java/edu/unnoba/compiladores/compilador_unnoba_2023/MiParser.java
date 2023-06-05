@@ -490,6 +490,8 @@ public class MiParser extends java_cup.runtime.lr_parser {
 
 
 
+    public ArrayList<String> variablesString = new ArrayList<>();
+
     Integer autoincrementalAuxFilter = 0;
 
     boolean isSentenciaFor = false;
@@ -681,7 +683,7 @@ class CUP$MiParser$actions {
 		ArrayList<Sentencia> bp = (ArrayList<Sentencia>)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
 		
         produccionesRecorridas.add("programa ->");
-        RESULT = new Programa(bp,bd, ht);
+        RESULT = new Programa(bp,bd, ht, variablesString);
     
               CUP$MiParser$result = parser.getSymbolFactory().newSymbol("programa",0, ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-1)), ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()), RESULT);
             }
@@ -696,7 +698,7 @@ class CUP$MiParser$actions {
 		ArrayList<Sentencia> bp = (ArrayList<Sentencia>)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
 		
         produccionesRecorridas.add("programa ->");
-        RESULT = new Programa(bp, ht);
+        RESULT = new Programa(bp, ht, variablesString);
 
               CUP$MiParser$result = parser.getSymbolFactory().newSymbol("programa",0, ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()), RESULT);
             }
@@ -2009,7 +2011,13 @@ class CUP$MiParser$actions {
 		Expresion eo = (Expresion)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-1)).value;
 		
     produccionesRecorridas.add("sentencia_display -> DISPLAY PARENTESIS_ABRE expresion_or PARENTESIS_CIERRA");
-    RESULT = new Display(eo);
+    if (eo.getNombre().equals("String")){
+        variablesString.add(eo.generarCodigo());
+        RESULT = new Display(eo, ((StringLiteral)eo).getValor().length());
+    }else{
+        RESULT = new Display(eo);
+    }
+
 
               CUP$MiParser$result = parser.getSymbolFactory().newSymbol("sentencia_display",10, ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-3)), ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()), RESULT);
             }

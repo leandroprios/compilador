@@ -176,7 +176,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         try {
             lexico = new MiLexico(new FileReader("pruebas.txt"));
             while (!lexico.yyatEOF()) {
-                System.out.println("Analizo: " + lexico.yytext());
+                //System.out.println("Analizo: " + lexico.yytext());
                 Symbol token;
                 token =lexico.next_token();
                 if(token!=null && MiParserSym.terminalNames[token.sym]!="EOF"){
@@ -210,15 +210,18 @@ public class FrmPrincipal extends javax.swing.JFrame {
                     
                     //genera codigo IR para el LLVM
                     try {
-                        MiParser sintactico3= new MiParser(new MiLexico(new FileReader("pruebas.txt")));
+                        //MiParser sintactico3= new MiParser(new MiLexico(new FileReader("pruebas.txt")));
 
-                        programa = (Programa) sintactico3.parse().value;
+                        //programa = (Programa) sintactico3.parse().value;
                         
-                        String codigo = programa.generarCodigo();
-                        codigoLLVM.setText(codigo);
-                        grafico = new PrintWriter(new FileWriter("programa.ll"));
-                        grafico.println(codigo);
-                        grafico.close();
+                        String codigoPrograma = programa.generarCodigo();
+                        codigoLLVM.setText(codigoPrograma);
+                        
+                        PrintWriter programaLL;
+                        
+                        programaLL = new PrintWriter(new FileWriter("programa.ll"));
+                        programaLL.println(codigoPrograma);
+                        programaLL.close();
                         System.out.println("Código generado");
 
                         file = new File("programa.ll");
@@ -226,22 +229,28 @@ public class FrmPrincipal extends javax.swing.JFrame {
                             file.delete();
                             file.createNewFile();
                         }
-                        Files.write(Paths.get("programa.ll"), codigo.getBytes(), StandardOpenOption.TRUNCATE_EXISTING);
+                        Files.write(Paths.get("programa.ll"), codigoPrograma.getBytes(), StandardOpenOption.TRUNCATE_EXISTING);
 
                         Process process = Runtime.getRuntime().exec("clang -c -o programa.o programa.ll");
                         BufferedReader reader1 = new BufferedReader(new InputStreamReader(process.getInputStream()));
-                        String line;
-                        while ((line = reader1.readLine()) != null) {
+                        String line = reader1.readLine();
+                        while (line  != null) {
                             System.out.println(line);
                         }
+                        
+                        //Files.write(Paths.get("programa.o"), codigo.getBytes(), StandardOpenOption.TRUNCATE_EXISTING);
+
                         System.out.println("Archivo objeto generado");
 
                         Process process2 = Runtime.getRuntime().exec("clang -o programa.exe programa.o scanf.o");
                         BufferedReader reader2 = new BufferedReader(new InputStreamReader(process2.getInputStream()));
-                        String line2;
-                        while ((line2 = reader2.readLine()) != null) {
+                        String line2 = reader2.readLine();
+                        while (line2 != null) {
                             System.out.println(line2);
                         }
+                        
+                        //Files.write(Paths.get("programa.o"), codigo.getBytes(), StandardOpenOption.TRUNCATE_EXISTING);
+
                         System.out.println("Ejecutable generado");
                     } catch (Error e) {
                         System.out.println("Error: " + e.getMessage());

@@ -25,6 +25,8 @@ action code {:
 
 parser code
 {:
+    public ArrayList<String> variablesString = new ArrayList<>();
+
     Integer autoincrementalAuxFilter = 0;
 
     boolean isSentenciaFor = false;
@@ -202,12 +204,12 @@ start with programa;
 
 programa ::= bloque_declaraciones:bd bloque_programa: bp{:
         produccionesRecorridas.add("programa ->");
-        RESULT = new Programa(bp,bd, ht);
+        RESULT = new Programa(bp,bd, ht, variablesString);
     :}
     |
    bloque_programa: bp{:
         produccionesRecorridas.add("programa ->");
-        RESULT = new Programa(bp, ht);
+        RESULT = new Programa(bp, ht, variablesString);
 :};
 
 
@@ -938,7 +940,13 @@ FILTER PARENTESIS_ABRE expresion_or:e_o COMA CORCHETE_ABRE PARENTESIS_ABRE PAREN
 
 sentencia_display ::= DISPLAY PARENTESIS_ABRE expresion_or:eo PARENTESIS_CIERRA {:
     produccionesRecorridas.add("sentencia_display -> DISPLAY PARENTESIS_ABRE expresion_or PARENTESIS_CIERRA");
-    RESULT = new Display(eo);
+    if (eo.getNombre().equals("String")){
+        variablesString.add(eo.generarCodigo());
+        RESULT = new Display(eo, ((StringLiteral)eo).getValor().length());
+    }else{
+        RESULT = new Display(eo);
+    }
+
 :};
 
 input ::= input_int:ii {:

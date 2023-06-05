@@ -14,6 +14,7 @@ public class StringLiteral extends Literal{
     public StringLiteral(String valor) {
         this.valor = valor;
         setNombre("String");
+        setTipo(Tipo.UNKNOWN);
         this.setIdVar(CodeGeneratorHelper.getNewPointer());
     }
 

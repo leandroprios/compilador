@@ -60,9 +60,6 @@ public class Entero extends Literal {
     
     @Override
     public Expresion reemplazarExpresionDerecha(String valor, Tipo tipo) {
-        System.out.println("entro al reemplazarExpresionDerecha DENTRO de la clase Entero tipo: " + Tipo.toString(tipo));
-        System.out.println("entro al reemplazarExpresionDerecha DENTRO de la clase Entero valor: " + valor);
-
         if(tipo == Tipo.FLOAT){
             if (this.enteroAFlotante == null) this.enteroAFlotante = new EnteroAFlotante(this.clonar());
             this.enteroAFlotante.reemplazarExpresionIzquierda(valor, tipo);

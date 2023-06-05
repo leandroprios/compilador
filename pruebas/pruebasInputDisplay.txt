@@ -16,7 +16,7 @@ var5 = input_float()
 display(var5)
 
 
-display("ingrese un booleano:")
+display("ingrese un booleano (1: true y 0 :false ):")
 varlogica = input_boolean()
 display(varlogica)
 ENDPROGRAM.SECTION
