@@ -4,19 +4,17 @@ float: var5, var8, var6;
 BOOLEAN: varlogica;
 ENDDECLARE.SECTION
 PROGRAM.SECTION
+var6 =3
+i=1
+if (i == 0) THEN
+  var2 = 2
+end
+elif (i==1) then
+ var2=3
+DISPLAY(var2)
+end
 
-display("inicio de programa")
-display("ingrese un numero entero:")
-var1 = input_int()
-display(var1)
 
+DISPLAY(var2)
 
-display("ingrese un numero float:")
-var5 = input_float()
-display(var5)
-
-
-display("ingrese un booleano:")
-varlogica = input_boolean()
-display(varlogica)
 ENDPROGRAM.SECTION

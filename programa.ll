@@ -13,10 +13,6 @@ declare i32 @scanf(i8* %0, ...)
 @.int_read_format = unnamed_addr constant [3 x i8] c"%d\00"
 @.double_read_format = unnamed_addr constant [4 x i8]  c"%lf\00"
 
-@str511 = private constant [19 x i8] c"inicio de programa\00"
-@str513 = private constant [26 x i8] c"ingrese un numero entero:\00"
-@str522 = private constant [25 x i8] c"ingrese un numero float:\00"
-@str531 = private constant [21 x i8] c"ingrese un booleano:\00"
 @var1 = global i32 0
 @var2 = global i32 0
 @var3 = global i32 0
@@ -28,28 +24,33 @@ declare i32 @scanf(i8* %0, ...)
 @var8 = global double 0.0
 
 define i32 @main(i32, i8**) {
-	%dest512 = call i32 @puts(i8* getelementptr ([19 x i8], [19 x i8] * @str511, i32 0, i32 0))
-	%dest514 = call i32 @puts(i8* getelementptr ([26 x i8], [26 x i8] * @str513, i32 0, i32 0))
-	%temp515 = alloca i32
-	%dest515 = call i32 (i8*, ...) @scanf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.int_read_format, i64 0, i64 0), i32* %temp515)
-	%var515 = load i32, i32* %temp515
-	store i32 %var515, i32* @var1
-	%var520 = load i32, i32* @var1
-	%dest521 = call i32 (i8*, ...) @printf(i8* getelementptr([4 x i8], [4 x i8]* @.integer, i32 0, i32 0), i32 %var520)
-	%dest523 = call i32 @puts(i8* getelementptr ([25 x i8], [25 x i8] * @str522, i32 0, i32 0))
-	%temp524 = alloca double
-	%dest524 = call i32 (i8*, ...) @scanf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.double_read_format, i64 0, i64 0), double* %temp524)
-	%var524 = load double, double* %temp524
-	store double %var524, double* @var5
-	%var529 = load double, double* @var5
-	%dest530 = call i32 (i8*, ...) @printf(i8* getelementptr([5 x i8], [5 x i8]* @.float, i32 0, i32 0), double %var529)
-	%dest532 = call i32 @puts(i8* getelementptr ([21 x i8], [21 x i8] * @str531, i32 0, i32 0))
-	%temp533 = alloca i1
-	%dest533 = call i32 (i8*, ...) @scanf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.int_read_format, i64 0, i64 0), i1* %temp533)
-	%var533 = load i1, i1* %temp533
-	store i1 %var533, i1* @varlogica
-	%var538 = load i1, i1* @varlogica
-	%dest539 = call i32 (i8*, ...) @printf(i8* getelementptr([4 x i8], [4 x i8]* @.integer, i32 0, i32 0), i1 %var538)
+	%var1231 = add i32 0, 3
+	%var1235 = sitofp i32 %var1231 to double
+	store double %var1235, double* @var6
+	%var1237 = add i32 0, 1
+	store i32 %var1237, i32* @i
+	%var1242 = load i32, i32* @i
+	%var1243 = add i32 0, 0
+	%var1244 = icmp eq i32 %var1242, %var1243
+	br i1 %var1244, label %etiqThenIf1261, label %etiqEndIf1261
+	etiqThenIf1261:
+	%var1245 = add i32 0, 2
+	store i32 %var1245, i32* @var2
+	%var1250 = load i32, i32* @i
+	%var1251 = add i32 0, 1
+	%var1252 = icmp eq i32 %var1250, %var1251
+	br i1 %var1252, label %etiqThenElif1260, label %etiqEndIf1261
+	
+	etiqThenElif1260:
+	%var1253 = add i32 0, 3
+	store i32 %var1253, i32* @var2
+	%var1258 = load i32, i32* @var2
+	%dest1259 = call i32 (i8*, ...) @printf(i8* getelementptr([4 x i8], [4 x i8]* @.integer, i32 0, i32 0), i32 %var1258)
+	br label %etiqEndIf1261
+	
+	etiqEndIf1261:
+	%var1262 = load i32, i32* @var2
+	%dest1263 = call i32 (i8*, ...) @printf(i8* getelementptr([4 x i8], [4 x i8]* @.integer, i32 0, i32 0), i32 %var1262)
 	
 	ret i32 0
 }

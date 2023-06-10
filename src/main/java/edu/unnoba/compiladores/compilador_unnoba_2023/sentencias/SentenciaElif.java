@@ -17,11 +17,17 @@ public class SentenciaElif extends Sentencia {
     ArrayList<Sentencia> sentencias;
     Expresion expresion;
     
+    private String etiquetaSiguiente;
+    
     public SentenciaElif(ArrayList<Sentencia> sentencias, Expresion expresion){
         setNombre("ELIF");
         this.sentencias = sentencias;
         this.expresion = expresion;
         this.setIdVar(CodeGeneratorHelper.getNewPointer());
+    }
+    
+    public void setEtiquetaSiguiente(String etiqueta){
+        this.etiquetaSiguiente =etiqueta;
     }
     
     @Override
@@ -46,9 +52,21 @@ public class SentenciaElif extends Sentencia {
         
         return grafico;
     }
+    
+    /*public String generarEtiqueta(){
+        return String.format("etiqThenIf%s:\n", getIdVar());
+    }*/
 
     @Override
     public String generarCodigo() {
-       return "";
+       String codigo = this.expresion.generarCodigo();
+        System.out.println("CODIGO DENTRO DEL ELIF "+String.format("br i1 %%var%s, label %%etiqThenElif%s, label %s\n", this.expresion.getIdVar(), getIdVar(), this.etiquetaSiguiente));
+        codigo = codigo.concat(String.format("br i1 %%var%s, label %%etiqThenElif%s, label %s\n", this.expresion.getIdVar(), getIdVar(), this.etiquetaSiguiente));
+        codigo = codigo.concat(String.format("etiqThenElif%s:\n", getIdVar()));
+        for (Sentencia sentencia : sentencias) {
+            codigo += sentencia.generarCodigo();
+        }
+        codigo = codigo.concat(String.format("br label %s\n", this.etiquetaSiguiente));
+       return codigo;
     }
 }
