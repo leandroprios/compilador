@@ -95,7 +95,14 @@ public class Entero extends Literal {
 
     @Override
     public String generarCodigo(){
-        return "%var"+getIdVar()+" = add i32 0, "+getValor()+"\n";
+        String codigo = ""; 
+        codigo += "%var"+getIdVar()+" = add i32 0, "+getValor()+"\n";
+        if (this.enteroAFlotante != null){
+            codigo += "%var"+this.enteroAFlotante.getIdVar()+" = sitofp i32 %var"+this.getIdVar()+" to double\n";
+            this.setIdVar(this.enteroAFlotante.getIdVar());
+            //codigo = this.enteroAFlotante.generarCodigo();
+        }
+        return codigo;
     }
     
 }

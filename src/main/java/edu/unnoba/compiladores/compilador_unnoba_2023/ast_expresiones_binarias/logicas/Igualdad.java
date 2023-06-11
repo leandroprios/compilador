@@ -66,7 +66,7 @@ public class Igualdad extends OperacionBinaria{
 
     @Override
     public String get_llvm_type_code(){
-        return getIzquierda().getTipo().equals(Tipo.INTEGER) ? "i32" : "double";
+        return getIzquierda().getTipo().equals(Tipo.INTEGER) ? "i32" : getIzquierda().getTipo().equals(Tipo.FLOAT) ? "double" : "i1";
     }
 
 }

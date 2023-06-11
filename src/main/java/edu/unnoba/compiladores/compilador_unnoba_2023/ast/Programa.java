@@ -72,6 +72,9 @@ public class Programa extends Nodo {
         //ejemplos para mostrar errores en el programa
         /*codigo.append("@str.cantinsuficiente = private constant [47 x i8] c\"La lista tiene menos elementos que el indicado\\00\"\n");
         codigo.append("@str.cantidadimpares = private constant [57 x i8] c\"No existen suficientes elementos impares para el calculo\\00\"\n");*/
+        /*codigo.append("@.trueString = private constant [5 x i8] c\"true\\00\"\n");
+        codigo.append("@.falseString = private constant [6 x i8] c\"false\\00\"\n");*/
+        
         codigo.append("@.integer = private constant [4 x i8] c\"%d\\0A\\00\"\n");
         codigo.append("@.float = private constant [5 x i8] c\"%lf\\0A\\00\"\n");
         codigo.append("@.int_read_format = unnamed_addr constant [3 x i8] c\"%d\\00\"\n");

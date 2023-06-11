@@ -1758,7 +1758,7 @@ class CUP$MiParser$actions {
 		
         produccionesRecorridas.add("factor -> GUION_BAJO");
         isGuionBajoFilter = true;
-        RESULT = new GuionBajo("GuionBajo", Tipo.UNKNOWN, "_");
+        RESULT = new GuionBajo("GuionBajo", Tipo.UNKNOWN, "_", Tipo.UNKNOWN);
     
               CUP$MiParser$result = parser.getSymbolFactory().newSymbol("factor",19, ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()), RESULT);
             }
@@ -1912,17 +1912,21 @@ class CUP$MiParser$actions {
                     throw new VarTypeNotEqualWithVarListTypes("El Tipo " + Tipo.toString(tipoAuxVar) +  " de la variable "+ auxVar +" no coincide con el Tipo " + Tipo.toString(tipoExpresionDerecha) + " de la Expresion \n");
                 }else {
                     expresionNueva = e_o.reemplazarExpresionIzquierda(auxVar, tipoAuxVar);
-                    if (tipoExpresionDerecha == Tipo.INTEGER && tipoAuxVar==Tipo.FLOAT){
-                    // por descarte tipoAuxVar siempre va a ser Tipo.INTEGER
+                    if (tipoExpresionDerecha == Tipo.INTEGER && tipoAuxVar==Tipo.FLOAT){ // tengo que castear el entero de la expresion DERECHA a flotante
                        expresionNueva = e_o.reemplazarExpresionDerecha(auxVar, tipoAuxVar);
                     }
                 }
 
      
             }else{
+
                 expresionNueva = e_o.reemplazarExpresionIzquierda(auxVar, tipoAuxVar);
-                //expresionNueva = e_o.reemplazarExpresionDerecha(auxVar, tipoAuxVar);
             }
+
+            //agrego a la tabla de simbolos la variables que reemplazan _ ('GUION BAJO') utilizadas en la comparacion del filter
+            /*if(!ht.containsKey("_auxFilter" + auxVar)){
+                ht.put("_auxFilter" + auxVar,tipoAuxVar);
+            }*/
 
             
 
@@ -1945,17 +1949,12 @@ class CUP$MiParser$actions {
             }
 
             if(j==0){ //si es la primera variable de la lista de variables
-  
-                    //Asignacion asignacion = new Asignacion(resultadoFilter, variable); //agrego la asignacion dentro del IF sentencia dentro del IF
                     sentenciasDentroIF.add(asignacion);
-                    //expresionIF = e_o.reemplazarExpresionIzquierda(auxVar, tipoAuxVar);
                     expresionIF =expresionNueva;
             }
             if(j>0 && l_v.size()>1){ //sentencias dentro del elif  
-                //Asignacion asignacion = new Asignacion(resultadoFilter, variable); //agrego la sentencias del elif
                 ArrayList<Sentencia> sentenciasDentroELIF = new ArrayList<>();
                 sentenciasDentroELIF.add(asignacion);
-                //sentenciasELIF.add(new SentenciaElif(sentenciasDentroELIF, e_o.reemplazarExpresionIzquierda(auxVar,tipoAuxVar)));
                 sentenciasELIF.add(new SentenciaElif(sentenciasDentroELIF, expresionNueva));
 
             }
@@ -1964,6 +1963,12 @@ class CUP$MiParser$actions {
     
     //agrego la variable del filter a la tabla de simbolos
     ht.put("_aux" + autoincrementalAuxFilter.toString(),tipoResultadoFilter);
+
+    //agrego la variable del filter default a la tabla de simbolos
+    if(!ht.containsKey("_retornoFilterDefault")){
+        ht.put("_retornoFilterDefault",tipoResultadoFilter);
+    }
+
     resultadoFilter = new Identificador("_aux" + autoincrementalAuxFilter.toString(), tipoResultadoFilter);
     variable = new Identificador("_retornoFilterDefault", tipoResultadoFilter);
 

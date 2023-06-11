@@ -778,7 +778,7 @@ factor ::= constante: c{:
     GUION_BAJO: gb{:
         produccionesRecorridas.add("factor -> GUION_BAJO");
         isGuionBajoFilter = true;
-        RESULT = new GuionBajo("GuionBajo", Tipo.UNKNOWN, "_");
+        RESULT = new GuionBajo("GuionBajo", Tipo.UNKNOWN, "_", Tipo.UNKNOWN);
     :}    
     |
     input: in{:
@@ -861,16 +861,21 @@ filter::= FILTER PARENTESIS_ABRE expresion_or:e_o COMA CORCHETE_ABRE lista_var:l
                     throw new VarTypeNotEqualWithVarListTypes("El Tipo " + Tipo.toString(tipoAuxVar) +  " de la variable "+ auxVar +" no coincide con el Tipo " + Tipo.toString(tipoExpresionDerecha) + " de la Expresion \n");
                 }else {
                     expresionNueva = e_o.reemplazarExpresionIzquierda(auxVar, tipoAuxVar);
-                    if (tipoExpresionDerecha == Tipo.INTEGER && tipoAuxVar==Tipo.FLOAT){
-                    // por descarte tipoAuxVar siempre va a ser Tipo.INTEGER
+                    if (tipoExpresionDerecha == Tipo.INTEGER && tipoAuxVar==Tipo.FLOAT){ // tengo que castear el entero de la expresion DERECHA a flotante
                        expresionNueva = e_o.reemplazarExpresionDerecha(auxVar, tipoAuxVar);
                     }
                 }
 
      
             }else{
+
                 expresionNueva = e_o.reemplazarExpresionIzquierda(auxVar, tipoAuxVar);
             }
+
+            //agrego a la tabla de simbolos la variables que reemplazan _ ('GUION BAJO') utilizadas en la comparacion del filter
+            /*if(!ht.containsKey("_auxFilter" + auxVar)){
+                ht.put("_auxFilter" + auxVar,tipoAuxVar);
+            }*/
 
             
 
@@ -907,6 +912,12 @@ filter::= FILTER PARENTESIS_ABRE expresion_or:e_o COMA CORCHETE_ABRE lista_var:l
     
     //agrego la variable del filter a la tabla de simbolos
     ht.put("_aux" + autoincrementalAuxFilter.toString(),tipoResultadoFilter);
+
+    //agrego la variable del filter default a la tabla de simbolos
+    if(!ht.containsKey("_retornoFilterDefault")){
+        ht.put("_retornoFilterDefault",tipoResultadoFilter);
+    }
+
     resultadoFilter = new Identificador("_aux" + autoincrementalAuxFilter.toString(), tipoResultadoFilter);
     variable = new Identificador("_retornoFilterDefault", tipoResultadoFilter);
 

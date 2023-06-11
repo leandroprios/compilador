@@ -16,31 +16,34 @@ import edu.unnoba.compiladores.compilador_unnoba_2023.factor.EnteroAFlotante;
 public class GuionBajo extends Expresion {
     
     private EnteroAFlotante enteroAFlotante;
-    private String nombreVar; 
+    private String nombreVar;
+    private Tipo tipoVar;
     
         
-    public GuionBajo(String valor,EnteroAFlotante enteroAFlotante, Tipo tipo, String nombreVar){
+    public GuionBajo(String valor,EnteroAFlotante enteroAFlotante, Tipo tipo, String nombreVar, Tipo tipoVar){
         setNombre(valor);
         this.enteroAFlotante = enteroAFlotante;
         this.nombreVar = nombreVar;
-        setTipo(tipo);
+        this.tipoVar = tipoVar;
+        this.setTipo(tipo);
         this.setIdVar(CodeGeneratorHelper.getNewPointer());
     }
     
-    public GuionBajo(String valor, Tipo tipo, String nombreVar){
+    public GuionBajo(String valor, Tipo tipo, String nombreVar, Tipo tipoVar){
         setNombre(valor);
         this.enteroAFlotante = null;
         this.nombreVar = nombreVar;
-        setTipo(tipo);
+        this.tipoVar = tipoVar;
+        this.setTipo(tipo);
         this.setIdVar(CodeGeneratorHelper.getNewPointer());
     }
 
 
     @Override
     public Expresion clonar() {
-        GuionBajo nuevoGuionBajo = new GuionBajo(this.getNombre(), this.getTipo(), this.nombreVar);
+        GuionBajo nuevoGuionBajo = new GuionBajo(this.getNombre(), this.getTipo(), this.nombreVar, this.tipoVar);
         if(this.enteroAFlotante != null){
-            nuevoGuionBajo = new GuionBajo(this.getNombre(), (EnteroAFlotante)this.enteroAFlotante.clonar(),this.getTipo(), this.nombreVar);
+            nuevoGuionBajo = new GuionBajo(this.getNombre(), (EnteroAFlotante)this.enteroAFlotante.clonar(),this.getTipo(), this.nombreVar, this.tipoVar);
         }
         return nuevoGuionBajo;
     }
@@ -48,16 +51,18 @@ public class GuionBajo extends Expresion {
     @Override
     public Expresion reemplazarExpresionIzquierda(String valor, Tipo tipo) {
         this.setNombre("ID : "+ valor + " \n <" + Tipo.toString(tipo) + ">" );
-        this.setTipo(tipo);
         this.nombreVar = valor;
         //if(this.getTipo() == Tipo.FLOAT){
-        if(tipo == Tipo.INTEGER && this.getTipo() == Tipo.FLOAT){
+        this.tipoVar = tipo;
+        if(tipo == Tipo.INTEGER && (this.getTipo() == Tipo.FLOAT || this.getTipo()==Tipo.UNKNOWN)){
+            
+            this.setTipo(Tipo.FLOAT);
             if (this.enteroAFlotante == null) this.enteroAFlotante = new EnteroAFlotante(this.clonar());
             this.enteroAFlotante.reemplazarExpresionIzquierda(valor, tipo);
         }else{
             this.enteroAFlotante = null;
+            this.setTipo(tipo);
         }
-        
         return this.clonar();
     }
     
@@ -89,24 +94,30 @@ public class GuionBajo extends Expresion {
 
         return grafico;
     }
+    
+    public String get_llvm_type_var() {
+        return this.tipoVar.equals(Tipo.FLOAT) ? "double" : (this.tipoVar.equals(Tipo.INTEGER) ? "i32" : "i1");
+    }
 
     @Override
     public String generarCodigo() {
         String codigo = "";
-        if (this.enteroAFlotante != null){
-            codigo = this.enteroAFlotante.generarCodigo();
-            codigo += "%var"+getIdVar()+" = sitofp i32 %var"+this.enteroAFlotante.getIdVar()+" to double\n";
+        
+        if (this.enteroAFlotante == null){
+            codigo += "%var" + this.getIdVar() + "= load " + this.get_llvm_type_var() + ", " +this.get_llvm_type_var() + "* @"+this.nombreVar+"\n" ;
         }else{
-            codigo += "store "+this.get_llvm_type_code()+" %var"+this.getIdVar()+", "+this.get_llvm_type_code()+"* @"+this.nombreVar+"\n";
-        }
+            //codigo += "%var" + this.getIdVar() + "= alloca i32\n"; 
+            codigo += this.enteroAFlotante.generarCodigo();
+            this.setIdVar(this.enteroAFlotante.getIdVar());
+            //codigo += "%var"+getIdVar()+" = sitofp i32 %var"+this.enteroAFlotante.getIdVar()+" to double\n";
+        }/*else{
+            //codigo += "%var" + this.getIdVar() + " = alloca " + this.get_llvm_type_code() + "\n"; 
+            codigo += "%var" + this.getIdVar() + " load " + this.get_llvm_type_code() + "," +this.get_llvm_type_code() + "@"+this.nombreVar+"\n" ;
+            
+            //codigo += "store "+this.get_llvm_type_code()+" %var"+this.getIdVar()+", "+this.get_llvm_type_code()+"* @"+this.nombreVar+"\n";
+        }*/
         
         return codigo;
-       
-       
-
-        //return "%var"+getIdVar()+" = load "+get_llvm_type_code()+", "+get_llvm_type_code()+"* @"+getNombre()+"\n";
-
-        //return "";
     }
     
     

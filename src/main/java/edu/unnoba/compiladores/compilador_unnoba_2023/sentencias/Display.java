@@ -67,6 +67,24 @@ public class Display extends Sentencia{
                 break;
             case BOOLEAN:
                 codigo += getDisplay().generarCodigo();
+                
+                /*codigo += "%formatString = alloca [6 x i8]\n";
+                codigo +="%trueString = alloca [5 x i8]\n";
+                codigo +="%falseString = alloca [6 x i8]\n";
+  
+                //Formato de la cadena para imprimir
+                codigo +="%format = c\"%s\\0\"\n";
+                codigo +="store [6 x i8] c\"%s\\0\", [6 x i8]* %formatString\n";
+  
+                //Cadenas para "verdadero" y "falso"
+                codigo +="store [5 x i8] c\"true\\0\", [5 x i8]* %trueString\n";
+                codigo +="store [6 x i8] c\"false\\0\", [6 x i8]* %falseString\n";
+  
+                //Selección de cadena según el valor booleano
+                codigo+="%selectedString = select i1 "+getDisplay().getIdVar()+", [5 x i8]* %trueString, [6 x i8]* %falseString\n";
+
+                codigo += "call i32 (i8*, ...) @printf(i8* getelementptr ([6 x i8], [6 x i8]* %formatString, i32 0, i32 0), i8* getelementptr ([0 x i8], [0 x i8]* %selectedString, i32 0, i32 0))\n";
+                */
                 codigo += "%dest"+getIdVar()+" = call i32 (i8*, ...) @printf(i8* getelementptr([4 x i8], [4 x i8]* @.integer, i32 0, i32 0), i1"
                         + " %var"+ getDisplay().getIdVar()+")\n";
                 break;
