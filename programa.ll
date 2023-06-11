@@ -22,35 +22,56 @@ declare i32 @scanf(i8* %0, ...)
 @var5 = global double 0.0
 @var6 = global double 0.0
 @var8 = global double 0.0
+@_aux0 = global double 0.0
 
 define i32 @main(i32, i8**) {
-	%var1231 = add i32 0, 3
-	%var1235 = sitofp i32 %var1231 to double
-	store double %var1235, double* @var6
-	%var1237 = add i32 0, 1
-	store i32 %var1237, i32* @i
-	%var1242 = load i32, i32* @i
-	%var1243 = add i32 0, 0
-	%var1244 = icmp eq i32 %var1242, %var1243
-	br i1 %var1244, label %etiqThenIf1261, label %etiqEndIf1261
-	etiqThenIf1261:
-	%var1245 = add i32 0, 2
-	store i32 %var1245, i32* @var2
-	%var1250 = load i32, i32* @i
-	%var1251 = add i32 0, 1
-	%var1252 = icmp eq i32 %var1250, %var1251
-	br i1 %var1252, label %etiqThenElif1260, label %etiqEndIf1261
-	
-	etiqThenElif1260:
-	%var1253 = add i32 0, 3
-	store i32 %var1253, i32* @var2
-	%var1258 = load i32, i32* @var2
-	%dest1259 = call i32 (i8*, ...) @printf(i8* getelementptr([4 x i8], [4 x i8]* @.integer, i32 0, i32 0), i32 %var1258)
-	br label %etiqEndIf1261
-	
-	etiqEndIf1261:
-	%var1262 = load i32, i32* @var2
-	%dest1263 = call i32 (i8*, ...) @printf(i8* getelementptr([4 x i8], [4 x i8]* @.integer, i32 0, i32 0), i32 %var1262)
+	store i32 %var230, i32* @var2
+	%var231 = add i32 0, 3
+	%var232 = icmp ne i32 %var230, %var231
+	br i1 %var232, label %etiqThenIf280, label %etiqElif245
+	etiqThenIf280:
+	%var234 = load i32, i32* @var2
+	%var235 = sitofp i32 %var234 to double
+	store double %var235, double* @_aux0
+	br label %etiqEndIf280
+	etiqElif245:
+	store i32 %var238, i32* @var3
+	%var239 = add i32 0, 3
+	%var240 = icmp ne i32 %var238, %var239
+	br i1 %var240, label %etiqThenElif245, label %etiqElif254
+	etiqThenElif245:
+	%var242 = load i32, i32* @var3
+	%var243 = sitofp i32 %var242 to double
+	store double %var243, double* @_aux0
+	br label %etiqEndIf280
+	etiqElif254:
+	store i32 %var247, i32* @var4
+	%var248 = add i32 0, 3
+	%var249 = icmp ne i32 %var247, %var248
+	br i1 %var249, label %etiqThenElif254, label %etiqElif276
+	etiqThenElif254:
+	%var251 = load i32, i32* @var4
+	%var252 = sitofp i32 %var251 to double
+	store double %var252, double* @_aux0
+	br label %etiqEndIf280
+	etiqElif276:
+	store double %var267, double* @var5
+	%var271 = add i32 0, 3
+	%var272 = fcmp one double %var267, %var271
+	br i1 %var272, label %etiqThenElif276, label %etiqThenElse280
+	etiqThenElif276:
+	%var274 = load double, double* @var5
+	store double %var274, double* @_aux0
+	br label %etiqEndIf280
+	etiqThenElse280:
+	%var278 = load double, double* @_retornoFilterDefault
+	store double %var278, double* @_aux0
+	br label %etiqEndIf280
+	etiqEndIf280:
+	%var281 = load double, double* @_aux0
+	store double %var281, double* @var5
+	%var286 = load double, double* @var5
+	%dest287 = call i32 (i8*, ...) @printf(i8* getelementptr([5 x i8], [5 x i8]* @.float, i32 0, i32 0), double %var286)
 	
 	ret i32 0
 }

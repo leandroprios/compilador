@@ -53,7 +53,6 @@ public class Booleano extends Literal {
 
     @Override
     public String generarCodigo(){
-        System.out.println("this.getIdVar() " + this.getIdVar());
         return (getValor()) ? "%var"+this.getIdVar()+" = add i1 0, 1\n" : "%var"+this.getIdVar()+" = add i1 0, 0\n";
     }
     

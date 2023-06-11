@@ -16,26 +16,31 @@ import edu.unnoba.compiladores.compilador_unnoba_2023.factor.EnteroAFlotante;
 public class GuionBajo extends Expresion {
     
     private EnteroAFlotante enteroAFlotante;
+    private String nombreVar; 
     
         
-    public GuionBajo(String valor,EnteroAFlotante enteroAFlotante){
+    public GuionBajo(String valor,EnteroAFlotante enteroAFlotante, Tipo tipo, String nombreVar){
         setNombre(valor);
         this.enteroAFlotante = enteroAFlotante;
+        this.nombreVar = nombreVar;
+        setTipo(tipo);
         this.setIdVar(CodeGeneratorHelper.getNewPointer());
     }
     
-    public GuionBajo(String valor){
+    public GuionBajo(String valor, Tipo tipo, String nombreVar){
         setNombre(valor);
         this.enteroAFlotante = null;
+        this.nombreVar = nombreVar;
+        setTipo(tipo);
         this.setIdVar(CodeGeneratorHelper.getNewPointer());
     }
 
 
     @Override
     public Expresion clonar() {
-        GuionBajo nuevoGuionBajo = new GuionBajo(this.getNombre());
+        GuionBajo nuevoGuionBajo = new GuionBajo(this.getNombre(), this.getTipo(), this.nombreVar);
         if(this.enteroAFlotante != null){
-            nuevoGuionBajo = new GuionBajo(this.getNombre(), (EnteroAFlotante)this.enteroAFlotante.clonar());
+            nuevoGuionBajo = new GuionBajo(this.getNombre(), (EnteroAFlotante)this.enteroAFlotante.clonar(),this.getTipo(), this.nombreVar);
         }
         return nuevoGuionBajo;
     }
@@ -43,9 +48,10 @@ public class GuionBajo extends Expresion {
     @Override
     public Expresion reemplazarExpresionIzquierda(String valor, Tipo tipo) {
         this.setNombre("ID : "+ valor + " \n <" + Tipo.toString(tipo) + ">" );
+        this.setTipo(tipo);
+        this.nombreVar = valor;
+        //if(this.getTipo() == Tipo.FLOAT){
         if(tipo == Tipo.INTEGER && this.getTipo() == Tipo.FLOAT){
-            System.out.println("entro al if tipo " + Tipo.toString(tipo));
-            System.out.println("entro al if valor " + valor);
             if (this.enteroAFlotante == null) this.enteroAFlotante = new EnteroAFlotante(this.clonar());
             this.enteroAFlotante.reemplazarExpresionIzquierda(valor, tipo);
         }else{
@@ -86,7 +92,21 @@ public class GuionBajo extends Expresion {
 
     @Override
     public String generarCodigo() {
-        return "";
+        String codigo = "";
+        if (this.enteroAFlotante != null){
+            codigo = this.enteroAFlotante.generarCodigo();
+            codigo += "%var"+getIdVar()+" = sitofp i32 %var"+this.enteroAFlotante.getIdVar()+" to double\n";
+        }else{
+            codigo += "store "+this.get_llvm_type_code()+" %var"+this.getIdVar()+", "+this.get_llvm_type_code()+"* @"+this.nombreVar+"\n";
+        }
+        
+        return codigo;
+       
+       
+
+        //return "%var"+getIdVar()+" = load "+get_llvm_type_code()+", "+get_llvm_type_code()+"* @"+getNombre()+"\n";
+
+        //return "";
     }
     
     

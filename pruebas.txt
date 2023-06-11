@@ -4,17 +4,6 @@ float: var5, var8, var6;
 BOOLEAN: varlogica;
 ENDDECLARE.SECTION
 PROGRAM.SECTION
-var6 =3
-i=1
-if (i == 0) THEN
-  var2 = 2
-end
-elif (i==1) then
- var2=3
-DISPLAY(var2)
-end
-
-
-DISPLAY(var2)
-
+var5 = filter(_!=3, [var2,var3,var4,var5])
+DISPLAY(var5)
 ENDPROGRAM.SECTION

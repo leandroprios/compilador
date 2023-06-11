@@ -55,7 +55,11 @@ public class SentenciaFor extends Sentencia{
 
     @Override
     public String generarCodigo() {
-        return "";
+        String codigo = "";
+        codigo = codigo.concat(this.expresionFor.generarCodigo());
+        
+        
+        return codigo;
     }
     
 }

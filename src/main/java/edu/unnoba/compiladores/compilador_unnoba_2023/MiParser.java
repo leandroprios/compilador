@@ -1758,7 +1758,7 @@ class CUP$MiParser$actions {
 		
         produccionesRecorridas.add("factor -> GUION_BAJO");
         isGuionBajoFilter = true;
-        RESULT = new GuionBajo("_");
+        RESULT = new GuionBajo("GuionBajo", Tipo.UNKNOWN, "_");
     
               CUP$MiParser$result = parser.getSymbolFactory().newSymbol("factor",19, ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()), RESULT);
             }
@@ -1933,17 +1933,26 @@ class CUP$MiParser$actions {
             }
             
             resultadoFilter = new Identificador("_aux" + autoincrementalAuxFilter.toString(), tipoResultadoFilter);
-            variable = new Identificador(auxVar, tipoResultadoFilter);
+            variable = new Identificador(auxVar, tipoAuxVar);
             
+            Asignacion asignacion;
+            if (tipoResultadoFilter == Tipo.FLOAT && tipoAuxVar == Tipo.INTEGER){
+                asignacion = new Asignacion(resultadoFilter, new EnteroAFlotante(variable));
+            }else if(tipoResultadoFilter == Tipo.INTEGER && tipoAuxVar == Tipo.FLOAT){
+                throw new Exception("No se puede realizar la asignacion de _aux" + autoincrementalAuxFilter.toString() + " de tipo " +  Tipo.toString(tipoResultadoFilter)  + " con " + auxVar + "  de tipo " + Tipo.toString(tipoAuxVar));
+            }else{
+                asignacion = new Asignacion(resultadoFilter, variable);
+            }
 
-            if(j==0){ //si es la primera variable de la lista de variables 
-                    Asignacion asignacion = new Asignacion(resultadoFilter, variable); //agrego la asignacion dentro del IF sentencia dentro del IF
+            if(j==0){ //si es la primera variable de la lista de variables
+  
+                    //Asignacion asignacion = new Asignacion(resultadoFilter, variable); //agrego la asignacion dentro del IF sentencia dentro del IF
                     sentenciasDentroIF.add(asignacion);
                     //expresionIF = e_o.reemplazarExpresionIzquierda(auxVar, tipoAuxVar);
                     expresionIF =expresionNueva;
             }
             if(j>0 && l_v.size()>1){ //sentencias dentro del elif  
-                Asignacion asignacion = new Asignacion(resultadoFilter, variable); //agrego la sentencias del elif
+                //Asignacion asignacion = new Asignacion(resultadoFilter, variable); //agrego la sentencias del elif
                 ArrayList<Sentencia> sentenciasDentroELIF = new ArrayList<>();
                 sentenciasDentroELIF.add(asignacion);
                 //sentenciasELIF.add(new SentenciaElif(sentenciasDentroELIF, e_o.reemplazarExpresionIzquierda(auxVar,tipoAuxVar)));
@@ -1953,6 +1962,8 @@ class CUP$MiParser$actions {
         }
     }
     
+    //agrego la variable del filter a la tabla de simbolos
+    ht.put("_aux" + autoincrementalAuxFilter.toString(),tipoResultadoFilter);
     resultadoFilter = new Identificador("_aux" + autoincrementalAuxFilter.toString(), tipoResultadoFilter);
     variable = new Identificador("_retornoFilterDefault", tipoResultadoFilter);
 
