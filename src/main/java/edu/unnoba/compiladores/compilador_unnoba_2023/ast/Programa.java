@@ -72,8 +72,28 @@ public class Programa extends Nodo {
         //ejemplos para mostrar errores en el programa
         /*codigo.append("@str.cantinsuficiente = private constant [47 x i8] c\"La lista tiene menos elementos que el indicado\\00\"\n");
         codigo.append("@str.cantidadimpares = private constant [57 x i8] c\"No existen suficientes elementos impares para el calculo\\00\"\n");*/
-        /*codigo.append("@.trueString = private constant [5 x i8] c\"true\\00\"\n");
-        codigo.append("@.falseString = private constant [6 x i8] c\"false\\00\"\n");*/
+
+ 
+        codigo.append("@trueStr = private constant [6 x i8] c\"true\\0A\\00\"\n" + "@falseStr = private constant [7 x i8] c\"false\\0A\\00\"\n");
+        //funcion para imprimir true o false
+        codigo.append("define void @printBool(i1 %value) {\n" +
+                "  %boolValue = zext i1 %value to i32\n" +
+                "  br i1 %value, label %trueLabel, label %falseLabel\n" + 
+                "trueLabel:\n" +
+                "  %formatStrTrue = getelementptr [6 x i8], [6 x i8]* @trueStr, i32 0, i32 0\n" +
+                "  call i32 (i8*, ...) @printf(i8* %formatStrTrue, i32 %boolValue)\n" +
+                "  br label %endLabel\n" +
+                "\n" +
+                "falseLabel:\n" +
+                "  %formatStrFalse = getelementptr [7 x i8], [7 x i8]* @falseStr, i32 0, i32 0\n" +
+                "  call i32 (i8*, ...) @printf(i8* %formatStrFalse, i32 %boolValue)\n" +
+                "  br label %endLabel\n" +
+                "\n" +
+                "endLabel:\n" +
+                "  ret void\n" +
+                "}\n");
+        
+        
         
         codigo.append("@.integer = private constant [4 x i8] c\"%d\\0A\\00\"\n");
         codigo.append("@.float = private constant [5 x i8] c\"%lf\\0A\\00\"\n");

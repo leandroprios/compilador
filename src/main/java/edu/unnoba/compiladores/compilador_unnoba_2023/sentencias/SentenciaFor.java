@@ -52,12 +52,53 @@ public class SentenciaFor extends Sentencia{
         }
         return grafico;
     }
+    
+    public String generarCodigoRepetidoInBucle(int contador){
+        String codigo = "";
+        codigo = codigo.concat(this.operacion.generarCodigo());
+        codigo = codigo.concat("br i1 %var" + this.operacion.getIdVar() + ", label %etiqDoFor" + this.getIdVar() + contador + ", label %etiqEndFor" + this.getIdVar() + contador + "\n");
+        codigo = codigo.concat("etiqDoFor" + this.getIdVar() + "\n");
+        codigo = codigo.concat(this.expresionFor.generarCodigo());
+        if(this.expresionFor.getOperacion().equals("++")){
+            codigo = codigo.concat("%var"+this.getIdVar() + " = add i32 @"+ this.asignacion.getIdent().getNombreVar() + " %var" + this.expresionFor.getIdVar()+"\n");
+        }else{
+            codigo = codigo.concat("%var"+this.getIdVar() + " = sub i32 @"+ this.asignacion.getIdent().getNombreVar() + " %var" + this.expresionFor.getIdVar()+"\n");
+        }
+        
+        return codigo;
+    }
 
     @Override
     public String generarCodigo() {
         String codigo = "";
-        codigo = codigo.concat(this.expresionFor.generarCodigo());
         
+        codigo = codigo.concat(this.asignacion.generarCodigo());
+        
+        codigo = codigo.concat(String.format("br label %%etiqForCondicion%s\n", this.getIdVar()));
+        codigo = codigo.concat("etiqForCondicion" + this.getIdVar() + ":\n");
+        codigo = codigo.concat(this.expresionFor.generarCodigo());
+        if(this.expresionFor.getOperacion().equals("++")){
+            codigo = codigo.concat("%var"+this.getIdVar() + " = add i32 %var"+ this.expresionFor.getExpresion().getIdVar() + ", %var" + this.expresionFor.getIdVar()+"\n");
+        }else{
+            codigo = codigo.concat("%var"+this.getIdVar() + " = sub i32 %var"+ this.expresionFor.getExpresion().getIdVar() + ", %var" + this.expresionFor.getIdVar()+"\n");
+        }
+        codigo = codigo.concat("store " +  this.asignacion.getIdent().get_llvm_type_code() + " %var"+ this.getIdVar() + ", " + this.asignacion.getIdent().get_llvm_type_code() + "* @" + this.asignacion.getIdent().getNombreVar() + "\n");
+        codigo = codigo.concat(this.operacion.generarCodigo());
+
+
+        codigo = codigo.concat("br i1 %var" + this.operacion.getIdVar() + ", label %etiqCuerpoFor" + this.getIdVar() + ", label %etiqEndFor" + this.getIdVar() + "\n");
+        codigo = codigo.concat("etiqCuerpoFor" + this.getIdVar() + ":\n");
+        for(Sentencia s : this.sentencias){
+            if (s.getNombre().equals("BREAK")){
+                ((Break)s).setIdVarFor(this.getIdVar());
+            }
+            if (s.getNombre().equals("CONTINUE")){
+                ((Continue)s).setIdVarFor(this.getIdVar());
+            }
+            codigo = codigo.concat(s.generarCodigo());
+        }
+        codigo = codigo.concat(String.format("br label %%etiqForCondicion%s\n", this.getIdVar()));
+        codigo = codigo.concat("etiqEndFor" + this.getIdVar() + ":\n");
         
         return codigo;
     }

@@ -12,10 +12,16 @@ import edu.unnoba.compiladores.compilador_unnoba_2023.ast.CodeGeneratorHelper;
  */
 public class Continue extends Sentencia{
     
+    private String idVarFor;
+    
     public Continue(){
         setNombre("CONTINUE");
         this.setIdVar(CodeGeneratorHelper.getNewPointer());
         this.IsExpresion = false;
+    }
+    
+    public void setIdVarFor(String idVarFor){
+        this.idVarFor = idVarFor;
     }
     
     @Override
@@ -27,7 +33,8 @@ public class Continue extends Sentencia{
 
     @Override
     public String generarCodigo() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        String codigo =String.format("br label %%etiqForCondicion%s\n", this.idVarFor);
+        return codigo;    
     }
     
 }

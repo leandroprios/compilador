@@ -1,16 +1,15 @@
 DECLARE.SECTION
 INT : var1, var2, var3, var4,i;
 float: var5, var8, var6;
-BOOLEAN: varlogica, varlogica2,varlogicaResultado;
+BOOLEAN: varlogica;
 ENDDECLARE.SECTION
 PROGRAM.SECTION
-(*if(3!=var5) then
+varlogica=false
+if (i == 0 or var1==3 and var2==3) THEN
   var2 = 2
 end
-*)
 
-#varlogica = varlogica2
-varlogicaResultado = filter(_!=true, [varlogica])
+DISPLAY(var2)
 
-DISPLAY(varlogicaResultado)
+#varlogica =  (i == 0 or var1==3) 
 ENDPROGRAM.SECTION

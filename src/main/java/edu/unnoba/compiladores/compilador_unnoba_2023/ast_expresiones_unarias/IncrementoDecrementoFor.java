@@ -9,10 +9,21 @@ import edu.unnoba.compiladores.compilador_unnoba_2023.ast_expresiones_binarias.E
  */
 public class IncrementoDecrementoFor  extends OperacionUnaria{
     
+    private String operacion;
     
     public IncrementoDecrementoFor(Identificador identificador, String operacion, Tipo tipo) {
         super(operacion, identificador, tipo);
+        this.setOperacion(operacion);
         this.setIdVar(CodeGeneratorHelper.getNewPointer());
+    }
+    
+    
+    public void setOperacion(String operacion){
+        this.operacion = operacion;
+    }
+    
+    public String getOperacion(){
+        return this.operacion;
     }
 
     @Override
@@ -57,7 +68,13 @@ public class IncrementoDecrementoFor  extends OperacionUnaria{
 
     @Override
     public String generarCodigo() {
-        return "";
+        String codigo = this.getExpresion().generarCodigo();
+        if (this.getOperacion().equals("--")){
+            codigo += "%var" + this.getIdVar() + " = sub i32 0, 1" +"\n";
+        }else{
+            codigo += "%var" + this.getIdVar() + " = add i32 0, 1" + "\n";
+        }
+        return codigo;
     }
 
 }

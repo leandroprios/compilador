@@ -4,19 +4,11 @@ float: var5, var8, var6;
 BOOLEAN: varlogica;
 ENDDECLARE.SECTION
 PROGRAM.SECTION
-#Esto es un comentario
-varlogica = false
-var6 =3
-
 for(i = 0; i++; i<3) do
-	var2 = 2
-	continue
-	for(i = 0; i++; i<3) do
-		var2 = 2
-		break
-	end
-	break 
+	var2 = 2 + i
+	DISPLAY(var2)
+	break
+	DISPLAY(i)
 end
-continue
-DISPLAY("literal string")
+
 ENDPROGRAM.SECTION
