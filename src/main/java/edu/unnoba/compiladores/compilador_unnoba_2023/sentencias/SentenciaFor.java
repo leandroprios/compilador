@@ -77,12 +77,7 @@ public class SentenciaFor extends Sentencia{
         codigo = codigo.concat(String.format("br label %%etiqForCondicion%s\n", this.getIdVar()));
         codigo = codigo.concat("etiqForCondicion" + this.getIdVar() + ":\n");
         codigo = codigo.concat(this.expresionFor.generarCodigo());
-        if(this.expresionFor.getOperacion().equals("++")){
-            codigo = codigo.concat("%var"+this.getIdVar() + " = add i32 %var"+ this.expresionFor.getExpresion().getIdVar() + ", %var" + this.expresionFor.getIdVar()+"\n");
-        }else{
-            codigo = codigo.concat("%var"+this.getIdVar() + " = sub i32 %var"+ this.expresionFor.getExpresion().getIdVar() + ", %var" + this.expresionFor.getIdVar()+"\n");
-        }
-        codigo = codigo.concat("store " +  this.asignacion.getIdent().get_llvm_type_code() + " %var"+ this.getIdVar() + ", " + this.asignacion.getIdent().get_llvm_type_code() + "* @" + this.asignacion.getIdent().getNombreVar() + "\n");
+       
         codigo = codigo.concat(this.operacion.generarCodigo());
 
 
@@ -97,6 +92,19 @@ public class SentenciaFor extends Sentencia{
             }
             codigo = codigo.concat(s.generarCodigo());
         }
+        
+        
+        codigo +=String.format("br label %%etiqIncreDecremFor%s\n", this.getIdVar());
+        
+        codigo = codigo.concat("etiqIncreDecremFor" + this.getIdVar() + ":\n");
+
+        if(this.expresionFor.getOperacion().equals("++")){
+            codigo = codigo.concat("%var"+this.getIdVar() + " = add i32 %var"+ this.expresionFor.getExpresion().getIdVar() + ", %var" + this.expresionFor.getIdVar()+"\n");
+        }else{
+            codigo = codigo.concat("%var"+this.getIdVar() + " = sub i32 %var"+ this.expresionFor.getExpresion().getIdVar() + ", %var" + this.expresionFor.getIdVar()+"\n");
+        }
+        codigo = codigo.concat("store " +  this.asignacion.getIdent().get_llvm_type_code() + " %var"+ this.getIdVar() + ", " + this.asignacion.getIdent().get_llvm_type_code() + "* @" + this.asignacion.getIdent().getNombreVar() + "\n");
+        
         codigo = codigo.concat(String.format("br label %%etiqForCondicion%s\n", this.getIdVar()));
         codigo = codigo.concat("etiqEndFor" + this.getIdVar() + ":\n");
         

@@ -15,6 +15,7 @@ public class Booleano extends Literal {
         this.valor = valor;
         setNombre("Boolean");
         this.setIdVar(CodeGeneratorHelper.getNewPointer());
+        this.setResultadoExpresion(super.getIdVar());
     }
 
     public Boolean getValor() {
@@ -53,7 +54,12 @@ public class Booleano extends Literal {
 
     @Override
     public String generarCodigo(){
-        return (getValor()) ? "%var"+this.getIdVar()+" = add i1 0, 1\n" : "%var"+this.getIdVar()+" = add i1 0, 0\n";
+        
+        //this.setResultadoExpresion("%var" + this.getResultadoExpresion());  
+        
+        String codigo = (getValor()) ? "%var"+this.getResultadoExpresion()+" = add i1 0, 1\n" : "%var"+this.getIdVar()+" = add i1 0, 0\n";
+
+        return codigo;
     }
     
 }

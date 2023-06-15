@@ -1,7 +1,6 @@
 package edu.unnoba.compiladores.compilador_unnoba_2023.ast_expresiones_binarias;
 
 import edu.unnoba.compiladores.compilador_unnoba_2023.ast.Tipo;
-import edu.unnoba.compiladores.compilador_unnoba_2023.ast_expresiones_unarias.GuionBajo;
 
 public class Division extends OperacionBinaria {
 
@@ -48,7 +47,10 @@ public class Division extends OperacionBinaria {
         return this.getTipo().equals(Tipo.FLOAT) ? "fdiv" : "sdiv"; 
     }
     
-    
-    
+
+    @Override
+    public String get_llvm_name() {
+        return llvm_name;
+    }
     
 }

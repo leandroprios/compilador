@@ -46,4 +46,9 @@ public class Multiplicacion extends OperacionBinaria {
         return getTipo().equals(Tipo.FLOAT) ? "fmul" : "mul";
     }
     
+    @Override
+    public String get_llvm_name() {
+        return llvm_name;
+    }
+    
 }

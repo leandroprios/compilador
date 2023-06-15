@@ -13,6 +13,8 @@ public class NegacionLogica extends OperacionUnaria {
     public NegacionLogica(Expresion expresion) {
         super("NOT", expresion, Tipo.BOOLEAN);
         this.setIdVar(CodeGeneratorHelper.getNewPointer());
+        this.setllamadoDesdeExpresion("");
+
     }
 
     @Override
@@ -49,7 +51,15 @@ public class NegacionLogica extends OperacionUnaria {
     
     @Override
     public String generarCodigo() {
-        StringBuilder resultado = new StringBuilder();     
+        StringBuilder resultado = new StringBuilder(); 
+        if(this.getllamadoDesdeExpresion().equals("")){
+            resultado.append( String.format("%%resultadoOr%s = alloca i1\n", this.getIdVar()));
+        }
+        
+        this.setResultadoExpresion("%var" + this.getIdVar());
+        this.getExpresion().setllamadoDesdeExpresion(this.getIdVar());
+
+        //resultado.append(     );
         resultado.append(this.getExpresion().generarCodigo());
         resultado.append(String.format("%%var%s = xor i1 %%var%s, 1\n", getIdVar(), getExpresion().getIdVar()));
         return resultado.toString();

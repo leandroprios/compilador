@@ -45,4 +45,10 @@ public class Resta extends OperacionBinaria {
     public String get_llvm_op_code() {
         return getTipo().equals(Tipo.FLOAT) ? "fsub" : "sub";
     }
+    
+    @Override
+    public String get_llvm_name() {
+        return llvm_name;
+    }
+
 }

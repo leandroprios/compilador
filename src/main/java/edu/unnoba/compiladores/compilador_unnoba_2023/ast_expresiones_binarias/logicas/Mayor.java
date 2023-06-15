@@ -66,7 +66,13 @@ public class Mayor extends OperacionBinaria{
         String codigo = getIzquierda().generarCodigo();
         codigo += getDerecha().generarCodigo();
         codigo += "%var"+getIdVar()+" = "+get_llvm_arithmetic_op_code()+" "+get_llvm_op_code()+" "+get_llvm_type_code()+" %var"+getIzquierda().getIdVar()+", %var"+getDerecha().getIdVar()+"\n";
+        this.setIdVar("%var"+getIdVar());
         return codigo;
     }
+    @Override
+    public String get_llvm_name() {
+        return llvm_name;
+    }
+
     
 }

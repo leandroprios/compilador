@@ -133,7 +133,7 @@ public class SentenciaIf extends Sentencia{
             siguienteIsIfEqualsFalse = "%etiqEndIf" + this.getIdVar();
         }
         
-        codigo = codigo.concat(String.format("br i1 %%var%s, label %%etiqThenIf%s, label %s\n", this.expresion.getIdVar(), getIdVar(), siguienteIsIfEqualsFalse));
+        codigo = codigo.concat(String.format("br i1 %s, label %%etiqThenIf%s, label %s\n", this.expresion.getIdVar(), getIdVar(), siguienteIsIfEqualsFalse));
         codigo = codigo.concat(String.format("etiqThenIf%s:\n", getIdVar()));
         for (Sentencia sentencia : sentenciasIf) {
             codigo += sentencia.generarCodigo();

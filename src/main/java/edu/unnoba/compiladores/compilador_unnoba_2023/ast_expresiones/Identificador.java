@@ -78,7 +78,11 @@ public class Identificador extends Constante {
     
     @Override
     public String generarCodigo() {
-        return "%var"+getIdVar()+" = load "+get_llvm_type_code()+", "+get_llvm_type_code()+"* @"+getNombre()+"\n";
+        String codigo = "";
+        this.setResultadoExpresion("%var" + this.getIdVar());    
+        //String codigo = "%varResultadoCondicion" + this.getIdVar() +" = load "+get_llvm_type_code()+", "+get_llvm_type_code()+"* @"+getNombre()+"\n";
+        codigo += "%var"+getIdVar()+" = load "+get_llvm_type_code()+", "+get_llvm_type_code()+"* @"+getNombre()+"\n";
+        return codigo;
     }
     
     

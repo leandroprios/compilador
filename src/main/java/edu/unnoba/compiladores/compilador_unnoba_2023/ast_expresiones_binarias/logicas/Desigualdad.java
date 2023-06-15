@@ -61,9 +61,38 @@ public class Desigualdad extends OperacionBinaria{
 
     @Override
     public String generarCodigo(){
+     
+        //this.setResultadoExpresion("%var" + this.getIdVar()); 
+        this.getIzquierda().setllamadoDesdeExpresion(this.getIdVar());
+        
+        String codigo = getIzquierda().generarCodigo();
+        this.getDerecha().setllamadoDesdeExpresion(this.getIdVar());
+        codigo += getDerecha().generarCodigo();
+        codigo += "%var"+getIdVar()+" = "+get_llvm_arithmetic_op_code()+" "+get_llvm_op_code()+" "+get_llvm_type_code()+" %var"+getIzquierda().getIdVar()+", %var"+getDerecha().getIdVar()+"\n";
+        //this.setIdVar("%var"+getIdVar());
+
+        /*if(!(getIzquierda().getTipo().equals(Tipo.BOOLEAN))){
+            codigo += "%var"+getIdVar()+" = "+get_llvm_arithmetic_op_code()+" "+get_llvm_op_code()+" "+get_llvm_type_code()+" %var"+getIzquierda().getIdVar()+", %var"+getDerecha().getIdVar()+"\n";
+            this.setIdVar("%var"+getIdVar());
+        }*/
+        this.setResultadoExpresion("%var" + getIdVar());    
+
+        this.getIzquierda().setResultadoExpresion("%var" + this.getIdVar());
+        this.getDerecha().setResultadoExpresion("%var" + this.getIdVar());
+
+        
+        return codigo;
+        /*
         String codigo = getIzquierda().generarCodigo();
         codigo += getDerecha().generarCodigo();
         codigo += "%var"+getIdVar()+" = "+get_llvm_arithmetic_op_code()+" "+get_llvm_op_code()+" "+get_llvm_type_code()+" %var"+getIzquierda().getIdVar()+", %var"+getDerecha().getIdVar()+"\n";
-        return codigo;
+        this.setIdVar("%var"+getIdVar());
+        return codigo;*/
     }
+    
+    @Override
+    public String get_llvm_name() {
+        return llvm_name;
+    }
+
 }

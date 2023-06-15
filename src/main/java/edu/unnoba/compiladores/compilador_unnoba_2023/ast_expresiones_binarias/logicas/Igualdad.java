@@ -52,10 +52,21 @@ public class Igualdad extends OperacionBinaria{
     }
     
     @Override
-    public String generarCodigo(){
+    public String generarCodigo(){  
         String codigo = getIzquierda().generarCodigo();
         codigo += getDerecha().generarCodigo();
         codigo += "%var"+getIdVar()+" = "+get_llvm_arithmetic_op_code()+" "+get_llvm_op_code()+" "+get_llvm_type_code()+" %var"+getIzquierda().getIdVar()+", %var"+getDerecha().getIdVar()+"\n";
+        //this.setIdVar("%var"+getIdVar());
+        
+        
+        this.setResultadoExpresion("%var" + getIdVar());
+ 
+        
+        this.getIzquierda().setResultadoExpresion("%var" + this.getIdVar());
+        this.getDerecha().setResultadoExpresion("%var" + this.getIdVar());
+        
+        this.setIdVar(this.getResultadoExpresion());
+        
         return codigo;
     }
 
@@ -68,5 +79,12 @@ public class Igualdad extends OperacionBinaria{
     public String get_llvm_type_code(){
         return getIzquierda().getTipo().equals(Tipo.INTEGER) ? "i32" : getIzquierda().getTipo().equals(Tipo.FLOAT) ? "double" : "i1";
     }
+    
+    @Override
+    public String get_llvm_name() {
+        return llvm_name;
+    }
+    
+ 
 
 }

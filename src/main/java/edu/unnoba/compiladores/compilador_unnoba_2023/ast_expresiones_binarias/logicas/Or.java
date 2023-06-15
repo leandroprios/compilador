@@ -15,8 +15,11 @@ import edu.unnoba.compiladores.compilador_unnoba_2023.ast_expresiones_unarias.Gu
  */
 public class Or extends OperacionBinaria{
 
+    //private String resultadoExpresion; //guarda el nombre de la variable de llvm
+
     public Or(Expresion izquierda, Expresion derecha) {
         super(izquierda, derecha, Tipo.BOOLEAN);
+        this.setResultadoExpresion("%varResultadoCondicion" + this.getIdVar());
     }
     
     @Override
@@ -56,4 +59,73 @@ public class Or extends OperacionBinaria{
         return "or";
     }
 
+    @Override
+    public String generarCodigo(){
+        String codigo = "";
+         codigo += "%resultadoOr"+ this.getIdVar() +  " = alloca i1\n";
+        //le paso el resultado de toda la expresion OR a la expresion IZ
+        this.getIzquierda().setResultadoExpresion("%var" + this.getIdVar());
+        this.getIzquierda().setllamadoDesdeExpresion(this.getIdVar());
+
+        codigo += getIzquierda().generarCodigo();
+        this.setResultadoExpresion(this.getIzquierda().getResultadoExpresion());
+        codigo += "\n";
+       
+        
+        codigo = codigo.concat("br i1 " + this.getIzquierda().getResultadoExpresion() + ", label %etiqTrueCondicionIzquierdaOr" + this.getIdVar() + ", label %etiqFalseCondicionIzquierdaOr" + this.getIdVar() + "\n");
+        //codigo += "%resultadoOrLoad2"+ this.getIdVar() +  " = load i1, i1*%resultadoOr" + this.getIdVar() +  "\n";
+
+        
+        //codigo = codigo.concat("br i1 %resultadoOrLoad2"+ this.getIdVar() + ", label %etiqTrueCondicionIzquierdaOr" + this.getIdVar() + ", label %etiqFalseCondicionIzquierdaOr" + this.getIdVar() + "\n");
+
+        codigo += "\n";
+        
+        //this.getDerecha().setResultadoExpresion(this.getIdVar());
+        
+        this.getDerecha().setllamadoDesdeExpresion(this.getIdVar());
+        
+        codigo = codigo.concat(String.format("etiqFalseCondicionIzquierdaOr%s:\n", this.getIdVar())); 
+        codigo += getDerecha().generarCodigo();
+        codigo += "\n";
+        //codigo += "store i1 "+ this.getDerecha().getResultadoExpresion()  + ", i1*%resultadoOr" + this.getIdVar() +  "\n";
+        codigo += "store i1 "+ this.getDerecha().getResultadoExpresion()  + ", i1*%resultadoOr" + this.getIdVar() +  "\n";
+
+        
+        codigo = codigo.concat(String.format("br label %%etiqFinOr%s\n", this.getIdVar()));
+
+        
+        codigo = codigo.concat(String.format("etiqTrueCondicionIzquierdaOr%s:\n", this.getIdVar()));
+        codigo += "store i1 "+ this.getIzquierda().getResultadoExpresion()  + ", i1*%resultadoOr" + this.getIdVar() +  "\n";
+        
+        codigo += "\n";    
+        
+        //this.setResultadoExpresion(this.getDerecha().getResultadoExpresion());
+
+        codigo += "\n";
+        
+        
+        codigo = codigo.concat(String.format("br label %%etiqFinOr%s\n", this.getIdVar()));
+        codigo += "\n";
+                
+        codigo += "\n";
+                
+        codigo = codigo.concat(String.format("etiqFinOr%s:\n", this.getIdVar()));
+        
+        codigo += "%resultadoOrLoad"+ this.getIdVar() +  " = load i1, i1*%resultadoOr" + this.getIdVar() +  "\n";
+
+        this.setResultadoExpresion("%resultadoOrLoad"+ this.getIdVar());
+
+        codigo+= ";" + this.getResultadoExpresion();
+        this.setIdVar(this.getResultadoExpresion());
+  
+        codigo += "\n";
+        
+        return codigo;
+    }
+
+    @Override
+    public String get_llvm_name() {
+        return llvm_name;
+    }
+    
 }

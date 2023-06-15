@@ -33,7 +33,7 @@ public class Continue extends Sentencia{
 
     @Override
     public String generarCodigo() {
-        String codigo =String.format("br label %%etiqForCondicion%s\n", this.idVarFor);
+        String codigo =String.format("br label %%etiqIncreDecremFor%s\n", this.idVarFor);
         return codigo;    
     }
     

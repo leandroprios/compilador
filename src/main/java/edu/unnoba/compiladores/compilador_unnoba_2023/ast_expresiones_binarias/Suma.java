@@ -46,4 +46,8 @@ public class Suma extends OperacionBinaria {
         return getTipo().equals(Tipo.FLOAT) ? "fadd" : "add";
     }
 
+    @Override
+    public String get_llvm_name() {
+        return llvm_name;
+    }
 }
