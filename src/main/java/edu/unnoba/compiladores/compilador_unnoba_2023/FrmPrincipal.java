@@ -283,6 +283,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
             Logger.getLogger(FrmPrincipal.class.getName()).log(Level.SEVERE, null, ex);
             this.parserResult.setText(ex.getMessage());
         } catch (Exception ex) {
+            this.parserResult.setText(ex.getMessage());
             Logger.getLogger(FrmPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
         resultLexico += "Analisis lexico terminado.";

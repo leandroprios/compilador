@@ -19,4 +19,5 @@ display(var5)
 display("ingrese un booleano (1: true y 0 :false ):")
 varlogica = input_boolean()
 display(varlogica)
+display("fin del programa")
 ENDPROGRAM.SECTION

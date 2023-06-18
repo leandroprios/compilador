@@ -19,12 +19,13 @@ public class Filter extends Sentencia {
    
     public Filter(SentenciaIf sentenciaIf, Tipo tipo) {
         this.sentenciaIf=sentenciaIf;
+        setNombre("FILTER");
     }
     
     public Filter(SentenciaIf sentenciaIf, Tipo tipo, boolean IsExpresion) {
         this.sentenciaIf=sentenciaIf;
         this.IsExpresion=IsExpresion;
-        //super.IsExpresion = IsExpresion;
+        setNombre("FILTER");
     }
      
     public SentenciaIf getSentenciaIf() {

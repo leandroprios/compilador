@@ -20,6 +20,8 @@ public class SentenciaElif extends Sentencia {
     private String etiquetaSiguiente;
     private String idVarEndIf;
     
+    private String idVarFor;
+    
     public SentenciaElif(ArrayList<Sentencia> sentencias, Expresion expresion){
         setNombre("ELIF");
         this.sentencias = sentencias;
@@ -35,6 +37,14 @@ public class SentenciaElif extends Sentencia {
         this.idVarEndIf =idVarEndIf;
     }
     
+    
+    public void setIdVarFor(String idVarFor){
+        this.idVarFor = idVarFor;
+    }
+    
+    public String getIdVarFor(){
+        return this.idVarFor;
+    }
     
     @Override
     public String graficar(String idPadre){
@@ -61,11 +71,21 @@ public class SentenciaElif extends Sentencia {
 
     @Override
     public String generarCodigo() {
-       String codigo = this.expresion.generarCodigo();
-        codigo = codigo.concat(String.format("br i1 %%var%s, label %%etiqThenElif%s, label %s\n", this.expresion.getIdVar(), getIdVar(), this.etiquetaSiguiente));
+        String codigo = "";
+
+        this.expresion.setLeerResultado(true);
+        codigo += this.expresion.generarCodigo();
+        this.expresion.setLeerResultado(false);
+        codigo = codigo.concat(String.format("br i1 %%resultadoLoad%s, label %%etiqThenElif%s, label %s\n", this.expresion.getIdVar(), getIdVar(), this.etiquetaSiguiente));
         codigo = codigo.concat(String.format("etiqThenElif%s:\n", getIdVar()));
 
         for (Sentencia sentencia : sentencias) {
+            if (sentencia.getNombre().equals("BREAK")){
+                ((Break)sentencia).setIdVarFor(this.getIdVarFor());
+            }
+            if (sentencia.getNombre().equals("CONTINUE")){
+                ((Continue)sentencia).setIdVarFor(this.getIdVarFor());
+            }
             codigo += sentencia.generarCodigo();
         }
         codigo = codigo.concat(String.format("br label %%etiqEndIf%s\n", this.idVarEndIf));

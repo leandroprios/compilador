@@ -17,6 +17,7 @@ public class Igualdad extends OperacionBinaria{
 
     public Igualdad(Expresion izquierda, Expresion derecha) {
         super(izquierda, derecha, Tipo.BOOLEAN);
+        this.setNombre("==");
     }
     
     @Override
@@ -52,21 +53,18 @@ public class Igualdad extends OperacionBinaria{
     }
     
     @Override
-    public String generarCodigo(){  
+    public String generarCodigo(){ 
+        this.setResultadoExpresion("%var"+ this.getIdVar());
         String codigo = getIzquierda().generarCodigo();
         codigo += getDerecha().generarCodigo();
         codigo += "%var"+getIdVar()+" = "+get_llvm_arithmetic_op_code()+" "+get_llvm_op_code()+" "+get_llvm_type_code()+" %var"+getIzquierda().getIdVar()+", %var"+getDerecha().getIdVar()+"\n";
-        //this.setIdVar("%var"+getIdVar());
-        
-        
-        this.setResultadoExpresion("%var" + getIdVar());
- 
-        
-        this.getIzquierda().setResultadoExpresion("%var" + this.getIdVar());
-        this.getDerecha().setResultadoExpresion("%var" + this.getIdVar());
-        
-        this.setIdVar(this.getResultadoExpresion());
-        
+        codigo += "store i1 %var"+this.getIdVar()  + ", i1* @resultado\n";       
+
+        if(this.getLeerResultado()) {
+            codigo += "%resultadoLoad"+ this.getIdVar()+  " = load i1, i1* @resultado\n";
+            this.setResultadoExpresion("%resultadoLoad"+ this.getIdVar());
+        }
+
         return codigo;
     }
 

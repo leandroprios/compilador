@@ -9,6 +9,7 @@ public abstract class Constante extends Expresion {
     
     @Override
     public String graficar(String idPadre){
+        this.setResultadoExpresion("%resultado"+ this.getIdVar());
         StringBuilder grafico = new StringBuilder();
         grafico.append(String.format("%1$s[label=\"%2$s : %3$s\"]\n", this.getId(), this.getNombre(), this.getEtiqueta()));
         if(idPadre != null)

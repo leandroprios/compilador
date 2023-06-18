@@ -51,17 +51,15 @@ public class NegacionLogica extends OperacionUnaria {
     
     @Override
     public String generarCodigo() {
+        this.setResultadoExpresion("%var"+ this.getIdVar());
         StringBuilder resultado = new StringBuilder(); 
-        if(this.getllamadoDesdeExpresion().equals("")){
-            resultado.append( String.format("%%resultadoOr%s = alloca i1\n", this.getIdVar()));
-        }
-        
-        this.setResultadoExpresion("%var" + this.getIdVar());
-        this.getExpresion().setllamadoDesdeExpresion(this.getIdVar());
-
-        //resultado.append(     );
         resultado.append(this.getExpresion().generarCodigo());
-        resultado.append(String.format("%%var%s = xor i1 %%var%s, 1\n", getIdVar(), getExpresion().getIdVar()));
+        resultado.append(String.format("%%var%s = xor i1 %%var%s, 1\n", this.getIdVar(), this.getExpresion().getIdVar()));
+        resultado.append(String.format("store i1 %%var%s , i1* @resultado\n",this.getIdVar()));
+        if(this.getLeerResultado()) {
+            resultado.append(String.format("%%resultadoLoad%s = load i1, i1* @resultado\n",this.getIdVar()));
+            this.setResultadoExpresion("%resultadoLoad"+ this.getIdVar());
+        }
         return resultado.toString();
     }  
 

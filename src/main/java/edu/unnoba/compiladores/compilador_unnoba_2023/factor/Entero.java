@@ -96,11 +96,12 @@ public class Entero extends Literal {
     @Override
     public String generarCodigo(){
         String codigo = ""; 
-        codigo += "%var"+getIdVar()+" = add i32 0, "+getValor()+"\n";
+        this.setResultadoExpresion("%resultado"+ this.getIdVar());
+        codigo += "%var"+this.getIdVar()+" = add i32 0, "+getValor()+"\n";
         if (this.enteroAFlotante != null){
+            this.enteroAFlotante.setllamadoDesdeExpresion(this.getIdVar());
             codigo += "%var"+this.enteroAFlotante.getIdVar()+" = sitofp i32 %var"+this.getIdVar()+" to double\n";
             this.setIdVar(this.enteroAFlotante.getIdVar());
-            //codigo = this.enteroAFlotante.generarCodigo();
         }
         return codigo;
     }

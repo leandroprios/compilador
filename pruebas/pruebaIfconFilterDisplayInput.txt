@@ -7,9 +7,11 @@ PROGRAM.SECTION
 #Esto es un comentario
 varlogica = false
 var6 =3
+display("ingrese un boolean (1/0)")
 varlogica = input_boolean()
-if (var6 == 3) then
+if (varlogica) then
 	var5 = filter(_!=true, [var2,var3,var4])
 end 
-DISPLAY("literal string")
+display(var5)
+DISPLAY("fin del programa")
 ENDPROGRAM.SECTION

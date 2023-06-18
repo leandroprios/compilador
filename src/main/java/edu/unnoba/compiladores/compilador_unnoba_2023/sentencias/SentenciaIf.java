@@ -20,7 +20,7 @@ public class SentenciaIf extends Sentencia{
     ArrayList<Sentencia> sentenciasElse;
     ArrayList<SentenciaElif> sentenciasElif;
     Expresion expresion;
-    
+    private String idVarFor;
     public SentenciaIf(ArrayList<Sentencia> sentenciasIf, Expresion expresion){
         setNombre("IF");
         this.sentenciasIf = sentenciasIf;
@@ -39,11 +39,20 @@ public class SentenciaIf extends Sentencia{
         this.IsExpresion = false;
     }
     
+    public void setIdVarFor(String idVarFor){
+        this.idVarFor = idVarFor;
+    }
+    
+    public String getIdVarFor(){
+        return this.idVarFor;
+    }
+    
     @Override
     public String graficar(String idPadre){
         final String miId = this.getId();
         String grafico = super.graficar(idPadre) + 
         expresion.graficar(miId);
+        
         
         Random random = new Random();
 
@@ -117,11 +126,16 @@ public class SentenciaIf extends Sentencia{
 
     @Override
     public String generarCodigo() {
+        
         String codigo = "";
         Boolean tieneElse = this.sentenciasElse != null && !this.sentenciasElse.isEmpty();
         Boolean tieneElif = this.sentenciasElif != null && !this.sentenciasElif.isEmpty();
         
+        this.expresion.setLeerResultado(true);        
+
         codigo = codigo.concat(this.expresion.generarCodigo());
+        
+        this.expresion.setLeerResultado(false); 
         
         String siguienteIsIfEqualsFalse = "";
         
@@ -133,9 +147,15 @@ public class SentenciaIf extends Sentencia{
             siguienteIsIfEqualsFalse = "%etiqEndIf" + this.getIdVar();
         }
         
-        codigo = codigo.concat(String.format("br i1 %s, label %%etiqThenIf%s, label %s\n", this.expresion.getIdVar(), getIdVar(), siguienteIsIfEqualsFalse));
+        codigo = codigo.concat(String.format("br i1 %%resultadoLoad%s, label %%etiqThenIf%s, label %s\n", this.expresion.getIdVar(), getIdVar(), siguienteIsIfEqualsFalse));
         codigo = codigo.concat(String.format("etiqThenIf%s:\n", getIdVar()));
         for (Sentencia sentencia : sentenciasIf) {
+            if (sentencia.getNombre().equals("BREAK")){
+                ((Break)sentencia).setIdVarFor(this.getIdVarFor());
+            }
+            if (sentencia.getNombre().equals("CONTINUE")){
+                ((Continue)sentencia).setIdVarFor(this.getIdVarFor());
+            }
             codigo += sentencia.generarCodigo();
         }
         codigo = codigo.concat(String.format("br label %%etiqEndIf%s\n", getIdVar())); //salto de forma incondicional a la etiqueta etiqEndIf
@@ -171,14 +191,20 @@ public class SentenciaIf extends Sentencia{
             }
 
             if(tieneElse) {
-                codigo = codigo.concat(String.format("etiqThenElse%s:\n", getIdVar()));
+                codigo = codigo.concat(String.format("etiqThenElse%s:\n", this.getIdVar()));
                 for (Sentencia sentenciaELSE : sentenciasElse) {
+                    if (sentenciaELSE.getNombre().equals("BREAK")){
+                        ((Break)sentenciaELSE).setIdVarFor(this.getIdVarFor());
+                    }
+                    if (sentenciaELSE.getNombre().equals("CONTINUE")){
+                        ((Continue)sentenciaELSE).setIdVarFor(this.getIdVarFor());
+                    }
                     codigo = codigo.concat(sentenciaELSE.generarCodigo());
                 }
-                codigo = codigo.concat(String.format("br label %%etiqEndIf%s\n", getIdVar())); //salto de forma incondicional a la etiqueta etiqEndIf
+                codigo = codigo.concat(String.format("br label %%etiqEndIf%s\n", this.getIdVar())); //salto de forma incondicional a la etiqueta etiqEndIf
             }
         }
-        codigo = codigo.concat(String.format("etiqEndIf%s:\n", getIdVar()));
+        codigo = codigo.concat(String.format("etiqEndIf%s:\n", this.getIdVar()));
 
         return codigo;
     }

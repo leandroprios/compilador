@@ -58,6 +58,8 @@ public class Input extends Expresion{
     
     @Override
     public String generarCodigo(){
+        this.setResultadoExpresion("%resultado"+ this.getIdVar());
+
         StringBuilder codigo = new StringBuilder();
         codigo.append(String.format("%%temp%s = alloca %s\n", getIdVar(), getTipo_llvm(getTipo())));
         if(getTipo()==Tipo.INTEGER){

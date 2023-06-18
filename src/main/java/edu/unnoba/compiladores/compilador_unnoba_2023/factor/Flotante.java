@@ -53,6 +53,7 @@ public class Flotante extends Literal {
     
     @Override
     public String generarCodigo(){
+        this.setResultadoExpresion("%resultado"+ this.getIdVar());
         return "%var"+getIdVar()+" = fadd double 0.0, "+getValor()+"\n";
     }
 

@@ -53,6 +53,10 @@ public class Display extends Sentencia{
     
         @Override
     public String generarCodigo() {
+        this.display.setResultadoExpresion("%resultado"+ this.getIdVar());
+        this.display.setllamadoDesdeExpresion(this.getNombre());
+        this.display.setLeerResultado(true);
+
         String codigo = "";
         switch (getDisplay().getTipo()){
             case INTEGER:
@@ -74,6 +78,7 @@ public class Display extends Sentencia{
                         +" x i8] * @str"+getDisplay().getIdVar()+", i32 0, i32 0))\n";
                 break;
         }
+        this.display.setLeerResultado(false);
         return codigo;
     }
     

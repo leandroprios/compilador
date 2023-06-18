@@ -21,6 +21,7 @@ public class Identificador extends Constante {
         setNombre(nombre);
         setNombreVar(nombre);
         this.setIdVar(CodeGeneratorHelper.getNewPointer());
+        this.setllamadoDesdeExpresion("");
     }
 
     public String getNombreVar() {
@@ -78,10 +79,17 @@ public class Identificador extends Constante {
     
     @Override
     public String generarCodigo() {
-        String codigo = "";
-        this.setResultadoExpresion("%var" + this.getIdVar());    
-        //String codigo = "%varResultadoCondicion" + this.getIdVar() +" = load "+get_llvm_type_code()+", "+get_llvm_type_code()+"* @"+getNombre()+"\n";
+        String codigo = ";entro al Identificador " + this.getIdVar() + "\n";
         codigo += "%var"+getIdVar()+" = load "+get_llvm_type_code()+", "+get_llvm_type_code()+"* @"+getNombre()+"\n";
+        if(get_llvm_type_code().equals("i1")){
+            codigo += "store i1 %var"+getIdVar()  + ", i1* @resultado\n";
+            this.setResultadoExpresion("%var"+getIdVar());
+            if(this.getLeerResultado()) {
+                codigo += "%resultadoLoad"+ this.getIdVar()+  " = load i1, i1* @resultado\n";
+                this.setResultadoExpresion("%resultadoLoad"+ this.getIdVar());
+            }
+        }
+        
         return codigo;
     }
     

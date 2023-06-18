@@ -115,6 +115,9 @@ public class Programa extends Nodo {
             }
         });
         
+        
+        codigo.append("@resultado = global i1 0");
+        
         codigo.append("\n");
         codigo.append("define i32 @main(i32, i8**) {\n\t");
         

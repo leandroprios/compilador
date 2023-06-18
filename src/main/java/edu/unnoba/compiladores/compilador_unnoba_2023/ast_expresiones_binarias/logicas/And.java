@@ -14,8 +14,7 @@ public class And extends OperacionBinaria{
     
     public And(Expresion izquierda, Expresion derecha) {
         super(izquierda, derecha, Tipo.BOOLEAN);
-        this.setResultadoExpresion("%varResultadoCondicion" + this.getIdVar());
-        this.setllamadoDesdeExpresion("");
+        this.setNombre("AND");
     }
     
 
@@ -59,66 +58,31 @@ public class And extends OperacionBinaria{
     
     @Override
     public String generarCodigo(){
+        this.setResultadoExpresion("%resultadoLoad"+ this.getIdVar());
+
         String codigo = "";
-        
-        if(this.getllamadoDesdeExpresion().equals("")){
-            this.setllamadoDesdeExpresion(this.getIdVar());
-            codigo += "%resultadoOr" + this.getIdVar() +  " = alloca i1\n";
-        }
-        
-        
-        this.getIzquierda().setResultadoExpresion("%var" + this.getIdVar());
-        this.getIzquierda().setllamadoDesdeExpresion(this.getIdVar());
+        codigo += ";entro al AND " + this.getIdVar() + "\n";
+        this.getIzquierda().setLeerResultado(true);
+        this.getDerecha().setLeerResultado(true);
 
         codigo += getIzquierda().generarCodigo();
         codigo += "\n";
+        codigo = codigo.concat("br i1 " + this.getIzquierda().getResultadoExpresion()+ ", label %etiqTrueCondicionIzquierdaAnd" + this.getIdVar() + ", label %etiqFinAnd" + this.getIdVar() + "\n");
         
-        codigo += "store i1 "+ this.getIzquierda().getResultadoExpresion()  + ", i1*%resultadoOr" + this.getllamadoDesdeExpresion() +  "\n";
-        
-
-        this.setResultadoExpresion(this.getIzquierda().getResultadoExpresion());
-        
-
-        
-        //codigo = codigo.concat("br i1 %resultadoOrLoad2"+ this.getIdVar() + ", label %etiqTrueCondicionIzquierdaAnd" + this.getIdVar() + ", label %etiqFinAnd" + this.getIdVar() + "\n");
-
-        codigo = codigo.concat("br i1 " + this.getIzquierda().getResultadoExpresion() + ", label %etiqTrueCondicionIzquierdaAnd" + this.getIdVar() + ", label %etiqFinAnd" + this.getIdVar() + "\n");
-        codigo += "\n";
-                
+        codigo += "\n";         
         codigo = codigo.concat(String.format("etiqTrueCondicionIzquierdaAnd%s:\n", this.getIdVar()));
  
-        this.getDerecha().setllamadoDesdeExpresion(this.getIdVar());
-
         codigo += getDerecha().generarCodigo();
-        
-        codigo += "store i1 "+ this.getDerecha().getResultadoExpresion()  + ", i1*%resultadoOr" + this.getllamadoDesdeExpresion() +  "\n";
-
-        //codigo += "%resultadoOrLoad2"+ this.getIdVar() +  " = load i1, i1*%resultadoOr" + this.getllamadoDesdeExpresion() +  "\n";
-
-        
         codigo += "\n";
         
-
-        this.setResultadoExpresion(this.getDerecha().getResultadoExpresion());
-        
-        codigo += "\n";
 
         codigo = codigo.concat(String.format("br label %%etiqFinAnd%s\n", this.getIdVar()));
-        
         codigo = codigo.concat(String.format("etiqFinAnd%s:\n", this.getIdVar()));
         
-        codigo += "%resultadoOrLoad"+ this.getIdVar() +  " = load i1, i1*%resultadoOr" + this.getllamadoDesdeExpresion() +  "\n";
-
-        
-        
-        this.setResultadoExpresion("%resultadoOrLoad"+ this.getIdVar());
-
-        this.setIdVar(this.getResultadoExpresion());
-        
-        //this.setIdVar(this.getResultadoExpresion());
-        //this.setIdVar("%resultadoOr" + this.getllamadoDesdeExpresion());
-        
         codigo += "\n";
+        if(this.getLeerResultado()) codigo += "%resultadoLoad"+ this.getIdVar()+  " = load i1, i1* @resultado\n";
+        codigo += "\n";
+        
         return codigo;
     }
     

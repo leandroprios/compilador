@@ -54,21 +54,12 @@ public abstract class OperacionBinaria extends Expresion {
     
     @Override
     public String generarCodigo(){
+        this.setResultadoExpresion("%var"+this.getIdVar());
         String codigo = "";
-        codigo += getIzquierda().generarCodigo();       
+        codigo += getIzquierda().generarCodigo();   
         codigo += getDerecha().generarCodigo();
-        
-        if(get_llvm_op_code().equals("or") || get_llvm_op_code().equals("and") || get_llvm_op_code().equals("not")){
-            /*this.setResultadoExpresion("%varResultadoCondicion" + this.getIdVar());
-            this.getIzquierda().setResultadoExpresion("%varResultado" + this.getIdVar());
-            this.getDerecha().setResultadoExpresion("%varResultado" + this.getIdVar());*/
-            
-            
-        }else{
-            codigo += "%var"+getIdVar()+" = "+get_llvm_op_code()+" "+get_llvm_type_code()+" %var"+getIzquierda().getIdVar()+", %var"+getDerecha().getIdVar()+"\n";
-            //this.setIdVar("%var"+getIdVar());
-        }
-        
+        codigo += "%var"+getIdVar()+" = "+get_llvm_op_code()+" "+get_llvm_type_code()+" %var"+getIzquierda().getIdVar()+", %var"+getDerecha().getIdVar()+"\n";
+        if(get_llvm_type_code().equals("i1")) codigo += "store i1 %var"+this.getIdVar()  + ", i1* @resultado\n";
         return codigo;
     }
 }

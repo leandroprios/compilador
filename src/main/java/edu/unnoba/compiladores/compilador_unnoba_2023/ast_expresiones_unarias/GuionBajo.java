@@ -102,20 +102,12 @@ public class GuionBajo extends Expresion {
     @Override
     public String generarCodigo() {
         String codigo = "";
-        
         if (this.enteroAFlotante == null){
             codigo += "%var" + this.getIdVar() + "= load " + this.get_llvm_type_var() + ", " +this.get_llvm_type_var() + "* @"+this.nombreVar+"\n" ;
         }else{
-            //codigo += "%var" + this.getIdVar() + "= alloca i32\n"; 
             codigo += this.enteroAFlotante.generarCodigo();
             this.setIdVar(this.enteroAFlotante.getIdVar());
-            //codigo += "%var"+getIdVar()+" = sitofp i32 %var"+this.enteroAFlotante.getIdVar()+" to double\n";
-        }/*else{
-            //codigo += "%var" + this.getIdVar() + " = alloca " + this.get_llvm_type_code() + "\n"; 
-            codigo += "%var" + this.getIdVar() + " load " + this.get_llvm_type_code() + "," +this.get_llvm_type_code() + "@"+this.nombreVar+"\n" ;
-            
-            //codigo += "store "+this.get_llvm_type_code()+" %var"+this.getIdVar()+", "+this.get_llvm_type_code()+"* @"+this.nombreVar+"\n";
-        }*/
+        }
         
         return codigo;
     }

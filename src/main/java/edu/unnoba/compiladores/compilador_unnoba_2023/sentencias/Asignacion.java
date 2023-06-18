@@ -44,8 +44,17 @@ public class Asignacion extends Sentencia {
     
     @Override
     public String generarCodigo() {
-        String codigo = getExpresion().generarCodigo();
-        codigo += "store "+getExpresion().get_llvm_type_code()+" %var"+getExpresion().getIdVar()+", "+getIdent().get_llvm_type_code()+"* @"+getIdent().getNombre()+"\n";
+        String codigo = ";entro al ASIGNACION " + this.getIdVar() + "\n";
+        this.getExpresion().setLeerResultado(true);
+        codigo += getExpresion().generarCodigo();
+        
+        //if(getExpresion().get_llvm_type_code().equals("i1")){
+            codigo += "store "+getExpresion().get_llvm_type_code()+ " %var"+getExpresion().getIdVar()+", "+getIdent().get_llvm_type_code()+"* @"+getIdent().getNombre()+"\n";
+        //}
+        /*else{
+            codigo += "store "+getExpresion().get_llvm_type_code()+" %var"+getExpresion().getResultadoExpresion()+", "+getIdent().get_llvm_type_code()+"* @"+getIdent().getNombre()+"\n";
+        }*/
+        
         return codigo;
     }
 }

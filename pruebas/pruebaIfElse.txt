@@ -7,12 +7,13 @@ PROGRAM.SECTION
 #Esto es un comentario
 varlogica = false
 var6 =3
-
+display("ingrese un entero")
+i = input_int()
 if (i == 0) THEN
   var2 = 2
 else
  var6 =3
 end
 
-DISPLAY("literal string")
+display("fin del programa")
 ENDPROGRAM.SECTION

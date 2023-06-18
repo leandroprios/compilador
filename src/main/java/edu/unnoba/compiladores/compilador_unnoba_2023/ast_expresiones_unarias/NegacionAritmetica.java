@@ -57,13 +57,20 @@ public class NegacionAritmetica extends OperacionUnaria {
         
     @Override
     public String generarCodigo(){
-        StringBuilder codigo = new StringBuilder();      
+        this.setResultadoExpresion("%var"+ this.getIdVar());
+        StringBuilder codigo = new StringBuilder();     
         codigo.append(this.getExpresion().generarCodigo());
         if(getExpresion().getTipo() == Tipo.INTEGER){
-            codigo.append(String.format("%%var%s = %s %s 0, %%var%s\n", getIdVar(), getOperacion(), get_llvm_type_code(), getExpresion().getIdVar()));
+            codigo.append(String.format("%%var%s = %s %s 0, %%var%s\n", this.getIdVar(), this.getOperacion(), this.get_llvm_type_code(), this.getExpresion().getIdVar()));
         }else if(getTipo() == Tipo.FLOAT){
-            codigo.append(String.format("%%var%s = %s %s 0.0,%%var%s\n", getIdVar(), getOperacion(), get_llvm_type_code(), getExpresion().getIdVar()));
+            codigo.append(String.format("%%var%s = %s %s 0.0,%%var%s\n", this.getIdVar(), this.getOperacion(), this.get_llvm_type_code(), this.getExpresion().getIdVar()));
         }
+        codigo.append(String.format("store i1 %%var%s , i1* @resultado\n",this.getIdVar()));
+        if(this.getLeerResultado()) {
+            codigo.append(String.format("%%resultadoLoad%s = load i1, i1* @resultado\n",this.getIdVar()));
+            this.setResultadoExpresion("%resultadoLoad"+ this.getIdVar());
+        }
+        
         return codigo.toString();
     }
 
