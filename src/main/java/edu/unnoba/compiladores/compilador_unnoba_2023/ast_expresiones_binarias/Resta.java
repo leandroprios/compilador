@@ -10,7 +10,7 @@ public class Resta extends OperacionBinaria {
     }
 
     @Override
-    protected String getNombreOperacion() {
+    public String getNombreOperacion() {
         return "-";
     }
 

@@ -20,7 +20,7 @@ public class MenorIgual extends OperacionBinaria{
     }
     
     @Override
-    protected String getNombreOperacion() {
+    public String getNombreOperacion() {
         return "<=";
     }
     

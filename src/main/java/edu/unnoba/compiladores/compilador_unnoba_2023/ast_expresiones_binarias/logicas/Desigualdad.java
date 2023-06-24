@@ -18,7 +18,7 @@ public class Desigualdad extends OperacionBinaria{
     
     
     @Override
-    protected String getNombreOperacion() {
+    public String getNombreOperacion() {
         return "!=";
     }
     

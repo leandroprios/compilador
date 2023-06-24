@@ -20,7 +20,7 @@ public class MayorIgual extends OperacionBinaria{
     }
     
     @Override
-    protected String getNombreOperacion() {
+    public String getNombreOperacion() {
         return ">=";
     }
     
@@ -43,7 +43,7 @@ public class MayorIgual extends OperacionBinaria{
 
     @Override
     public boolean ComparacionFor(String var) {
-        return false;
+        return this.izquierda.ComparacionFor(var);
     }
     
     @Override

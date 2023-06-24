@@ -34,7 +34,7 @@ public abstract class OperacionBinaria extends Expresion {
         return String.format("%s", this.getNombreOperacion());
     }
 
-    protected abstract String getNombreOperacion();
+    public abstract String getNombreOperacion();
 
     @Override
     public String graficar(String idPadre) {

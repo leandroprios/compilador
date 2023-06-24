@@ -71,7 +71,7 @@ public class Display extends Sentencia{
                 break;
             case BOOLEAN:
                 codigo += getDisplay().generarCodigo();
-                codigo +="call void @printBool(i1 %var" + getDisplay().getIdVar() + ")\n"; //llamo a la funcion
+                codigo +="call void @printBool(i1 %resultadoLoad" + getDisplay().getIdVar() + ")\n"; //llamo a la funcion
                 break;
             default:
                 codigo += "%dest"+getIdVar()+" = call i32 @puts(i8* getelementptr (["+(getCantidadDigitos()+1)+" x i8], ["+(getCantidadDigitos()+1)

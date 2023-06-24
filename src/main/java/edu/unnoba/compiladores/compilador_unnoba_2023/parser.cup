@@ -49,6 +49,16 @@ parser code
         return this.produccionesRecorridas;
     }
 
+    public boolean verificarOperacionConComparacion(IncrementoDecrementoFor e_id, OperacionBinaria c_f){
+        boolean retorno=false; 
+        if(e_id.getOperacion().equals("++")){
+            if(c_f.getNombreOperacion().equals(">") || c_f.getNombreOperacion().equals(">=")) retorno = true;
+        }else{
+            if(c_f.getNombreOperacion().equals("<") || c_f.getNombreOperacion().equals("<=")) retorno = true;
+        }
+        return retorno;
+    }
+
     public boolean validarTiposVariablesConExpresion(String var, Expresion expresion_or){
         boolean retorno=true;
         Tipo tipoAuxVar = ht.get(var);
@@ -943,7 +953,7 @@ filter::= FILTER PARENTESIS_ABRE expresion_or:e_o COMA CORCHETE_ABRE lista_var:l
     RESULT = resultadoFilter;
 :} 
 |
-FILTER PARENTESIS_ABRE expresion_or:e_o COMA CORCHETE_ABRE PARENTESIS_ABRE PARENTESIS_CIERRA CORCHETE_CIERRA PARENTESIS_CIERRA {:
+FILTER PARENTESIS_ABRE expresion_or:e_o COMA CORCHETE_ABRE CORCHETE_CIERRA PARENTESIS_CIERRA {:
     Tipo tipoResultadoFilter = Tipo.UNKNOWN;
     Identificador resultadoFilter = new Identificador("_aux" + autoincrementalAuxFilter.toString(), tipoResultadoFilter);
     
@@ -1090,6 +1100,10 @@ sentencia_for ::= FOR PARENTESIS_ABRE VAR:id1 ASIGNACION CONST_INT:intAux  PUNTO
             }
             throw new VarNotDeclaredTSException("La variable " + id1 + " no está declarada previamente.");
         }
+        if(verificarOperacionConComparacion(e_id, (OperacionBinaria)c_f)) throw new Exception("La Comparacion no es compatible con el tipo de operacion.");
+
+
+
     }else{
         pilaVariablesInFor.remove(pilaVariablesInFor.size()-1);
         pilaFor.remove(pilaFor.size()-1);

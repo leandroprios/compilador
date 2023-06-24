@@ -10,7 +10,7 @@ public class Suma extends OperacionBinaria {
     }
 
     @Override
-    protected String getNombreOperacion() {
+    public String getNombreOperacion() {
         return "+";
     }
 

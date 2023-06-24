@@ -71,11 +71,7 @@ public class IncrementoDecrementoFor  extends OperacionUnaria{
         this.getExpresion().setLeerResultado(true);
         this.setResultadoExpresion("%var"+ this.getIdVar());
         String codigo = this.getExpresion().generarCodigo();
-        if (this.getOperacion().equals("--")){
-            codigo += "%var" +  this.getIdVar()+ " = sub i32 0, 1" +"\n";
-        }else{
-            codigo += "%var" + this.getIdVar() + " = add i32 0, 1" + "\n";
-        }
+        codigo += "%var" + this.getIdVar() + " = add i32 0, 1" + "\n";
         return codigo;
     }
 

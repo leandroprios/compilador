@@ -20,7 +20,7 @@ public class Menor extends OperacionBinaria{
     }
     
     @Override
-    protected String getNombreOperacion() {
+    public String getNombreOperacion() {
         return "<";
     }
     
@@ -43,8 +43,6 @@ public class Menor extends OperacionBinaria{
 
     @Override
     public boolean ComparacionFor(String var) {
-        System.out.println("nombre var en menor " +var);
-
         return this.izquierda.ComparacionFor(var);
     }
     
