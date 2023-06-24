@@ -4,13 +4,10 @@ float: var5, var8, var6;
 BOOLEAN: varlogica;
 ENDDECLARE.SECTION
 PROGRAM.SECTION
-
-
-i= filter(_!=3, [var2,var3,var4, var5])
-for(i = 0; i++; i<3) do
-	var2= var2 + i
-	DISPLAY(var2)
-	display(i)
+for(i = filter(_!=3, [var2,var3]); i++; i<3) do
+	var4= filter(_!=3, [i])
+	display(var4)
 end
+
 
 ENDPROGRAM.SECTION

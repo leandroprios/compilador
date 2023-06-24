@@ -21,6 +21,10 @@ public class SentenciaIf extends Sentencia{
     ArrayList<SentenciaElif> sentenciasElif;
     Expresion expresion;
     private String idVarFor;
+    Filter sentenciaFilter;
+
+    
+    
     public SentenciaIf(ArrayList<Sentencia> sentenciasIf, Expresion expresion){
         setNombre("IF");
         this.sentenciasIf = sentenciasIf;
@@ -28,6 +32,15 @@ public class SentenciaIf extends Sentencia{
         this.setIdVar(CodeGeneratorHelper.getNewPointer());
         this.IsExpresion = false;
     }
+    
+    /*public SentenciaIf(ArrayList<Sentencia> sentenciasIf, Expresion expresion, Filter sentenciaFilter){
+        setNombre("IF");
+        this.sentenciasIf = sentenciasIf;
+        this.expresion = expresion;
+        this.setIdVar(CodeGeneratorHelper.getNewPointer());
+        this.IsExpresion = false;
+        this.sentenciaFilter = sentenciaFilter;
+    }*/
     
     public SentenciaIf(ArrayList<Sentencia> sentenciasIf, Expresion expresion, ArrayList<SentenciaElif> sentenciasElif, ArrayList<Sentencia> sentenciasElse){
         setNombre("IF");
@@ -38,6 +51,17 @@ public class SentenciaIf extends Sentencia{
         this.setIdVar(CodeGeneratorHelper.getNewPointer());
         this.IsExpresion = false;
     }
+    
+    /*public SentenciaIf(ArrayList<Sentencia> sentenciasIf, Expresion expresion, ArrayList<SentenciaElif> sentenciasElif, ArrayList<Sentencia> sentenciasElse,  Filter sentenciaFilter){
+        setNombre("IF");
+        this.sentenciasIf = sentenciasIf;
+        this.expresion = expresion;
+        this.sentenciasElse = sentenciasElse;
+        this.sentenciasElif = sentenciasElif;
+        this.setIdVar(CodeGeneratorHelper.getNewPointer());
+        this.IsExpresion = false;
+        this.sentenciaFilter = sentenciaFilter;
+    }*/
     
     public void setIdVarFor(String idVarFor){
         this.idVarFor = idVarFor;
@@ -50,9 +74,16 @@ public class SentenciaIf extends Sentencia{
     @Override
     public String graficar(String idPadre){
         final String miId = this.getId();
-        String grafico = super.graficar(idPadre) + 
-        expresion.graficar(miId);
         
+        String grafico;
+        if(sentenciaFilter !=null){
+            grafico = super.graficar(idPadre) + 
+            sentenciaFilter.graficar(idPadre) + 
+            expresion.graficar(miId);
+        }else{
+            grafico = super.graficar(idPadre) + 
+            expresion.graficar(miId);
+        }
         
         Random random = new Random();
 

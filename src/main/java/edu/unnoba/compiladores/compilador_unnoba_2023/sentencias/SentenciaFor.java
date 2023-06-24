@@ -6,6 +6,7 @@ package edu.unnoba.compiladores.compilador_unnoba_2023.sentencias;
 
 import edu.unnoba.compiladores.compilador_unnoba_2023.ast.CodeGeneratorHelper;
 import edu.unnoba.compiladores.compilador_unnoba_2023.ast_expresiones_binarias.Expresion;
+import edu.unnoba.compiladores.compilador_unnoba_2023.ast_expresiones_binarias.Filter;
 import edu.unnoba.compiladores.compilador_unnoba_2023.ast_expresiones_binarias.OperacionBinaria;
 import edu.unnoba.compiladores.compilador_unnoba_2023.ast_expresiones_unarias.IncrementoDecrementoFor;
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ public class SentenciaFor extends Sentencia{
     Asignacion asignacion;
     IncrementoDecrementoFor expresionFor;
     ArrayList<Sentencia> sentencias;
+    Filter sentenciaFilter;
     
     
     public SentenciaFor(Expresion operacion, Asignacion asignacion, IncrementoDecrementoFor expresionFor, ArrayList<Sentencia> sentencias){
@@ -32,14 +34,34 @@ public class SentenciaFor extends Sentencia{
         this.IsExpresion = false;
     }
     
+    public SentenciaFor(Expresion operacion, Asignacion asignacion, IncrementoDecrementoFor expresionFor, ArrayList<Sentencia> sentencias, Filter sentenciaFilter){
+        setNombre("FOR");
+        this.operacion = operacion;
+        this.asignacion = asignacion;
+        this.expresionFor = expresionFor;
+        this.sentencias = sentencias;
+        this.setIdVar(CodeGeneratorHelper.getNewPointer());
+        this.IsExpresion = false;
+        this.sentenciaFilter = sentenciaFilter;
+    }
+    
     @Override
     public String graficar(String idPadre){
         final String miId = this.getId();
-        String grafico = super.graficar(idPadre) + 
-        asignacion.graficar(miId) +
-        expresionFor.graficar(miId) + 
-        operacion.graficar(miId);
-        
+        String grafico;
+        if(sentenciaFilter !=null){
+            grafico = super.graficar(idPadre) + 
+            sentenciaFilter.graficar(idPadre) +
+            asignacion.graficar(miId) +
+            expresionFor.graficar(miId) + 
+            operacion.graficar(miId);
+        }else{
+            grafico = super.graficar(idPadre) + 
+            asignacion.graficar(miId) +
+            expresionFor.graficar(miId) + 
+            operacion.graficar(miId);
+        }
+       
         Random random = new Random();
         
         String idDo = "nodo_";

@@ -34,6 +34,8 @@ parser code
     Boolean isAsignacionFilter = false;
     Boolean isGuionBajoFilter = false;
     boolean isExpresionFilter = false;
+    boolean filterIsExpresion = false;
+    Filter filterInExpresion;
 
     ArrayList<Filter> pilaFilter = new ArrayList<>();
 
@@ -312,11 +314,14 @@ bloque_programa ::= PROGRAM_SECTION bloque_sentencias:bs END_PROGRAM_SECTION{:
 
 bloque_sentencias ::= bloque_sentencias:bs sentencia:s {:
             produccionesRecorridas.add("bloque_sentencias -> bloque_sentencias:bs sentencia");  
-            for(Filter filter : pilaFilter){
-                System.out.println("bloque_sentencias filter");
-                bs.add((Sentencia)filter);
+            if(filterIsExpresion == false){
+                for(Filter filter : pilaFilter){
+                    System.out.println("bloque_sentencias filter");
+                    bs.add((Sentencia)filter);
+                }
+                pilaFilter.clear();
             }
-            pilaFilter.clear();
+
             bs.add(s);
             RESULT = bs;
        :}
@@ -324,11 +329,13 @@ bloque_sentencias ::= bloque_sentencias:bs sentencia:s {:
        sentencia:s {:
             produccionesRecorridas.add("bloque_sentencias -> sentencia");
             ArrayList<Sentencia> sentencias = new ArrayList<>();
-            for(Filter filter : pilaFilter){
-                System.out.println("bloque_sentencias filter");
-                sentencias.add((Sentencia)filter);
+            if(filterIsExpresion == false){
+                for(Filter filter : pilaFilter){
+                    System.out.println("bloque_sentencias filter");
+                    sentencias.add((Sentencia)filter);
+                }
+                pilaFilter.clear();
             }
-            pilaFilter.clear();
             sentencias.add(s);
             RESULT  = sentencias;
 :};
@@ -1006,32 +1013,61 @@ input_bool ::= INPUT_BOOL:i_bool PARENTESIS_ABRE PARENTESIS_CIERRA {:
     RESULT = new Input(Tipo.BOOLEAN, i_bool);
 :};
 
-sentencia_if ::= IF PARENTESIS_ABRE 
-    expresion_or:eo PARENTESIS_CIERRA THEN bloque_sentencias:bs END {:
+sentencia_if ::= IF PARENTESIS_ABRE expresion_or:eo PARENTESIS_CIERRA THEN bloque_sentencias:bs END {:
         produccionesRecorridas.add("sentencia_if -> IF PARENTESIS_ABRE expresion_or PARENTESIS_CIERRA THEN bloque_sentencias END");
         RESULT = new SentenciaIf(bs,eo);
     :}
     |
     IF PARENTESIS_ABRE expresion_or:eo PARENTESIS_CIERRA THEN bloque_sentencias:bs1 END ELSE bloque_sentencias:bs2 END{:
         produccionesRecorridas.add("sentencia_if -> IF PARENTESIS_ABRE expresion_or PARENTESIS_CIERRA THEN bloque_sentencias ELSE bloque_sentencias END");
+        
+
         ArrayList<SentenciaElif> sentenciasElif = new ArrayList<>();
         RESULT = new SentenciaIf(bs1,eo, sentenciasElif,bs2);
     :}
     |
-    IF PARENTESIS_ABRE expresion_or:eo PARENTESIS_CIERRA THEN bloque_sentencias:bs1 END sentencia_elseif: elseif{:
+    IF PARENTESIS_ABRE expresion_or:eo PARENTESIS_CIERRA THEN bloque_sentencias:bs1 END sentencia_elseif: elseif {:
         produccionesRecorridas.add("sentencia_if -> IF PARENTESIS_ABRE expresion_or PARENTESIS_CIERRA THEN bloque_sentencias sentencia_elseif END");
         ArrayList<Sentencia> sentenciasElse = new ArrayList<>();
+        
+        /*SentenciaIf sentenciaIf;
+        if(filterInExpresion!=null){
+            sentenciaIf = new SentenciaIf(bs1,eo,elseif, sentenciasElse,filterInExpresion);
+        }else{
+            sentenciaIf = new SentenciaIf(bs1,eo,elseif, sentenciasElse);
+        }
+
+        filterInExpresion = null;
+
+        RESULT = sentenciaIf;*/
+
         RESULT = new SentenciaIf(bs1,eo,elseif, sentenciasElse);
     :}
     |
     IF PARENTESIS_ABRE expresion_or:eo PARENTESIS_CIERRA THEN bloque_sentencias:bs1 END sentencia_elseif: elseif ELSE bloque_sentencias:bs2 END{:
         produccionesRecorridas.add("sentencia_if -> IF PARENTESIS_ABRE expresion_or PARENTESIS_CIERRA THEN bloque_sentencias sentencia_elseif ELSE bloque_sentencias END");
+        
+        /*
+        SentenciaIf sentenciaIf;
+        if(filterInExpresion!=null){
+            sentenciaIf = new SentenciaIf(bs1,eo,elseif, bs2,filterInExpresion);
+        }else{
+            sentenciaIf = new SentenciaIf(bs1,eo,elseif, bs2);
+        }
+
+        filterInExpresion = null;
+
+        RESULT = sentenciaIf;
+        */
+
         RESULT = new SentenciaIf(bs1,eo,elseif, bs2);
 :};
 
 
 sentencia_elseif ::= sentencia_elseif: elseif ELIF PARENTESIS_ABRE expresion_or:eo PARENTESIS_CIERRA THEN bloque_sentencias:bs2 END{:
         produccionesRecorridas.add("sentencia_elseif -> sentencia_elseif ELIF PARENTESIS_ABRE expresion_or PARENTESIS_CIERRA THEN bloque_sentencias");
+        
+        
         elseif.add(new SentenciaElif(bs2,eo));
         RESULT = elseif;
     :}
@@ -1039,7 +1075,21 @@ sentencia_elseif ::= sentencia_elseif: elseif ELIF PARENTESIS_ABRE expresion_or:
     ELIF PARENTESIS_ABRE expresion_or:eo PARENTESIS_CIERRA THEN bloque_sentencias:bs2 END{:
         produccionesRecorridas.add("sentencia_elseif -> ELIF PARENTESIS_ABRE expresion_or PARENTESIS_CIERRA THEN bloque_sentencias");
         ArrayList<SentenciaElif> listaElif = new ArrayList<>();
+        
+        /*
+        SentenciaElif sentenciaElif;
+        if(filterInExpresion!=null){
+            sentenciaElif = new SentenciaElif(bs2,eo,filterInExpresion);
+        }else{
+            sentenciaElif = new SentenciaElif(bs2,eo);
+        }
+
+        filterInExpresion = null;
+        
+        listaElif.add(sentenciaElif);
+        */
         listaElif.add(new SentenciaElif(bs2,eo));
+
         RESULT = listaElif;
 :};
 
@@ -1070,21 +1120,29 @@ expresion_incremento_decremento ::= VAR:var OPERADOR_SUMA:op OPERADOR_SUMA: op2{
         Identificador identificador = new Identificador(var,Tipo.INTEGER);
         RESULT = new IncrementoDecrementoFor(identificador,op + op2,Tipo.INTEGER);
 :};
-sentencia_for ::= FOR PARENTESIS_ABRE VAR:id1 ASIGNACION CONST_INT:intAux  PUNTO_COMA expresion_incremento_decremento:e_id PUNTO_COMA comparacion:c_f  PARENTESIS_CIERRA DO {:
+sentencia_for ::= FOR PARENTESIS_ABRE {: filterIsExpresion = true;:} sentencia_asignacion: sa  PUNTO_COMA expresion_incremento_decremento:e_id PUNTO_COMA comparacion:c_f  PARENTESIS_CIERRA DO 
+{:
     pilaFor.add("for"); 
-    isSentenciaFor = true;        
-    if (pilaVariablesInFor.contains(id1)) {
-        throw new VarForException("No es posible volver a utlizar la variable " + id1 + " ya que, es utilizada en otro FOR");
+    isSentenciaFor = true;
+    
+    if(((Asignacion)sa).getExpresion().getNombre().contains("_aux") && !pilaFilter.isEmpty()){
+        filterInExpresion = pilaFilter.get(pilaFilter.size()-1);
+        pilaFilter.clear();
+    }
+    
+    filterIsExpresion = false;
+    if (pilaVariablesInFor.contains(((Asignacion)sa).getIdent().getNombre())) {
+        throw new VarForException("No es posible volver a utlizar la variable " + ((Asignacion)sa).getIdent().getNombre() + " ya que, es utilizada en otro FOR");
     } else {
-        pilaVariablesInFor.add(id1);
+        pilaVariablesInFor.add(((Asignacion)sa).getIdent().getNombre());
     }
 
     :} bloque_sentencias:bs END{:
     produccionesRecorridas.add("sentencia_for -> FOR PARENTESIS_ABRE VAR ASIGNACION CONST_INT PUNTO_COMA VAR expresion_incremento_decremento PUNTO_COMA comparacion PARENTESIS_CIERRA DO bloque_sentencias END");
     //Verificar que c_f contenga el mismo id que id1 y id2;
     String id2 = ((Identificador)e_id.getExpresion()).getNombre();
-    if((id1).equals(id2)){
-        if (!c_f.ComparacionFor(id1)){       
+    if((((Asignacion)sa).getIdent().getNombre()).equals(id2)){
+        if (!c_f.ComparacionFor(((Asignacion)sa).getIdent().getNombre())){       
             pilaVariablesInFor.remove(pilaVariablesInFor.size()-1);
             pilaFor.remove(pilaFor.size()-1);
             if(pilaFor.isEmpty()){
@@ -1092,13 +1150,13 @@ sentencia_for ::= FOR PARENTESIS_ABRE VAR:id1 ASIGNACION CONST_INT:intAux  PUNTO
             }
             throw new ComparacionForException("El For no admite este tipo de comparacion"); //ademas compara la tercer variable del for 
         }
-        if(!ht.containsKey(id1)){
+        if(!ht.containsKey(((Asignacion)sa).getIdent().getNombre())){
             pilaVariablesInFor.remove(pilaVariablesInFor.size()-1);
             pilaFor.remove(pilaFor.size()-1);
             if(pilaFor.isEmpty()){
                 isSentenciaFor = false;
             }
-            throw new VarNotDeclaredTSException("La variable " + id1 + " no está declarada previamente.");
+            throw new VarNotDeclaredTSException("La variable " + ((Asignacion)sa).getIdent().getNombre() + " no está declarada previamente.");
         }
         if(verificarOperacionConComparacion(e_id, (OperacionBinaria)c_f)) throw new Exception("La Comparacion no es compatible con el tipo de operacion.");
 
@@ -1113,10 +1171,6 @@ sentencia_for ::= FOR PARENTESIS_ABRE VAR:id1 ASIGNACION CONST_INT:intAux  PUNTO
         throw new VarForNotEqualException("La variable utlizada en el FOR debe ser la misma");
     }
 
-    
-    Entero entero = new Entero(Integer.parseInt(intAux));
-    Asignacion asignacion = new Asignacion(new Identificador(id1,Tipo.INTEGER),entero);
-    
     pilaVariablesInFor.remove(pilaVariablesInFor.size()-1);
     pilaFor.remove(pilaFor.size()-1);
 
@@ -1124,6 +1178,15 @@ sentencia_for ::= FOR PARENTESIS_ABRE VAR:id1 ASIGNACION CONST_INT:intAux  PUNTO
         isSentenciaFor = false;
     }
     
+    SentenciaFor sf;
+    if(filterInExpresion!=null){
+        sf = new SentenciaFor(c_f,(Asignacion)sa,e_id,bs,filterInExpresion);
+    }else{
+        sf = new SentenciaFor(c_f,(Asignacion)sa,e_id,bs);
+    }
+
+    filterInExpresion = null;
+
     
-    RESULT = new SentenciaFor(c_f,asignacion,e_id,bs);
+    RESULT = sf;
 :};

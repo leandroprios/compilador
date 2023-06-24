@@ -6,6 +6,7 @@ package edu.unnoba.compiladores.compilador_unnoba_2023.sentencias;
 
 import edu.unnoba.compiladores.compilador_unnoba_2023.ast.CodeGeneratorHelper;
 import edu.unnoba.compiladores.compilador_unnoba_2023.ast_expresiones_binarias.Expresion;
+import edu.unnoba.compiladores.compilador_unnoba_2023.ast_expresiones_binarias.Filter;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -21,6 +22,8 @@ public class SentenciaElif extends Sentencia {
     private String idVarEndIf;
     
     private String idVarFor;
+    Filter sentenciaFilter;
+
     
     public SentenciaElif(ArrayList<Sentencia> sentencias, Expresion expresion){
         setNombre("ELIF");
@@ -28,6 +31,14 @@ public class SentenciaElif extends Sentencia {
         this.expresion = expresion;
         this.setIdVar(CodeGeneratorHelper.getNewPointer());
     }
+    
+    /*public SentenciaElif(ArrayList<Sentencia> sentencias, Expresion expresion, Filter sentenciaFilter){
+        setNombre("ELIF");
+        this.sentencias = sentencias;
+        this.expresion = expresion;
+        this.setIdVar(CodeGeneratorHelper.getNewPointer());
+        this.sentenciaFilter = sentenciaFilter;
+    }*/
     
     public void setEtiquetaSiguiente(String etiqueta){
         this.etiquetaSiguiente =etiqueta;
@@ -51,9 +62,15 @@ public class SentenciaElif extends Sentencia {
         final String miId = this.getId();
        
         Random random = new Random();
-        
-        String grafico = super.graficar(idPadre) + 
-        expresion.graficar(miId);
+        String grafico;
+        if(sentenciaFilter !=null){
+            grafico = super.graficar(idPadre) + 
+            sentenciaFilter.graficar(idPadre) + 
+            expresion.graficar(miId);
+        }else{
+            grafico = super.graficar(idPadre) + 
+            expresion.graficar(miId);
+        }
         
         String idThenIf = "nodo_";
         idThenIf = idThenIf + random.nextInt(1000000000);
@@ -72,7 +89,7 @@ public class SentenciaElif extends Sentencia {
     @Override
     public String generarCodigo() {
         String codigo = "";
-
+            
         this.expresion.setLeerResultado(true);
         codigo += this.expresion.generarCodigo();
         this.expresion.setLeerResultado(false);
