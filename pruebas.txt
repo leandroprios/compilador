@@ -5,49 +5,19 @@ BOOLEAN: varlogica, varlogica2;
 ENDDECLARE.SECTION
 PROGRAM.SECTION
 
-var3 = 3 
-var2 = -1
-varlogica = false
-varlogica = not true
-#varlogica = 3 < 4 and 2 > 1 or true and not false
- display(varlogica)
-varlogica2 = filter(_==true, [varlogica])
-if(false==filter(_==true, [varlogica])) then
- display("entro al if")
- varlogica2 = filter(_==true, [varlogica])
-	
-for(i = filter(_==1, [var1, var2]); i++; i<3) do
-	var2 = 2 + i
-	DISPLAY(var2)
-	if(true==filter(_==true, [varlogica]) and varlogica) then
- 		display("entro al if")
- 		varlogica2 = filter(_==false, [varlogica])
-		DISPLAY(varlogica2)
-	end
-	elif (false==filter(_==true, [varlogica]) or varlogica) then
-		display("entro al elif")
-	end  
-	varlogica2 = filter(_==true, [varlogica])
-	DISPLAY(varlogica2)
-	break
-	DISPLAY(i)
-end	
 
+#varlogica  = 3.3 == filter(_==3, [var3])
+
+varlogica = true
+#varlogica2 = filter(_==true, [varlogica])
+var3=3
+if(3==filter(_==3, [var3])) then
+ display("entro al if")
 end 
 (*
-for(i = filter(_==1, [var1, var2]); i++; i<3) do
+for(i = 0; i++; i<3) do
 	var2 = 2 + i
 	DISPLAY(var2)
-	if(true==filter(_==true, [varlogica]) and varlogica) then
- 		display("entro al if")
- 		varlogica2 = filter(_==false, [varlogica])
-		DISPLAY(varlogica2)
-	end
-	elif (false==filter(_==true, [varlogica]) or varlogica) then
-		display("entro al elif")
-	end  
-	varlogica2 = filter(_==true, [varlogica])
-	DISPLAY(varlogica2)
 	break
 	DISPLAY(i)
 end

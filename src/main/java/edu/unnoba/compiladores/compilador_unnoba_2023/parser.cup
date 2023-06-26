@@ -1018,46 +1018,24 @@ input_bool ::= INPUT_BOOL:i_bool PARENTESIS_ABRE PARENTESIS_CIERRA {:
 
 sentencia_if ::= sentencia_if_completa:sent_if {:
         produccionesRecorridas.add("sentencia_if -> IF PARENTESIS_ABRE expresion_or PARENTESIS_CIERRA THEN bloque_sentencias END");
-        /*if(filterInExpresion!=null){
-            sent_if.setSentenciaFilter(filterInExpresion);
-            filterInExpresion = null;
-        }*/
         RESULT = sent_if;
     :}
     |
     sentencia_if_completa:sent_if ELSE bloque_sentencias:bs2 END{:
         produccionesRecorridas.add("sentencia_if -> IF PARENTESIS_ABRE expresion_or PARENTESIS_CIERRA THEN bloque_sentencias ELSE bloque_sentencias END");
-        
-        /*if(filterInExpresion!=null){
-            sent_if.setSentenciaFilter(filterInExpresion);
-            filterInExpresion = null;
-        }*/
         sent_if.setSentenciasElse(bs2);
         RESULT = sent_if;
     :}
     |
     sentencia_if_completa:sent_if sentencia_elseif: elseif {:
         produccionesRecorridas.add("sentencia_if -> IF PARENTESIS_ABRE expresion_or PARENTESIS_CIERRA THEN bloque_sentencias sentencia_elseif END");
-        
-        /*if(filterInExpresion!=null){
-            sent_if.setSentenciaFilter(filterInExpresion);
-            filterInExpresion = null;
-        }*/
-
         sent_if.setSentenciasElif(elseif);
         RESULT = sent_if;
     :}
     |
     sentencia_if_completa:sent_if sentencia_elseif: elseif ELSE bloque_sentencias:bs2 END{:
         produccionesRecorridas.add("sentencia_if -> IF PARENTESIS_ABRE expresion_or PARENTESIS_CIERRA THEN bloque_sentencias sentencia_elseif ELSE bloque_sentencias END");
-        
-        /*if(filterInExpresion!=null){
-            sent_if.setSentenciaFilter(filterInExpresion);
-            filterInExpresion = null;
-        }*/
-
-        sent_if.setSentenciasElse(bs2);
-        sent_if.setSentenciasElif(elseif);
+        if.setSentenciasElif(elseif);
         RESULT = sent_if;
 :};
 
