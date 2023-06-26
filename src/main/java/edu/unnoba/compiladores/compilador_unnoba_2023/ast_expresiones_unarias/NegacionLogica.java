@@ -63,5 +63,26 @@ public class NegacionLogica extends OperacionUnaria {
         return resultado.toString();
     }  
 
+    @Override
+    public String getNombreIz() {
+        return this.getNombre();
+    }
+    
+    @Override
+    public String getNombreDe() {
+        return this.getNombre();
+    }
+    
+    @Override
+    public boolean isOperacionBinaria() {
+        return false;
+    }
+    
+    @Override
+    public String graficar(String idPadre) {
+        final String miId = this.getId();
+        String grafico = super.graficar(idPadre) + this.getExpresion().graficar(miId);
+        return grafico;
+    }
     
 }

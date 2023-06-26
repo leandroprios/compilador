@@ -67,5 +67,19 @@ public class EnteroAFlotante extends Expresion {
         codigo += "%var"+getIdVar()+" = sitofp i32 %var"+getEntero().getIdVar()+" to double\n";
         return codigo;
     }
-
+    
+    @Override
+    public String getNombreIz() {
+        return this.getNombre();
+    }
+    
+    @Override
+    public String getNombreDe() {
+        return this.getNombre();
+    }
+    
+    @Override
+    public boolean isOperacionBinaria() {
+        return false;
+    }
 }

@@ -73,4 +73,20 @@ public class Input extends Expresion{
         codigo.append(String.format("%%var%s = load %s, %s* %%temp%s\n", getIdVar(), getTipo_llvm(getTipo()), getTipo_llvm(getTipo()), getIdVar()));
         return codigo.toString();
     }
+    
+    @Override
+    public String getNombreIz() {
+        return this.getNombre();
+    }
+    
+    @Override
+    public String getNombreDe() {
+        return this.getNombre();
+    }
+    
+    @Override
+    public boolean isOperacionBinaria() {
+        return false;
+    }
+    
 }

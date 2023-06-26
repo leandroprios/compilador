@@ -78,7 +78,7 @@ public class SentenciaFor extends Sentencia{
     @Override
     public String generarCodigo() {
         String codigo = "";
-
+        if(sentenciaFilter !=null) codigo += this.sentenciaFilter.generarCodigo();
         codigo = codigo.concat(this.asignacion.generarCodigo());
         codigo = codigo.concat(String.format("br label %%etiqForCondicion%s\n", this.getIdVar()));
         codigo = codigo.concat("etiqForCondicion" + this.getIdVar() + ":\n");

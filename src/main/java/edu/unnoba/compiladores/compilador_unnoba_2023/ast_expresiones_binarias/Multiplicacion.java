@@ -51,4 +51,20 @@ public class Multiplicacion extends OperacionBinaria {
         return llvm_name;
     }
     
+    @Override
+    public String getNombreIz() {
+        return this.getIzquierda().getNombreIz();
+    }
+    
+    @Override
+    public String getNombreDe() {
+        return this.getDerecha().getNombreDe();
+    }
+    
+    @Override
+    public boolean isOperacionBinaria() {
+        return true;
+    }
+    
+    
 }

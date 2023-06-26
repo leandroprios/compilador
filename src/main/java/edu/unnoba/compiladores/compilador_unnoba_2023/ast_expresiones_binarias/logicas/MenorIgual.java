@@ -80,4 +80,20 @@ public class MenorIgual extends OperacionBinaria{
     public String get_llvm_name() {
         return llvm_name;
     }
+    
+    @Override
+    public String getNombreIz() {
+        return this.getIzquierda().getNombreIz();
+    }
+    
+    @Override
+    public String getNombreDe() {
+        return this.getDerecha().getNombreDe();
+    }
+    
+    @Override
+    public boolean isOperacionBinaria() {
+        return true;
+    }
+    
 }

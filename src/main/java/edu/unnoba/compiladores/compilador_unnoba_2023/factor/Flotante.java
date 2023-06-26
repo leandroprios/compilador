@@ -56,5 +56,20 @@ public class Flotante extends Literal {
         this.setResultadoExpresion("%resultado"+ this.getIdVar());
         return "%var"+getIdVar()+" = fadd double 0.0, "+getValor()+"\n";
     }
-
+    
+    @Override
+    public String getNombreIz() {
+        return this.getNombre();
+    }
+    
+    @Override
+    public String getNombreDe() {
+        return this.getNombre();
+    }
+    
+    @Override
+    public boolean isOperacionBinaria() {
+        return false;
+    }
+    
 }

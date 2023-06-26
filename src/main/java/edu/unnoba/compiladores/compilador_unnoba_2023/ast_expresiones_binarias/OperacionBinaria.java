@@ -28,7 +28,6 @@ public abstract class OperacionBinaria extends Expresion {
         return derecha;
     }
 
-
     @Override
     public String getEtiqueta() {
         return String.format("%s", this.getNombreOperacion());

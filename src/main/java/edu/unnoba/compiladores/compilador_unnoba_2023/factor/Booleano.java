@@ -64,4 +64,20 @@ public class Booleano extends Literal {
         return codigo;
     }
     
+    @Override
+    public String getNombreIz() {
+        return this.getNombre();
+    }
+    
+    @Override
+    public String getNombreDe() {
+        return this.getNombre();
+    }
+    
+    
+    @Override
+    public boolean isOperacionBinaria() {
+        return false;
+    }
+    
 }

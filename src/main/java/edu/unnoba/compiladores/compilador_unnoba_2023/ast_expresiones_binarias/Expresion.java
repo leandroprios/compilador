@@ -27,6 +27,8 @@ public abstract class Expresion extends Nodo {
         this.ir_ref = ir_ref;
     }
     
+    public abstract boolean isOperacionBinaria();
+    
     public String getValorConstante(){
         String retorno = "";
         if(getNombre() != null){
@@ -96,6 +98,11 @@ public abstract class Expresion extends Nodo {
     }
 
      public abstract Expresion clonar();
+     
+    public abstract String getNombreIz();
+    
+    public abstract String getNombreDe();
+
      
     public abstract Expresion reemplazarExpresionIzquierda(String valor, Tipo tipo);
      

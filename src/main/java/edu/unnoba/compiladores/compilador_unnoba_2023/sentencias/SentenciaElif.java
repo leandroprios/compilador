@@ -32,13 +32,13 @@ public class SentenciaElif extends Sentencia {
         this.setIdVar(CodeGeneratorHelper.getNewPointer());
     }
     
-    /*public SentenciaElif(ArrayList<Sentencia> sentencias, Expresion expresion, Filter sentenciaFilter){
+    public SentenciaElif(ArrayList<Sentencia> sentencias, Expresion expresion, Filter sentenciaFilter){
         setNombre("ELIF");
         this.sentencias = sentencias;
         this.expresion = expresion;
         this.setIdVar(CodeGeneratorHelper.getNewPointer());
         this.sentenciaFilter = sentenciaFilter;
-    }*/
+    }
     
     public void setEtiquetaSiguiente(String etiqueta){
         this.etiquetaSiguiente =etiqueta;
@@ -64,6 +64,7 @@ public class SentenciaElif extends Sentencia {
         Random random = new Random();
         String grafico;
         if(sentenciaFilter !=null){
+            this.expresion = expresion.clonar();
             grafico = super.graficar(idPadre) + 
             sentenciaFilter.graficar(idPadre) + 
             expresion.graficar(miId);
@@ -89,7 +90,9 @@ public class SentenciaElif extends Sentencia {
     @Override
     public String generarCodigo() {
         String codigo = "";
-            
+        
+        if(this.sentenciaFilter != null)codigo += this.sentenciaFilter.generarCodigo();
+
         this.expresion.setLeerResultado(true);
         codigo += this.expresion.generarCodigo();
         this.expresion.setLeerResultado(false);

@@ -34,7 +34,7 @@ parser code
     Boolean isAsignacionFilter = false;
     Boolean isGuionBajoFilter = false;
     boolean isExpresionFilter = false;
-    boolean filterIsExpresion = false;
+    boolean filterIsExpresion = true;
     Filter filterInExpresion;
 
     ArrayList<Filter> pilaFilter = new ArrayList<>();
@@ -211,6 +211,7 @@ nonterminal Expresion input_bool;
 nonterminal IncrementoDecrementoFor expresion_incremento_decremento; 
 nonterminal ArrayList<SentenciaElif> sentencia_elseif;
 nonterminal ArrayList<String> lista_var;
+nonterminal SentenciaIf sentencia_if_completa;
 
 start with programa;
 
@@ -314,7 +315,7 @@ bloque_programa ::= PROGRAM_SECTION bloque_sentencias:bs END_PROGRAM_SECTION{:
 
 bloque_sentencias ::= bloque_sentencias:bs sentencia:s {:
             produccionesRecorridas.add("bloque_sentencias -> bloque_sentencias:bs sentencia");  
-            if(filterIsExpresion == false){
+            if(filterIsExpresion == false && !pilaFilter.isEmpty()){
                 for(Filter filter : pilaFilter){
                     System.out.println("bloque_sentencias filter");
                     bs.add((Sentencia)filter);
@@ -329,7 +330,7 @@ bloque_sentencias ::= bloque_sentencias:bs sentencia:s {:
        sentencia:s {:
             produccionesRecorridas.add("bloque_sentencias -> sentencia");
             ArrayList<Sentencia> sentencias = new ArrayList<>();
-            if(filterIsExpresion == false){
+            if(filterIsExpresion == false && !pilaFilter.isEmpty()){
                 for(Filter filter : pilaFilter){
                     System.out.println("bloque_sentencias filter");
                     sentencias.add((Sentencia)filter);
@@ -379,9 +380,10 @@ sentencia ::= sentencia_for: sf{:
 
 
 sentencia_asignacion ::= VAR:id ASIGNACION {:
-
-    isAsignacionFilter= true;
-    idAsignacionFilter = id;
+        filterIsExpresion = false;
+        isAsignacionFilter= true;
+        idAsignacionFilter = id;
+   
     :} expresion_or: eo {:
         produccionesRecorridas.add("sentencia_asignacion -> VAR ASIGNACION expresion_or");
         
@@ -895,8 +897,8 @@ filter::= FILTER PARENTESIS_ABRE expresion_or:e_o COMA CORCHETE_ABRE lista_var:l
             }*/
 
             
-
-            if(isAsignacionFilter==true){
+            
+            if(isAsignacionFilter==true && filterIsExpresion==false){
                 if(!validarTiposVariablesConTipoAsignacionId(auxVar)){
                     throw new VarTypeNotCompatibleWithVarListTypes("El Tipo " + Tipo.toString(tipoAuxVar) +  " de la variable "+ auxVar +" no coincide con el Tipo " + Tipo.toString(tipoIdAsignacion) + " de la Asignacion con la variable " + idAsignacionFilter + " \n");
                 }
@@ -931,12 +933,12 @@ filter::= FILTER PARENTESIS_ABRE expresion_or:e_o COMA CORCHETE_ABRE lista_var:l
     ht.put("_aux" + autoincrementalAuxFilter.toString(),tipoResultadoFilter);
 
     //agrego la variable del filter default a la tabla de simbolos
-    if(!ht.containsKey("_retornoFilterDefault")){
-        ht.put("_retornoFilterDefault",tipoResultadoFilter);
-    }
+    //if(!ht.containsKey("_retornoFilterDefault")){
+        ht.put("_retornoFilterDefault" + autoincrementalAuxFilter.toString(),tipoResultadoFilter);
+    //}
 
     resultadoFilter = new Identificador("_aux" + autoincrementalAuxFilter.toString(), tipoResultadoFilter);
-    variable = new Identificador("_retornoFilterDefault", tipoResultadoFilter);
+    variable = new Identificador("_retornoFilterDefault" + autoincrementalAuxFilter.toString(), tipoResultadoFilter);
 
 
     Asignacion asignacion = new Asignacion(resultadoFilter,variable); //agrego la sentencia dentro del  ELIF
@@ -957,6 +959,7 @@ filter::= FILTER PARENTESIS_ABRE expresion_or:e_o COMA CORCHETE_ABRE lista_var:l
     autoincrementalAuxFilter = autoincrementalAuxFilter +1;
     isAsignacionFilter = false;
     isGuionBajoFilter = false;
+    //filterIsExpresion= false;
     RESULT = resultadoFilter;
 :} 
 |
@@ -1013,82 +1016,155 @@ input_bool ::= INPUT_BOOL:i_bool PARENTESIS_ABRE PARENTESIS_CIERRA {:
     RESULT = new Input(Tipo.BOOLEAN, i_bool);
 :};
 
-sentencia_if ::= IF PARENTESIS_ABRE expresion_or:eo PARENTESIS_CIERRA THEN bloque_sentencias:bs END {:
+sentencia_if ::= sentencia_if_completa:sent_if {:
         produccionesRecorridas.add("sentencia_if -> IF PARENTESIS_ABRE expresion_or PARENTESIS_CIERRA THEN bloque_sentencias END");
-        RESULT = new SentenciaIf(bs,eo);
+        /*if(filterInExpresion!=null){
+            sent_if.setSentenciaFilter(filterInExpresion);
+            filterInExpresion = null;
+        }*/
+        RESULT = sent_if;
     :}
     |
-    IF PARENTESIS_ABRE expresion_or:eo PARENTESIS_CIERRA THEN bloque_sentencias:bs1 END ELSE bloque_sentencias:bs2 END{:
+    sentencia_if_completa:sent_if ELSE bloque_sentencias:bs2 END{:
         produccionesRecorridas.add("sentencia_if -> IF PARENTESIS_ABRE expresion_or PARENTESIS_CIERRA THEN bloque_sentencias ELSE bloque_sentencias END");
         
-
-        ArrayList<SentenciaElif> sentenciasElif = new ArrayList<>();
-        RESULT = new SentenciaIf(bs1,eo, sentenciasElif,bs2);
+        /*if(filterInExpresion!=null){
+            sent_if.setSentenciaFilter(filterInExpresion);
+            filterInExpresion = null;
+        }*/
+        sent_if.setSentenciasElse(bs2);
+        RESULT = sent_if;
     :}
     |
-    IF PARENTESIS_ABRE expresion_or:eo PARENTESIS_CIERRA THEN bloque_sentencias:bs1 END sentencia_elseif: elseif {:
+    sentencia_if_completa:sent_if sentencia_elseif: elseif {:
         produccionesRecorridas.add("sentencia_if -> IF PARENTESIS_ABRE expresion_or PARENTESIS_CIERRA THEN bloque_sentencias sentencia_elseif END");
-        ArrayList<Sentencia> sentenciasElse = new ArrayList<>();
         
-        /*SentenciaIf sentenciaIf;
-        if(filterInExpresion!=null){
-            sentenciaIf = new SentenciaIf(bs1,eo,elseif, sentenciasElse,filterInExpresion);
-        }else{
-            sentenciaIf = new SentenciaIf(bs1,eo,elseif, sentenciasElse);
-        }
+        /*if(filterInExpresion!=null){
+            sent_if.setSentenciaFilter(filterInExpresion);
+            filterInExpresion = null;
+        }*/
 
-        filterInExpresion = null;
-
-        RESULT = sentenciaIf;*/
-
-        RESULT = new SentenciaIf(bs1,eo,elseif, sentenciasElse);
+        sent_if.setSentenciasElif(elseif);
+        RESULT = sent_if;
     :}
     |
-    IF PARENTESIS_ABRE expresion_or:eo PARENTESIS_CIERRA THEN bloque_sentencias:bs1 END sentencia_elseif: elseif ELSE bloque_sentencias:bs2 END{:
+    sentencia_if_completa:sent_if sentencia_elseif: elseif ELSE bloque_sentencias:bs2 END{:
         produccionesRecorridas.add("sentencia_if -> IF PARENTESIS_ABRE expresion_or PARENTESIS_CIERRA THEN bloque_sentencias sentencia_elseif ELSE bloque_sentencias END");
         
-        /*
-        SentenciaIf sentenciaIf;
-        if(filterInExpresion!=null){
-            sentenciaIf = new SentenciaIf(bs1,eo,elseif, bs2,filterInExpresion);
+        /*if(filterInExpresion!=null){
+            sent_if.setSentenciaFilter(filterInExpresion);
+            filterInExpresion = null;
+        }*/
+
+        sent_if.setSentenciasElse(bs2);
+        sent_if.setSentenciasElif(elseif);
+        RESULT = sent_if;
+:};
+
+sentencia_if_completa ::= IF PARENTESIS_ABRE {:filterIsExpresion  = true; :}  expresion_or:eo {:
+    if(eo.getNombre().contains("_aux") && !pilaFilter.isEmpty()){
+        if(!((Identificador)eo).getTipo().equals(Tipo.BOOLEAN)){
+            throw new Exception("El Filter debe devolver un Boolean para esta condicion");
         }else{
-            sentenciaIf = new SentenciaIf(bs1,eo,elseif, bs2);
+            filterInExpresion = pilaFilter.get(pilaFilter.size()-1);
+            pilaFilter.clear();
         }
+    }
+    if(eo.isOperacionBinaria()){
+        if((((OperacionBinaria)eo).getIzquierda().getNombreIz().contains("_aux") || ((OperacionBinaria)eo).getIzquierda().getNombreDe().contains("_aux") || 
+            ((OperacionBinaria)eo).getDerecha().getNombreIz().contains("_aux") || ((OperacionBinaria)eo).getDerecha().getNombreDe().contains("_aux")) && !pilaFilter.isEmpty()){
+            System.out.println("seteo el filter");
+            filterInExpresion = pilaFilter.get(pilaFilter.size()-1);
+            pilaFilter.clear();
+        }
+    }
+    
+    filterIsExpresion  = false; 
 
+    :}  
+    PARENTESIS_CIERRA THEN bloque_sentencias:bs END {:
+
+    SentenciaIf sentenciaIf =new SentenciaIf(bs,eo);
+    
+    if(filterInExpresion != null) {
+        sentenciaIf.setSentenciaFilter(filterInExpresion);
         filterInExpresion = null;
-
-        RESULT = sentenciaIf;
-        */
-
-        RESULT = new SentenciaIf(bs1,eo,elseif, bs2);
+    }
+    RESULT = sentenciaIf;
 :};
 
 
-sentencia_elseif ::= sentencia_elseif: elseif ELIF PARENTESIS_ABRE expresion_or:eo PARENTESIS_CIERRA THEN bloque_sentencias:bs2 END{:
-        produccionesRecorridas.add("sentencia_elseif -> sentencia_elseif ELIF PARENTESIS_ABRE expresion_or PARENTESIS_CIERRA THEN bloque_sentencias");
-        
-        
-        elseif.add(new SentenciaElif(bs2,eo));
-        RESULT = elseif;
-    :}
-    |
-    ELIF PARENTESIS_ABRE expresion_or:eo PARENTESIS_CIERRA THEN bloque_sentencias:bs2 END{:
-        produccionesRecorridas.add("sentencia_elseif -> ELIF PARENTESIS_ABRE expresion_or PARENTESIS_CIERRA THEN bloque_sentencias");
-        ArrayList<SentenciaElif> listaElif = new ArrayList<>();
-        
-        /*
+sentencia_elseif ::= sentencia_elseif: elseif ELIF PARENTESIS_ABRE {:filterIsExpresion  = true; :} expresion_or:eo {:
+
+    if(eo.getNombre().contains("_aux") && !pilaFilter.isEmpty()){
+        if(!((Identificador)eo).getTipo().equals(Tipo.BOOLEAN)){
+            throw new Exception("El Filter debe devolver un Boolean para esta condicion");
+        }else{
+            filterInExpresion = pilaFilter.get(pilaFilter.size()-1);
+            pilaFilter.clear();
+        }
+    }
+    if(eo.isOperacionBinaria()){
+       if((((OperacionBinaria)eo).getIzquierda().getNombreIz().contains("_aux") || ((OperacionBinaria)eo).getIzquierda().getNombreDe().contains("_aux") || 
+            ((OperacionBinaria)eo).getDerecha().getNombreIz().contains("_aux") || ((OperacionBinaria)eo).getDerecha().getNombreDe().contains("_aux")) && !pilaFilter.isEmpty()){
+            filterInExpresion = pilaFilter.get(pilaFilter.size()-1);
+            pilaFilter.clear();
+        }
+    }
+    filterIsExpresion  = false; 
+
+    :} PARENTESIS_CIERRA THEN bloque_sentencias:bs2 END{:
+        produccionesRecorridas.add("sentencia_elseif -> sentencia_elseif ELIF PARENTESIS_ABRE expresion_or PARENTESIS_CIERRA THEN bloque_sentencias"); 
         SentenciaElif sentenciaElif;
         if(filterInExpresion!=null){
             sentenciaElif = new SentenciaElif(bs2,eo,filterInExpresion);
+            filterInExpresion = null;
         }else{
             sentenciaElif = new SentenciaElif(bs2,eo);
         }
+        
+        elseif.add(sentenciaElif);
 
-        filterInExpresion = null;
+        RESULT = elseif;
+    :}
+    |
+    ELIF PARENTESIS_ABRE {:filterIsExpresion  = true; :} expresion_or:eo {:
+
+    if(eo.getNombre().contains("_aux") && !pilaFilter.isEmpty()){
+        if(!((Identificador)eo).getTipo().equals(Tipo.BOOLEAN)){
+            throw new Exception("El Filter debe devolver un Boolean para esta condicion");
+        }else{
+            filterInExpresion = pilaFilter.get(pilaFilter.size()-1);
+            pilaFilter.clear();
+        }
+    }
+    if(eo.isOperacionBinaria()){
+        if((((OperacionBinaria)eo).getIzquierda().getNombreIz().contains("_aux") || ((OperacionBinaria)eo).getIzquierda().getNombreDe().contains("_aux") || 
+            ((OperacionBinaria)eo).getDerecha().getNombreIz().contains("_aux") || ((OperacionBinaria)eo).getDerecha().getNombreDe().contains("_aux")) && !pilaFilter.isEmpty()){
+            filterInExpresion = pilaFilter.get(pilaFilter.size()-1);
+            pilaFilter.clear();
+        }
+    }
+    
+
+    filterIsExpresion  = false; 
+
+    :}   PARENTESIS_CIERRA THEN bloque_sentencias:bs2 END{:
+        produccionesRecorridas.add("sentencia_elseif -> ELIF PARENTESIS_ABRE expresion_or PARENTESIS_CIERRA THEN bloque_sentencias");
+        ArrayList<SentenciaElif> listaElif = new ArrayList<>();
+        
+        
+        SentenciaElif sentenciaElif;
+        if(filterInExpresion!=null){
+            sentenciaElif = new SentenciaElif(bs2,eo,filterInExpresion);
+            filterInExpresion = null;
+        }else{
+            sentenciaElif = new SentenciaElif(bs2,eo);
+        }
         
         listaElif.add(sentenciaElif);
-        */
-        listaElif.add(new SentenciaElif(bs2,eo));
+        
+        //listaElif.add(new SentenciaElif(bs2,eo));
 
         RESULT = listaElif;
 :};

@@ -74,5 +74,20 @@ public class IncrementoDecrementoFor  extends OperacionUnaria{
         codigo += "%var" + this.getIdVar() + " = add i32 0, 1" + "\n";
         return codigo;
     }
+    
+    @Override
+    public String getNombreIz() {
+        return this.getNombre();
+    }
+    
+    @Override
+    public String getNombreDe() {
+        return this.getNombre();
+    }
+    
+    @Override
+    public boolean isOperacionBinaria() {
+        return false;
+    }
 
 }

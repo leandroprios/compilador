@@ -33,14 +33,16 @@ public class SentenciaIf extends Sentencia{
         this.IsExpresion = false;
     }
     
-    /*public SentenciaIf(ArrayList<Sentencia> sentenciasIf, Expresion expresion, Filter sentenciaFilter){
+    public SentenciaIf(ArrayList<Sentencia> sentenciasIf, Expresion expresion, Filter sentenciaFilter){
         setNombre("IF");
         this.sentenciasIf = sentenciasIf;
         this.expresion = expresion;
         this.setIdVar(CodeGeneratorHelper.getNewPointer());
         this.IsExpresion = false;
         this.sentenciaFilter = sentenciaFilter;
-    }*/
+    }
+    
+    
     
     public SentenciaIf(ArrayList<Sentencia> sentenciasIf, Expresion expresion, ArrayList<SentenciaElif> sentenciasElif, ArrayList<Sentencia> sentenciasElse){
         setNombre("IF");
@@ -52,7 +54,7 @@ public class SentenciaIf extends Sentencia{
         this.IsExpresion = false;
     }
     
-    /*public SentenciaIf(ArrayList<Sentencia> sentenciasIf, Expresion expresion, ArrayList<SentenciaElif> sentenciasElif, ArrayList<Sentencia> sentenciasElse,  Filter sentenciaFilter){
+    public SentenciaIf(ArrayList<Sentencia> sentenciasIf, Expresion expresion, ArrayList<SentenciaElif> sentenciasElif, ArrayList<Sentencia> sentenciasElse,  Filter sentenciaFilter){
         setNombre("IF");
         this.sentenciasIf = sentenciasIf;
         this.expresion = expresion;
@@ -61,7 +63,7 @@ public class SentenciaIf extends Sentencia{
         this.setIdVar(CodeGeneratorHelper.getNewPointer());
         this.IsExpresion = false;
         this.sentenciaFilter = sentenciaFilter;
-    }*/
+    }
     
     public void setIdVarFor(String idVarFor){
         this.idVarFor = idVarFor;
@@ -77,6 +79,7 @@ public class SentenciaIf extends Sentencia{
         
         String grafico;
         if(sentenciaFilter !=null){
+            this.expresion = expresion.clonar();
             grafico = super.graficar(idPadre) + 
             sentenciaFilter.graficar(idPadre) + 
             expresion.graficar(miId);
@@ -123,6 +126,14 @@ public class SentenciaIf extends Sentencia{
         return grafico;
     }
     
+    public Filter getSentenciaFilter() {
+        return this.sentenciaFilter;
+    }
+
+    public void setSentenciaFilter(Filter filter) {
+        this.sentenciaFilter = filter;
+    }
+    
     public ArrayList<Sentencia> getSentenciasIf() {
         return sentenciasIf;
     }
@@ -161,6 +172,10 @@ public class SentenciaIf extends Sentencia{
         String codigo = "";
         Boolean tieneElse = this.sentenciasElse != null && !this.sentenciasElse.isEmpty();
         Boolean tieneElif = this.sentenciasElif != null && !this.sentenciasElif.isEmpty();
+        
+        
+        
+        if(this.getSentenciaFilter()!= null)codigo += this.getSentenciaFilter().generarCodigo();
         
         this.expresion.setLeerResultado(true);        
 
