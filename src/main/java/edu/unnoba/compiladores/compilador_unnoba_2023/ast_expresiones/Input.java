@@ -61,7 +61,7 @@ public class Input extends Expresion{
         this.setResultadoExpresion("%resultado"+ this.getIdVar());
 
         StringBuilder codigo = new StringBuilder();
-        codigo.append(String.format("%%temp%s = alloca %s\n", getIdVar(), getTipo_llvm(getTipo())));
+        codigo.append(String.format("%%temp%s = alloca %s\n", this.getIdVar(), this.getTipo_llvm(getTipo())));
         if(getTipo()==Tipo.INTEGER){
             codigo.append(String.format("%%dest%s = call i32 (i8*, ...) @scanf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.int_read_format, i64 0, i64 0), i32* %%temp%s)\n", getIdVar(), getIdVar()));
         }else if(getTipo()==Tipo.FLOAT){
@@ -70,7 +70,12 @@ public class Input extends Expresion{
         else if(getTipo()==Tipo.BOOLEAN){
             codigo.append(String.format("%%dest%s = call i32 (i8*, ...) @scanf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.int_read_format, i64 0, i64 0), i1* %%temp%s)\n", getIdVar(), getIdVar()));
         }
-        codigo.append(String.format("%%var%s = load %s, %s* %%temp%s\n", getIdVar(), getTipo_llvm(getTipo()), getTipo_llvm(getTipo()), getIdVar()));
+        
+        if(getTipo()==Tipo.FLOAT || getTipo()==Tipo.INTEGER){
+            codigo.append(String.format("%%var%s = load %s, %s* %%temp%s\n", getIdVar(), this.getTipo_llvm(getTipo()), getTipo_llvm(getTipo()), getIdVar()));
+        }else{
+            codigo.append(String.format("%%resultadoLoad%s = load %s, %s* %%temp%s\n", this.getIdVar(), this.getTipo_llvm(this.getTipo()), getTipo_llvm(getTipo()), getIdVar()));
+        }
         return codigo.toString();
     }
     

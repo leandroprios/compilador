@@ -1,25 +1,11 @@
 DECLARE.SECTION
 INT : var1, var2, var3, var4,i;
 float: var5, var8, var6;
-BOOLEAN: varlogica, varlogica2;
+BOOLEAN: varlogica;
 ENDDECLARE.SECTION
 PROGRAM.SECTION
-
-
-#varlogica  = 3.3 == filter(_==3, [var3])
-
-varlogica = true
-#varlogica2 = filter(_==true, [varlogica])
-var3=3
-if(3==filter(_==3, [var3])) then
- display("entro al if")
-end 
-(*
-for(i = 0; i++; i<3) do
-	var2 = 2 + i
-	DISPLAY(var2)
-	break
-	DISPLAY(i)
-end
-*)
+display("ingrese un booleano (1: true y 0 :false ):")
+varlogica = input_boolean()
+display(varlogica)
+display("fin del programa")
 ENDPROGRAM.SECTION

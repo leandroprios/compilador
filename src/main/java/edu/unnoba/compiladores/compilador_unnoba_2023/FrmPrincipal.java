@@ -238,8 +238,6 @@ public class FrmPrincipal extends javax.swing.JFrame {
                             System.out.println(line);
                         }
                         
-                        //Files.write(Paths.get("programa.o"), codigo.getBytes(), StandardOpenOption.TRUNCATE_EXISTING);
-
                         System.out.println("Archivo objeto generado");
 
                         Process process2 = Runtime.getRuntime().exec("clang -o programa.exe programa.o scanf.o");
@@ -249,8 +247,6 @@ public class FrmPrincipal extends javax.swing.JFrame {
                             System.out.println(line2);
                         }
                         
-                        //Files.write(Paths.get("programa.o"), codigo.getBytes(), StandardOpenOption.TRUNCATE_EXISTING);
-
                         System.out.println("Ejecutable generado");
                     } catch (Error e) {
                         System.out.println("Error: " + e.getMessage());

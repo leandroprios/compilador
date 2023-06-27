@@ -31,6 +31,12 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
+      <groupId>org.lwjgl</groupId>
+      <artifactId>lwjgl-llvm</artifactId>
+      <version>3.3.2</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
       <groupId>com.github.vbmacher</groupId>
       <artifactId>java-cup</artifactId>
       <version>11b</version>
@@ -56,10 +62,10 @@
     </dependency>
   </dependencies>
   <properties>
-    <maven.compiler.target>1.8</maven.compiler.target>
     <exec.mainClass>edu.unnoba.compiladores.compilador_unnoba_2023.Compilador_unnoba_2023</exec.mainClass>
     <maven.compiler.source>1.8</maven.compiler.source>
-    <start-class>edu.unnoba.compiladores.compilador_unnoba_2023.FrmPrincipal</start-class>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.target>1.8</maven.compiler.target>
+    <start-class>edu.unnoba.compiladores.compilador_unnoba_2023.FrmPrincipal</start-class>
   </properties>
 </project>
