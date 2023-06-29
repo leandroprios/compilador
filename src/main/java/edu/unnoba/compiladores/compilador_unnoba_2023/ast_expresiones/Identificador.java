@@ -85,7 +85,7 @@ public class Identificador extends Constante {
     
     @Override
     public String generarCodigo() {
-        String codigo = ";entro al Identificador " + this.getIdVar() + "\n";
+        String codigo = "";
         codigo += "%var"+getIdVar()+" = load "+get_llvm_type_code()+", "+get_llvm_type_code()+"* @"+getNombre()+"\n";
         if(get_llvm_type_code().equals("i1")){
             codigo += "store i1 %var"+getIdVar()  + ", i1* @resultado\n";

@@ -31,11 +31,8 @@ endLabel:
 @.int_read_format = unnamed_addr constant [3 x i8] c"%d\00"
 @.double_read_format = unnamed_addr constant [4 x i8]  c"%lf\00"
 
-@_aux1 = global i32 0
 @varlogica2 = global i1 0
 @varlogica3 = global i1 0
-@_retornoFilterDefault0 = global i32 0
-@_retornoFilterDefault1 = global i32 0
 @var1 = global i32 0
 @var2 = global i32 0
 @var3 = global i32 0
@@ -44,77 +41,39 @@ endLabel:
 @varlogica = global i1 0
 @var5 = global i32 0
 @var6 = global double 0.0
-@_aux0 = global i32 0
 @resultado = global i1 0
 define i32 @main(i32, i8**) {
-	;entro al ASIGNACION 451
-	%var447 = add i32 0, 4
-	store i32 %var447, i32* @i
-	br label %etiqForCondicion495
-	etiqForCondicion495:
-	;entro al Identificador 452
-	%var452 = load i32, i32* @i
-	%var453 = add i32 0, 1
-	;entro al Identificador 454
-	%var454 = load i32, i32* @i
-	%var455 = add i32 0, 2
-	%var456 = icmp sgt i32 %var454, %var455
-	store i1 %var456, i1* @resultado
-	%resultadoLoad456 = load i1, i1* @resultado
-	br i1 %resultadoLoad456, label %etiqCuerpoFor495, label %etiqEndFor495
-	etiqCuerpoFor495:
-	%var461= load i32, i32* @var2
-	%var462 = add i32 0, 3
-	%var463 = icmp ne i32 %var461, %var462
-	store i1 %var463, i1* @resultado
-	%resultadoLoad463 = load i1, i1* @resultado
-	br i1 %resultadoLoad463, label %etiqThenIf470, label %etiqThenElse470
-	etiqThenIf470:
-	;entro al ASIGNACION 466
-	;entro al Identificador 465
-	%var465 = load i32, i32* @var2
-	store i32 %var465, i32* @_aux0
-	br label %etiqEndIf470
-	etiqThenElse470:
-	;entro al ASIGNACION 469
-	;entro al Identificador 468
-	%var468 = load i32, i32* @_retornoFilterDefault0
-	store i32 %var468, i32* @_aux0
-	br label %etiqEndIf470
-	etiqEndIf470:
-	;entro al ASIGNACION 475
-	;entro al Identificador 471
-	%var471 = load i32, i32* @_aux0
-	store i32 %var471, i32* @var1
-	%var480= load i32, i32* @var2
-	%var481 = add i32 0, 3
-	%var482 = icmp ne i32 %var480, %var481
-	store i1 %var482, i1* @resultado
-	%resultadoLoad482 = load i1, i1* @resultado
-	br i1 %resultadoLoad482, label %etiqThenIf489, label %etiqThenElse489
-	etiqThenIf489:
-	;entro al ASIGNACION 485
-	;entro al Identificador 484
-	%var484 = load i32, i32* @var2
-	store i32 %var484, i32* @_aux1
-	br label %etiqEndIf489
-	etiqThenElse489:
-	;entro al ASIGNACION 488
-	;entro al Identificador 487
-	%var487 = load i32, i32* @_retornoFilterDefault1
-	store i32 %var487, i32* @_aux1
-	br label %etiqEndIf489
-	etiqEndIf489:
-	;entro al ASIGNACION 494
-	;entro al Identificador 490
-	%var490 = load i32, i32* @_aux1
-	store i32 %var490, i32* @var2
-	br label %etiqIncreDecremFor495
-	etiqIncreDecremFor495:
-	%var495 = sub i32 %var452, %var453
-	store i32 %var495, i32* @i
-	br label %etiqForCondicion495
-	etiqEndFor495:
+	;entro al ASIGNACION 212
+	;entro al Identificador 206
+	%var206 = load i32, i32* @i
+	%var207 = add i32 0, 1
+	%var208 = sub i32 %var206, %var207
+	store i32 %var208, i32* @i
+	;entro al ASIGNACION 217
+	%var213 = add i32 0, 4
+	store i32 %var213, i32* @i
+	br label %etiqForCondicion225
+	etiqForCondicion225:
+	;entro al Identificador 218
+	%var218 = load i32, i32* @i
+	%var219 = add i32 0, 1
+	;entro al Identificador 220
+	%var220 = load i32, i32* @i
+	%var221 = add i32 0, 2
+	%var222 = icmp sgt i32 %var220, %var221
+	store i1 %var222, i1* @resultado
+	%resultadoLoad222 = load i1, i1* @resultado
+	br i1 %resultadoLoad222, label %etiqCuerpoFor225, label %etiqEndFor225
+	etiqCuerpoFor225:
+	;entro al Identificador 223
+	%var223 = load i32, i32* @i
+	%dest224 = call i32 (i8*, ...) @printf(i8* getelementptr([4 x i8], [4 x i8]* @.integer, i32 0, i32 0), i32 %var223)
+	br label %etiqIncreDecremFor225
+	etiqIncreDecremFor225:
+	%var225 = sub i32 %var218, %var219
+	store i32 %var225, i32* @i
+	br label %etiqForCondicion225
+	etiqEndFor225:
 	
 	ret i32 0
 }

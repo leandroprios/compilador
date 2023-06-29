@@ -63,7 +63,6 @@ public class Or extends OperacionBinaria{
     @Override
     public String generarCodigo(){
         String codigo = "";
-        codigo += ";entro al OR " + this.getIdVar() + "\n";
         
         this.setResultadoExpresion("%resultadoLoad"+ this.getIdVar());
         this.getIzquierda().setLeerResultado(true);

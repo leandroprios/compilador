@@ -44,7 +44,7 @@ public class Asignacion extends Sentencia {
     
     @Override
     public String generarCodigo() {
-        String codigo = ";entro al ASIGNACION " + this.getIdVar() + "\n";
+        String codigo = "";
         this.getExpresion().setLeerResultado(true);
         codigo += getExpresion().generarCodigo();
         

@@ -61,7 +61,6 @@ public class And extends OperacionBinaria{
         this.setResultadoExpresion("%resultadoLoad"+ this.getIdVar());
 
         String codigo = "";
-        codigo += ";entro al AND " + this.getIdVar() + "\n";
         this.getIzquierda().setLeerResultado(true);
         this.getDerecha().setLeerResultado(true);
 
