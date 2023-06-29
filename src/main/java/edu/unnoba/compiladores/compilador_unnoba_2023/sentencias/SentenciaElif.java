@@ -65,8 +65,8 @@ public class SentenciaElif extends Sentencia {
         String grafico;
         if(sentenciaFilter !=null){
             this.expresion = expresion.clonar();
-            grafico = super.graficar(idPadre) + 
-            sentenciaFilter.graficar(idPadre) + 
+            grafico = sentenciaFilter.graficar(idPadre) +
+            super.graficar(idPadre) +
             expresion.graficar(miId);
         }else{
             grafico = super.graficar(idPadre) + 

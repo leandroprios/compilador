@@ -17,6 +17,7 @@ public class MayorIgual extends OperacionBinaria{
 
     public MayorIgual(Expresion izquierda, Expresion derecha) {
         super(izquierda, derecha, Tipo.BOOLEAN);
+        this.setNombre(">=");
     }
     
     @Override

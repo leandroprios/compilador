@@ -7,6 +7,7 @@ public class Suma extends OperacionBinaria {
 
     public Suma(Expresion izquierda, Expresion derecha, Tipo tipo) {
         super(izquierda, derecha, tipo);
+        this.setNombre("+");
     }
 
     @Override

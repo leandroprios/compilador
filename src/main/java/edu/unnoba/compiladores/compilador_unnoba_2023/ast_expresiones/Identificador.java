@@ -27,6 +27,12 @@ public class Identificador extends Constante {
     public String getNombreVar() {
         return nombreVar;
     }
+    
+    @Override
+    public String getNombre(){
+        return super.getNombre();
+    }
+    
 
     public void setNombreVar(String nombreVar) {
         this.nombreVar = nombreVar;

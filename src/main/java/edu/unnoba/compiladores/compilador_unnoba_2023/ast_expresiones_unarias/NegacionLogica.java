@@ -14,7 +14,6 @@ public class NegacionLogica extends OperacionUnaria {
         super("NOT", expresion, Tipo.BOOLEAN);
         this.setIdVar(CodeGeneratorHelper.getNewPointer());
         this.setllamadoDesdeExpresion("");
-
     }
 
     @Override

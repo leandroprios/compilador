@@ -50,8 +50,8 @@ public class SentenciaFor extends Sentencia{
         final String miId = this.getId();
         String grafico;
         if(sentenciaFilter !=null){
-            grafico = super.graficar(idPadre) + 
-            sentenciaFilter.graficar(idPadre) +
+            grafico =  sentenciaFilter.graficar(idPadre) +
+            super.graficar(idPadre) +
             asignacion.graficar(miId) +
             expresionFor.graficar(miId) + 
             operacion.graficar(miId);

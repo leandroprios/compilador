@@ -253,11 +253,17 @@ public class FrmPrincipal extends javax.swing.JFrame {
                         codigoLLVM.setText("Error: " + e.getMessage());
                     }
                     //*/
-
+                    
+                    
                 } catch (Error e) {
                     System.out.println("Error: " + e.getMessage());
                     this.ASTResult.setText("Error: " + e.getMessage());
                 }
+                catch (Exception ex) {
+                    this.parserResult.setText(ex.getMessage());
+                    Logger.getLogger(FrmPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
             }
             else{
                 this.parserResult.setText(s);

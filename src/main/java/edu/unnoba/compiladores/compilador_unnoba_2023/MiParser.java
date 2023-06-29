@@ -2179,10 +2179,6 @@ class CUP$MiParser$actions {
 		SentenciaIf sent_if = (SentenciaIf)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
 		
         produccionesRecorridas.add("sentencia_if -> IF PARENTESIS_ABRE expresion_or PARENTESIS_CIERRA THEN bloque_sentencias END");
-        /*if(filterInExpresion!=null){
-            sent_if.setSentenciaFilter(filterInExpresion);
-            filterInExpresion = null;
-        }*/
         RESULT = sent_if;
     
               CUP$MiParser$result = parser.getSymbolFactory().newSymbol("sentencia_if",8, ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()), RESULT);
@@ -2201,11 +2197,6 @@ class CUP$MiParser$actions {
 		ArrayList<Sentencia> bs2 = (ArrayList<Sentencia>)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-1)).value;
 		
         produccionesRecorridas.add("sentencia_if -> IF PARENTESIS_ABRE expresion_or PARENTESIS_CIERRA THEN bloque_sentencias ELSE bloque_sentencias END");
-        
-        /*if(filterInExpresion!=null){
-            sent_if.setSentenciaFilter(filterInExpresion);
-            filterInExpresion = null;
-        }*/
         sent_if.setSentenciasElse(bs2);
         RESULT = sent_if;
     
@@ -2225,12 +2216,6 @@ class CUP$MiParser$actions {
 		ArrayList<SentenciaElif> elseif = (ArrayList<SentenciaElif>)((java_cup.runtime.Symbol) CUP$MiParser$stack.peek()).value;
 		
         produccionesRecorridas.add("sentencia_if -> IF PARENTESIS_ABRE expresion_or PARENTESIS_CIERRA THEN bloque_sentencias sentencia_elseif END");
-        
-        /*if(filterInExpresion!=null){
-            sent_if.setSentenciaFilter(filterInExpresion);
-            filterInExpresion = null;
-        }*/
-
         sent_if.setSentenciasElif(elseif);
         RESULT = sent_if;
     
@@ -2253,14 +2238,8 @@ class CUP$MiParser$actions {
 		ArrayList<Sentencia> bs2 = (ArrayList<Sentencia>)((java_cup.runtime.Symbol) CUP$MiParser$stack.elementAt(CUP$MiParser$top-1)).value;
 		
         produccionesRecorridas.add("sentencia_if -> IF PARENTESIS_ABRE expresion_or PARENTESIS_CIERRA THEN bloque_sentencias sentencia_elseif ELSE bloque_sentencias END");
-        
-        /*if(filterInExpresion!=null){
-            sent_if.setSentenciaFilter(filterInExpresion);
-            filterInExpresion = null;
-        }*/
-
-        sent_if.setSentenciasElse(bs2);
         sent_if.setSentenciasElif(elseif);
+        sent_if.setSentenciasElse(bs2);
         RESULT = sent_if;
 
               CUP$MiParser$result = parser.getSymbolFactory().newSymbol("sentencia_if",8, ((java_cup.runtime.Symbol)CUP$MiParser$stack.elementAt(CUP$MiParser$top-4)), ((java_cup.runtime.Symbol)CUP$MiParser$stack.peek()), RESULT);

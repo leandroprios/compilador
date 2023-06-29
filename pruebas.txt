@@ -1,11 +1,60 @@
 DECLARE.SECTION
-INT : var1, var2, var3, var4,i;
-float: var5, var8, var6;
-BOOLEAN: varlogica;
+INT : var1, var2, var3, var4, var5, i;
+float: var6;
+BOOLEAN: varlogica, varlogica2, varlogica3;
 ENDDECLARE.SECTION
 PROGRAM.SECTION
-display("ingrese un booleano (1: true y 0 :false ):")
-varlogica = input_boolean()
-display(varlogica)
-display("fin del programa")
+
+for(i = 4; i--; i>2) do
+	
+	var1= filter(_!=3, [var2])
+
+	var2= filter(_!=3, [var2])
+	
+end
+
+
+(*
+display("Ingrese un boolean (1/0)")
+varlogica3 = input_boolean()
+display(varlogica3)
+
+varlogica = true
+varlogica2 = false
+
+
+if(false) then
+	display("entro al if")
+end 
+ELIF(varlogica OR varlogica2) THEN
+	display("OR TRUE")
+end
+else  
+	display("entro al else")
+end 
+*)
+(*
+
+
+
+*)
+(*
+if(varlogica AND varlogica2) THEN
+	display("AND TRUE")
+end
+ELIF(varlogica OR varlogica2) THEN
+	display("OR TRUE")
+end
+ELSE
+	display("AND y OR FALSE")
+END
+
+var2 = 3
+var3 = 3
+var4 = 4
+var5 = 3
+
+var1 = filter(_!=3, [var2,var3,var4,var5])
+display(var1)
+*)
 ENDPROGRAM.SECTION

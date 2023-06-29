@@ -15,6 +15,7 @@ public class IncrementoDecrementoFor  extends OperacionUnaria{
         super(operacion, identificador, tipo);
         this.setOperacion(operacion);
         this.setIdVar(CodeGeneratorHelper.getNewPointer());
+        this.setNombre(operacion);
     }
     
     

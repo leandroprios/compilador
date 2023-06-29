@@ -392,7 +392,7 @@ sentencia_asignacion ::= VAR:id ASIGNACION {:
         }
         
         if(pilaVariablesInFor.contains(id)){
-            throw new VarForException("No es posible editar la variable " + id + " ya que, es utilizada en un FOR");
+            throw new VarForException("No es posible utilizar la variable " + id + " dentro del mismo bucle.");
         }
         
         
@@ -1035,7 +1035,8 @@ sentencia_if ::= sentencia_if_completa:sent_if {:
     |
     sentencia_if_completa:sent_if sentencia_elseif: elseif ELSE bloque_sentencias:bs2 END{:
         produccionesRecorridas.add("sentencia_if -> IF PARENTESIS_ABRE expresion_or PARENTESIS_CIERRA THEN bloque_sentencias sentencia_elseif ELSE bloque_sentencias END");
-        if.setSentenciasElif(elseif);
+        sent_if.setSentenciasElif(elseif);
+        sent_if.setSentenciasElse(bs2);
         RESULT = sent_if;
 :};
 

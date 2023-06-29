@@ -80,8 +80,8 @@ public class SentenciaIf extends Sentencia{
         String grafico;
         if(sentenciaFilter !=null){
             this.expresion = expresion.clonar();
-            grafico = super.graficar(idPadre) + 
-            sentenciaFilter.graficar(idPadre) + 
+            grafico = sentenciaFilter.graficar(idPadre) + 
+            super.graficar(idPadre) + 
             expresion.graficar(miId);
         }else{
             grafico = super.graficar(idPadre) + 
@@ -110,11 +110,11 @@ public class SentenciaIf extends Sentencia{
                 grafico += senElif.graficar(miId);
             }
         }
-        
+
         if(this.sentenciasElse != null && !this.sentenciasElse.isEmpty()){
             String idElse = "nodo_";
             idElse = idElse + random.nextInt(1000000000);
-            grafico = grafico + miId + "--" + idElse + "\n" 
+            grafico += miId + "--" + idElse + "\n" 
             + idElse + "[label=\"ELSE" + "\"]\n";
             
             for(Sentencia senElse : sentenciasElse){

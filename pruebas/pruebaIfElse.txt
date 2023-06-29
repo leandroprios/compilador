@@ -11,6 +11,7 @@ display("ingrese un entero")
 i = input_int()
 if (i == 0) THEN
   var2 = 2
+end
 else
  var6 =3
 end

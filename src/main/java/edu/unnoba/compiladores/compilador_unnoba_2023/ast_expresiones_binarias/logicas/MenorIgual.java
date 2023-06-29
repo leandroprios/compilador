@@ -17,6 +17,7 @@ public class MenorIgual extends OperacionBinaria{
 
     public MenorIgual(Expresion izquierda, Expresion derecha) {
         super(izquierda, derecha, Tipo.BOOLEAN);
+        this.setNombre("<=");
     }
     
     @Override

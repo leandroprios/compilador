@@ -20,7 +20,7 @@ public class Flotante extends Literal {
     public Float getValor() {
         return valor;
     }
-
+  
     @Override
     public String toString() {
         return valor.toString();
