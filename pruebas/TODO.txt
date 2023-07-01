@@ -1,0 +1,51 @@
+DECLARE.SECTION
+INT : var1, var2, var3, var4, var5, i, j;
+float: var6;
+BOOLEAN: varlogica, varlogica2, varlogica3;
+ENDDECLARE.SECTION
+PROGRAM.SECTION
+varlogica = true
+varlogica2 = varlogica
+if(varlogica AND varlogica2) THEN
+	display("AND TRUE")
+	var1 = filter(_!=3, [var2,var3,var4,var5])
+	display(var1)
+end
+ELIF(varlogica OR varlogica2) THEN
+	display("OR TRUE")
+	var1 = filter(_==3, [var2,var3,var4,var5])
+	display(var1)
+end
+ELSE
+	display("AND y OR FALSE. Ingrese un entero y luego un float")	
+END
+
+for(i = 10; i--; i>2) do	
+	if(i == 5 and true) then
+		for(j = 0; j++; j<2) do
+			display("entro al for anidado")
+			var4 = j
+			display(var4)
+			var4 = filter(_==3, [var2,var3,var4,var5])
+			display(var4)
+		end
+	end
+	if(i==4 and not false) then
+	 	break
+	end 
+	display(i)
+end
+
+varlogica2 = false
+varlogica = true
+if(filter(_==true, [varlogica2,varlogica])) THEN
+	display("filter del if = true")
+end
+elif(NOT filter(_==false, [varlogica2,varlogica])) then
+	display("filter del elif = true por el NOT")
+end
+else
+	display("else")
+end
+
+ENDPROGRAM.SECTION

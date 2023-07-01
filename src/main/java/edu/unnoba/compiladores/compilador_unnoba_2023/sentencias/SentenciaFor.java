@@ -7,7 +7,6 @@ package edu.unnoba.compiladores.compilador_unnoba_2023.sentencias;
 import edu.unnoba.compiladores.compilador_unnoba_2023.ast.CodeGeneratorHelper;
 import edu.unnoba.compiladores.compilador_unnoba_2023.ast_expresiones_binarias.Expresion;
 import edu.unnoba.compiladores.compilador_unnoba_2023.ast_expresiones_binarias.Filter;
-import edu.unnoba.compiladores.compilador_unnoba_2023.ast_expresiones_binarias.OperacionBinaria;
 import edu.unnoba.compiladores.compilador_unnoba_2023.ast_expresiones_unarias.IncrementoDecrementoFor;
 import java.util.ArrayList;
 import java.util.Random;
@@ -21,7 +20,10 @@ public class SentenciaFor extends Sentencia{
     Asignacion asignacion;
     IncrementoDecrementoFor expresionFor;
     ArrayList<Sentencia> sentencias;
-    Filter sentenciaFilter;
+    ArrayList<Filter> sentenciaFilter;
+    ArrayList<Filter> sentenciaFilterComparacion;
+
+    
     
     
     public SentenciaFor(Expresion operacion, Asignacion asignacion, IncrementoDecrementoFor expresionFor, ArrayList<Sentencia> sentencias){
@@ -34,15 +36,31 @@ public class SentenciaFor extends Sentencia{
         this.IsExpresion = false;
     }
     
-    public SentenciaFor(Expresion operacion, Asignacion asignacion, IncrementoDecrementoFor expresionFor, ArrayList<Sentencia> sentencias, Filter sentenciaFilter){
-        setNombre("FOR");
-        this.operacion = operacion;
-        this.asignacion = asignacion;
-        this.expresionFor = expresionFor;
-        this.sentencias = sentencias;
-        this.setIdVar(CodeGeneratorHelper.getNewPointer());
-        this.IsExpresion = false;
-        this.sentenciaFilter = sentenciaFilter;
+    public void setFilterAsignacion(ArrayList<Filter> filters){
+        this.sentenciaFilter = filters;
+    }
+    
+    
+    public void setFilterComparacion(ArrayList<Filter> filters){
+        this.sentenciaFilterComparacion = filters;
+    }
+    
+    
+    
+    public String getGraficosFilterAsignacion(String idPadre){
+        String grafico = "";
+        for (Filter filter : this.sentenciaFilter) {
+            grafico += filter.graficar(idPadre);
+        }
+        return grafico;
+    }
+    
+    public String getGraficosFilterComparacion(String idPadre){
+        String grafico = "";
+        for (Filter filter : this.sentenciaFilterComparacion) {
+            grafico += filter.graficar(idPadre);
+        }
+        return grafico;
     }
     
     @Override
@@ -50,16 +68,21 @@ public class SentenciaFor extends Sentencia{
         final String miId = this.getId();
         String grafico;
         if(sentenciaFilter !=null){
-            grafico =  sentenciaFilter.graficar(idPadre) +
-            super.graficar(idPadre) +
+            grafico =  this.getGraficosFilterAsignacion(idPadre);
+            if(this.sentenciaFilterComparacion !=null && !this.sentenciaFilterComparacion.isEmpty()) grafico += this.getGraficosFilterComparacion(idPadre);
+            grafico += super.graficar(idPadre) +
             asignacion.graficar(miId) +
-            expresionFor.graficar(miId) + 
-            operacion.graficar(miId);
+            expresionFor.graficar(miId);
+            //if(this.sentenciaFilterComparacion !=null && !this.sentenciaFilterComparacion.isEmpty()) grafico += this.getGraficosFilterComparacion(miId);
+            grafico +=operacion.graficar(miId);
         }else{
-            grafico = super.graficar(idPadre) + 
+            grafico = "";
+            if(this.sentenciaFilterComparacion !=null && !this.sentenciaFilterComparacion.isEmpty()) grafico += this.getGraficosFilterComparacion(idPadre);
+            grafico += super.graficar(idPadre) + 
             asignacion.graficar(miId) +
-            expresionFor.graficar(miId) + 
-            operacion.graficar(miId);
+            expresionFor.graficar(miId);
+            //if(this.sentenciaFilterComparacion !=null && !this.sentenciaFilterComparacion.isEmpty()) grafico += this.getGraficosFilterComparacion(miId);
+            grafico +=operacion.graficar(miId);
         }
        
         Random random = new Random();
@@ -74,15 +97,31 @@ public class SentenciaFor extends Sentencia{
         }
         return grafico;
     }
+    
+    public String getCodigoFilter(){
+        String codigo = "";
+        for (Filter filter : this.sentenciaFilter) {
+            codigo += filter.generarCodigo();
+        }
+        return codigo;
+    }
+    
+    public String getCodigoFilterComparacion(){
+        String codigo = "";
+        for (Filter filter : this.sentenciaFilterComparacion) {
+            codigo += filter.generarCodigo();
+        }
+        return codigo;
+    }
 
     @Override
     public String generarCodigo() {
         String codigo = "";
-        if(sentenciaFilter !=null) codigo += this.sentenciaFilter.generarCodigo();
+        if(sentenciaFilter !=null) codigo += this.getCodigoFilter();
         codigo = codigo.concat(this.asignacion.generarCodigo());
         codigo = codigo.concat(String.format("br label %%etiqForCondicion%s\n", this.getIdVar()));
         codigo = codigo.concat("etiqForCondicion" + this.getIdVar() + ":\n");
-        codigo = codigo.concat(this.expresionFor.generarCodigo());
+        if(sentenciaFilterComparacion !=null) codigo += this.getCodigoFilterComparacion();
         this.operacion.setLeerResultado(true);
         codigo = codigo.concat(this.operacion.generarCodigo());
         this.operacion.setLeerResultado(false);
@@ -106,12 +145,7 @@ public class SentenciaFor extends Sentencia{
         
         codigo = codigo.concat("etiqIncreDecremFor" + this.getIdVar() + ":\n");
 
-        if(this.expresionFor.getOperacion().equals("++")){
-            codigo = codigo.concat("%var"+this.getIdVar() + " = add i32 %var"+ this.expresionFor.getExpresion().getIdVar() + ", %var" + this.expresionFor.getIdVar()+"\n");
-        }else{
-            codigo = codigo.concat("%var"+this.getIdVar() + " = sub i32 %var"+ this.expresionFor.getExpresion().getIdVar() + ", %var" + this.expresionFor.getIdVar()+"\n");
-        }
-        codigo = codigo.concat("store " +  this.asignacion.getIdent().get_llvm_type_code() + " %var"+ this.getIdVar() + ", " + this.asignacion.getIdent().get_llvm_type_code() + "* @" + this.asignacion.getIdent().getNombreVar() + "\n");
+        codigo += this.expresionFor.generarCodigo();
         
         codigo = codigo.concat(String.format("br label %%etiqForCondicion%s\n", this.getIdVar()));
         codigo = codigo.concat("etiqEndFor" + this.getIdVar() + ":\n");

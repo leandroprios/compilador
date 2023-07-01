@@ -21,7 +21,7 @@ public class SentenciaIf extends Sentencia{
     ArrayList<SentenciaElif> sentenciasElif;
     Expresion expresion;
     private String idVarFor;
-    Filter sentenciaFilter;
+    ArrayList<Filter> sentenciasFilter;
 
     
     
@@ -33,14 +33,14 @@ public class SentenciaIf extends Sentencia{
         this.IsExpresion = false;
     }
     
-    public SentenciaIf(ArrayList<Sentencia> sentenciasIf, Expresion expresion, Filter sentenciaFilter){
+    /*public SentenciaIf(ArrayList<Sentencia> sentenciasIf, Expresion expresion, Filter sentenciaFilter){
         setNombre("IF");
         this.sentenciasIf = sentenciasIf;
         this.expresion = expresion;
         this.setIdVar(CodeGeneratorHelper.getNewPointer());
         this.IsExpresion = false;
         this.sentenciaFilter = sentenciaFilter;
-    }
+    }*/
     
     
     
@@ -54,7 +54,7 @@ public class SentenciaIf extends Sentencia{
         this.IsExpresion = false;
     }
     
-    public SentenciaIf(ArrayList<Sentencia> sentenciasIf, Expresion expresion, ArrayList<SentenciaElif> sentenciasElif, ArrayList<Sentencia> sentenciasElse,  Filter sentenciaFilter){
+   /* public SentenciaIf(ArrayList<Sentencia> sentenciasIf, Expresion expresion, ArrayList<SentenciaElif> sentenciasElif, ArrayList<Sentencia> sentenciasElse,  Filter sentenciaFilter){
         setNombre("IF");
         this.sentenciasIf = sentenciasIf;
         this.expresion = expresion;
@@ -63,6 +63,30 @@ public class SentenciaIf extends Sentencia{
         this.setIdVar(CodeGeneratorHelper.getNewPointer());
         this.IsExpresion = false;
         this.sentenciaFilter = sentenciaFilter;
+    }*/
+    
+    public void setSentenciaArrayFilter(ArrayList<Filter> filters){
+        this.sentenciasFilter= filters;
+    }
+    
+    public ArrayList<Filter> getSentenciaArrayFilter(){
+        return this.sentenciasFilter;
+    }
+    
+    public String getGraficosFilterAsignacion(String idPadre){
+        String grafico = "";
+        for (Filter filter : this.sentenciasFilter) {
+            grafico += filter.graficar(idPadre);
+        }
+        return grafico;
+    }
+    
+    public String getCodigoFilter(){
+        String codigo = "";
+        for (Filter filter : this.sentenciasFilter) {
+            codigo += filter.generarCodigo();
+        }
+        return codigo;
     }
     
     public void setIdVarFor(String idVarFor){
@@ -78,9 +102,9 @@ public class SentenciaIf extends Sentencia{
         final String miId = this.getId();
         
         String grafico;
-        if(sentenciaFilter !=null){
+        if(sentenciasFilter !=null){
             this.expresion = expresion.clonar();
-            grafico = sentenciaFilter.graficar(idPadre) + 
+            grafico = this.getGraficosFilterAsignacion(idPadre) + 
             super.graficar(idPadre) + 
             expresion.graficar(miId);
         }else{
@@ -126,13 +150,13 @@ public class SentenciaIf extends Sentencia{
         return grafico;
     }
     
-    public Filter getSentenciaFilter() {
-        return this.sentenciaFilter;
+    public ArrayList<Filter> getSentenciasFilter() {
+        return this.sentenciasFilter;
     }
 
-    public void setSentenciaFilter(Filter filter) {
+    /*public void setSentenciaFilter(Filter filter) {
         this.sentenciaFilter = filter;
-    }
+    }*/
     
     public ArrayList<Sentencia> getSentenciasIf() {
         return sentenciasIf;
@@ -175,7 +199,7 @@ public class SentenciaIf extends Sentencia{
         
         
         
-        if(this.getSentenciaFilter()!= null)codigo += this.getSentenciaFilter().generarCodigo();
+        if(this.getSentenciasFilter()!= null) codigo += this.getCodigoFilter();
         
         this.expresion.setLeerResultado(true);        
 

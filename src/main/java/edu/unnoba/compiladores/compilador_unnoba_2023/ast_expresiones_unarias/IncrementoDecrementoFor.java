@@ -1,23 +1,31 @@
 package edu.unnoba.compiladores.compilador_unnoba_2023.ast_expresiones_unarias;
 import edu.unnoba.compiladores.compilador_unnoba_2023.ast.CodeGeneratorHelper;
 import edu.unnoba.compiladores.compilador_unnoba_2023.ast.Tipo;
-import edu.unnoba.compiladores.compilador_unnoba_2023.ast_expresiones.Identificador;
 import edu.unnoba.compiladores.compilador_unnoba_2023.ast_expresiones_binarias.Expresion;
+import edu.unnoba.compiladores.compilador_unnoba_2023.sentencias.Asignacion;
 /**
  *
  * @author julianzabala
  */
-public class IncrementoDecrementoFor  extends OperacionUnaria{
+public class IncrementoDecrementoFor  extends Expresion{
     
     private String operacion;
-    
-    public IncrementoDecrementoFor(Identificador identificador, String operacion, Tipo tipo) {
-        super(operacion, identificador, tipo);
+    private Asignacion asignacion;
+
+    public IncrementoDecrementoFor(Asignacion asignacion) {
         this.setOperacion(operacion);
-        this.setIdVar(CodeGeneratorHelper.getNewPointer());
         this.setNombre(operacion);
+        this.setAsignacion(asignacion);
+        this.setIdVar(CodeGeneratorHelper.getNewPointer());
     }
     
+    public void setAsignacion(Asignacion asignacion){
+        this.asignacion = asignacion;
+    }
+    
+    public Asignacion getAsignacion(){
+        return this.asignacion;
+    }
     
     public void setOperacion(String operacion){
         this.operacion = operacion;
@@ -27,9 +35,8 @@ public class IncrementoDecrementoFor  extends OperacionUnaria{
         return this.operacion;
     }
 
-    @Override
     public Expresion clonar() {
-        return new IncrementoDecrementoFor((Identificador)this.getExpresion(),this.getNombre(),this.getTipo());
+        return new IncrementoDecrementoFor((Asignacion)this.getAsignacion());
     }
 
     @Override
@@ -50,10 +57,7 @@ public class IncrementoDecrementoFor  extends OperacionUnaria{
         @Override
     public String graficar(String idPadre){
         final String miId = this.getId();
-        String grafico = idPadre + "--" + ((Identificador)this.getExpresion()).getId() + "\n" +
-        ((Identificador)this.getExpresion()).getId() + "[label=\"ID : " + ((Identificador)this.getExpresion()).getEtiqueta() + "\"]\n"
-        + idPadre + "--" + this.getId() + "\n" 
-        + this.getId() + "[label=\"" + this.getEtiqueta() + "\"]\n";
+        String grafico = asignacion.graficar(idPadre);
         return grafico;
     }
  
@@ -62,17 +66,10 @@ public class IncrementoDecrementoFor  extends OperacionUnaria{
         return this.getTipo();
     }
 
-    @Override
-    public String get_llvm_op_code() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
+    
     @Override
     public String generarCodigo() {
-        this.getExpresion().setLeerResultado(true);
-        this.setResultadoExpresion("%var"+ this.getIdVar());
-        String codigo = this.getExpresion().generarCodigo();
-        codigo += "%var" + this.getIdVar() + " = add i32 0, 1" + "\n";
+        String codigo = this.getAsignacion().generarCodigo();
         return codigo;
     }
     

@@ -22,7 +22,7 @@ public class SentenciaElif extends Sentencia {
     private String idVarEndIf;
     
     private String idVarFor;
-    Filter sentenciaFilter;
+    ArrayList<Filter> sentenciasFilter;
 
     
     public SentenciaElif(ArrayList<Sentencia> sentencias, Expresion expresion){
@@ -32,12 +32,24 @@ public class SentenciaElif extends Sentencia {
         this.setIdVar(CodeGeneratorHelper.getNewPointer());
     }
     
-    public SentenciaElif(ArrayList<Sentencia> sentencias, Expresion expresion, Filter sentenciaFilter){
-        setNombre("ELIF");
-        this.sentencias = sentencias;
-        this.expresion = expresion;
-        this.setIdVar(CodeGeneratorHelper.getNewPointer());
-        this.sentenciaFilter = sentenciaFilter;
+    public void setSentenciaArrayFilter(ArrayList<Filter> filters){
+        this.sentenciasFilter= filters;
+    }
+    
+    public String getGraficosFilterAsignacion(String idPadre){
+        String grafico = "";
+        for (Filter filter : this.sentenciasFilter) {
+            grafico += filter.graficar(idPadre);
+        }
+        return grafico;
+    }
+    
+    public String getCodigoFilter(){
+        String codigo = "";
+        for (Filter filter : this.sentenciasFilter) {
+            codigo += filter.generarCodigo();
+        }
+        return codigo;
     }
     
     public void setEtiquetaSiguiente(String etiqueta){
@@ -63,9 +75,9 @@ public class SentenciaElif extends Sentencia {
        
         Random random = new Random();
         String grafico;
-        if(sentenciaFilter !=null){
+        if(sentenciasFilter !=null && !sentenciasFilter.isEmpty()){
             this.expresion = expresion.clonar();
-            grafico = sentenciaFilter.graficar(idPadre) +
+            grafico = this.getGraficosFilterAsignacion(idPadre) +
             super.graficar(idPadre) +
             expresion.graficar(miId);
         }else{
@@ -91,7 +103,7 @@ public class SentenciaElif extends Sentencia {
     public String generarCodigo() {
         String codigo = "";
         
-        if(this.sentenciaFilter != null)codigo += this.sentenciaFilter.generarCodigo();
+        if(sentenciasFilter !=null && !sentenciasFilter.isEmpty())codigo += this.getCodigoFilter();
 
         this.expresion.setLeerResultado(true);
         codigo += this.expresion.generarCodigo();

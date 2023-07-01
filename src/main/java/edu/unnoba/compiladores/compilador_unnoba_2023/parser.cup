@@ -37,6 +37,11 @@ parser code
     boolean filterIsExpresion = true;
     Filter filterInExpresion;
 
+    ArrayList<Filter> arrayFilterInExpresion = new ArrayList<>();
+    ArrayList<Filter> arrayFilterInComparacionFor = new ArrayList<>();
+
+
+
     ArrayList<Filter> pilaFilter = new ArrayList<>();
 
     List<String> produccionesRecorridas = new ArrayList<>();
@@ -53,7 +58,7 @@ parser code
 
     public boolean verificarOperacionConComparacion(IncrementoDecrementoFor e_id, OperacionBinaria c_f){
         boolean retorno=false; 
-        if(e_id.getOperacion().equals("++")){
+        if(e_id.getAsignacion().getExpresion().getNombre().equals("+")){
             if(c_f.getNombreOperacion().equals(">") || c_f.getNombreOperacion().equals(">=")) retorno = true;
         }else{
             if(c_f.getNombreOperacion().equals("<") || c_f.getNombreOperacion().equals("<=")) retorno = true;
@@ -985,36 +990,21 @@ sentencia_display ::= DISPLAY PARENTESIS_ABRE expresion_or:eo PARENTESIS_CIERRA 
 
 :};
 
-input ::= input_int:ii {:
-        produccionesRecorridas.add("input -> input_int");
-        RESULT = ii;
+input ::= INPUT_INT:i_int PARENTESIS_ABRE PARENTESIS_CIERRA  {:
+        produccionesRecorridas.add("input_int -> INPUT_INT PARENTESIS_ABRE PARENTESIS_CIERRA");
+        RESULT = new Input(Tipo.INTEGER, i_int);
     :}
     |
-    input_float:ifl {:
-        produccionesRecorridas.add("input -> input_float");
-        RESULT = ifl;
+    INPUT_FLOAT:i_float PARENTESIS_ABRE PARENTESIS_CIERRA {:
+        produccionesRecorridas.add("input_float -> INPUT_FLOAT PARENTESIS_ABRE PARENTESIS_CIERRA"); 
+        RESULT = new Input(Tipo.FLOAT, i_float);
     :}
     |
-    input_bool:ib {:
-        produccionesRecorridas.add("input -> input_bool");
-        RESULT = ib;
+    INPUT_BOOL:i_bool PARENTESIS_ABRE PARENTESIS_CIERRA {:
+        produccionesRecorridas.add("input_bool -> INPUT_BOOL PARENTESIS_ABRE PARENTESIS_CIERRA"); 
+        RESULT = new Input(Tipo.BOOLEAN, i_bool);
 :};
 
-
-input_int ::= INPUT_INT:i_int PARENTESIS_ABRE PARENTESIS_CIERRA {:
-    produccionesRecorridas.add("input_int -> INPUT_INT PARENTESIS_ABRE PARENTESIS_CIERRA");
-    RESULT = new Input(Tipo.INTEGER, i_int);
-:};
-
-input_float ::= INPUT_FLOAT:i_float PARENTESIS_ABRE PARENTESIS_CIERRA {:
-    produccionesRecorridas.add("input_float -> INPUT_FLOAT PARENTESIS_ABRE PARENTESIS_CIERRA"); 
-    RESULT = new Input(Tipo.FLOAT, i_float);
-:};
-
-input_bool ::= INPUT_BOOL:i_bool PARENTESIS_ABRE PARENTESIS_CIERRA {:
-    produccionesRecorridas.add("input_bool -> INPUT_BOOL PARENTESIS_ABRE PARENTESIS_CIERRA"); 
-    RESULT = new Input(Tipo.BOOLEAN, i_bool);
-:};
 
 sentencia_if ::= sentencia_if_completa:sent_if {:
         produccionesRecorridas.add("sentencia_if -> IF PARENTESIS_ABRE expresion_or PARENTESIS_CIERRA THEN bloque_sentencias END");
@@ -1045,19 +1035,33 @@ sentencia_if_completa ::= IF PARENTESIS_ABRE {:filterIsExpresion  = true; :}  ex
         if(!((Identificador)eo).getTipo().equals(Tipo.BOOLEAN)){
             throw new Exception("El Filter debe devolver un Boolean para esta condicion");
         }else{
-            filterInExpresion = pilaFilter.get(pilaFilter.size()-1);
+            for(Filter f : pilaFilter){
+                arrayFilterInExpresion.add(f);
+            }
             pilaFilter.clear();
         }
-    }
-    if(eo.isOperacionBinaria()){
-        if((((OperacionBinaria)eo).getIzquierda().getNombreIz().contains("_aux") || ((OperacionBinaria)eo).getIzquierda().getNombreDe().contains("_aux") || 
-            ((OperacionBinaria)eo).getDerecha().getNombreIz().contains("_aux") || ((OperacionBinaria)eo).getDerecha().getNombreDe().contains("_aux")) && !pilaFilter.isEmpty()){
-            System.out.println("seteo el filter");
-            filterInExpresion = pilaFilter.get(pilaFilter.size()-1);
-            pilaFilter.clear();
+    }else{
+        if(eo.isOperacionBinaria()){
+            if((((OperacionBinaria)eo).getIzquierda().getNombreIz().contains("_aux") || ((OperacionBinaria)eo).getIzquierda().getNombreDe().contains("_aux") || 
+                ((OperacionBinaria)eo).getDerecha().getNombreIz().contains("_aux") || ((OperacionBinaria)eo).getDerecha().getNombreDe().contains("_aux")) && !pilaFilter.isEmpty()){
+                for(Filter f : pilaFilter){
+                    arrayFilterInExpresion.add(f);
+                }
+                pilaFilter.clear();
+            }
+        }else{
+            if(eo.getNombre().equals("NOT")){
+                if(((NegacionLogica)eo).getExpresion().getNombre().contains("_aux") && !pilaFilter.isEmpty()){
+                    for(Filter f : pilaFilter){
+                        arrayFilterInExpresion.add(f);
+                    }
+                    pilaFilter.clear();
+                }
+            }else if(!eo.getNombre().equals("Boolean")){
+                throw new Exception("No se admite esta expresion.");
+            }
         }
     }
-    
     filterIsExpresion  = false; 
 
     :}  
@@ -1065,10 +1069,12 @@ sentencia_if_completa ::= IF PARENTESIS_ABRE {:filterIsExpresion  = true; :}  ex
 
     SentenciaIf sentenciaIf =new SentenciaIf(bs,eo);
     
-    if(filterInExpresion != null) {
-        sentenciaIf.setSentenciaFilter(filterInExpresion);
-        filterInExpresion = null;
+
+    if(arrayFilterInExpresion != null && !arrayFilterInExpresion.isEmpty()) {
+        sentenciaIf.setSentenciaArrayFilter(new ArrayList<Filter>(arrayFilterInExpresion));
+        arrayFilterInExpresion.clear();
     }
+
     RESULT = sentenciaIf;
 :};
 
@@ -1079,27 +1085,42 @@ sentencia_elseif ::= sentencia_elseif: elseif ELIF PARENTESIS_ABRE {:filterIsExp
         if(!((Identificador)eo).getTipo().equals(Tipo.BOOLEAN)){
             throw new Exception("El Filter debe devolver un Boolean para esta condicion");
         }else{
-            filterInExpresion = pilaFilter.get(pilaFilter.size()-1);
+            for(Filter f : pilaFilter){
+                arrayFilterInExpresion.add(f);
+            }
             pilaFilter.clear();
         }
-    }
-    if(eo.isOperacionBinaria()){
-       if((((OperacionBinaria)eo).getIzquierda().getNombreIz().contains("_aux") || ((OperacionBinaria)eo).getIzquierda().getNombreDe().contains("_aux") || 
-            ((OperacionBinaria)eo).getDerecha().getNombreIz().contains("_aux") || ((OperacionBinaria)eo).getDerecha().getNombreDe().contains("_aux")) && !pilaFilter.isEmpty()){
-            filterInExpresion = pilaFilter.get(pilaFilter.size()-1);
-            pilaFilter.clear();
+    }else{
+        if(eo.isOperacionBinaria()){
+            if((((OperacionBinaria)eo).getIzquierda().getNombreIz().contains("_aux") || ((OperacionBinaria)eo).getIzquierda().getNombreDe().contains("_aux") || 
+                ((OperacionBinaria)eo).getDerecha().getNombreIz().contains("_aux") || ((OperacionBinaria)eo).getDerecha().getNombreDe().contains("_aux")) && !pilaFilter.isEmpty()){
+                for(Filter f : pilaFilter){
+                    arrayFilterInExpresion.add(f);
+                }
+                pilaFilter.clear();
+            }
+        }else{
+            if(eo.getNombre().equals("NOT")){
+                if(((NegacionLogica)eo).getExpresion().getNombre().contains("_aux") && !pilaFilter.isEmpty()){
+                    for(Filter f : pilaFilter){
+                        arrayFilterInExpresion.add(f);
+                    }
+                    pilaFilter.clear();
+                }else if(!eo.getNombre().equals("Boolean")){
+                    throw new Exception("No se admite esta expresion.");
+                }
+            }
         }
     }
     filterIsExpresion  = false; 
 
-    :} PARENTESIS_CIERRA THEN bloque_sentencias:bs2 END{:
+    :} PARENTESIS_CIERRA THEN bloque_sentencias:bs END{:
         produccionesRecorridas.add("sentencia_elseif -> sentencia_elseif ELIF PARENTESIS_ABRE expresion_or PARENTESIS_CIERRA THEN bloque_sentencias"); 
-        SentenciaElif sentenciaElif;
-        if(filterInExpresion!=null){
-            sentenciaElif = new SentenciaElif(bs2,eo,filterInExpresion);
-            filterInExpresion = null;
-        }else{
-            sentenciaElif = new SentenciaElif(bs2,eo);
+        
+        SentenciaElif sentenciaElif  =new SentenciaElif(bs,eo);
+        if(arrayFilterInExpresion != null && !arrayFilterInExpresion.isEmpty()) {
+            sentenciaElif.setSentenciaArrayFilter(new ArrayList<Filter>(arrayFilterInExpresion));
+            arrayFilterInExpresion.clear();
         }
         
         elseif.add(sentenciaElif);
@@ -1109,41 +1130,55 @@ sentencia_elseif ::= sentencia_elseif: elseif ELIF PARENTESIS_ABRE {:filterIsExp
     |
     ELIF PARENTESIS_ABRE {:filterIsExpresion  = true; :} expresion_or:eo {:
 
-    if(eo.getNombre().contains("_aux") && !pilaFilter.isEmpty()){
-        if(!((Identificador)eo).getTipo().equals(Tipo.BOOLEAN)){
-            throw new Exception("El Filter debe devolver un Boolean para esta condicion");
+        if(eo.getNombre().contains("_aux") && !pilaFilter.isEmpty()){
+            if(!((Identificador)eo).getTipo().equals(Tipo.BOOLEAN)){
+                throw new Exception("El Filter debe devolver un Boolean para esta condicion");
+            }else{
+                for(Filter f : pilaFilter){
+                    arrayFilterInExpresion.add(f);
+                }
+                pilaFilter.clear();
+            }
         }else{
-            filterInExpresion = pilaFilter.get(pilaFilter.size()-1);
-            pilaFilter.clear();
+            if(eo.isOperacionBinaria()){
+                if((((OperacionBinaria)eo).getIzquierda().getNombreIz().contains("_aux") || ((OperacionBinaria)eo).getIzquierda().getNombreDe().contains("_aux") || 
+                    ((OperacionBinaria)eo).getDerecha().getNombreIz().contains("_aux") || ((OperacionBinaria)eo).getDerecha().getNombreDe().contains("_aux")) && !pilaFilter.isEmpty()){
+                    for(Filter f : pilaFilter){
+                        arrayFilterInExpresion.add(f);
+                    }
+                    pilaFilter.clear();
+                }
+            }else{
+                if(eo.getNombre().equals("NOT")){
+                    if(((NegacionLogica)eo).getExpresion().getNombre().contains("_aux") && !pilaFilter.isEmpty()){
+                        for(Filter f : pilaFilter){
+                            arrayFilterInExpresion.add(f);
+                        }
+                        pilaFilter.clear();
+                    }
+                }else if(!eo.getNombre().equals("Boolean")){
+                    throw new Exception("No se admite esta expresion.");
+                }else{
+                    throw new Exception("No se admite esta expresion.");
+                }
+            }
         }
-    }
-    if(eo.isOperacionBinaria()){
-        if((((OperacionBinaria)eo).getIzquierda().getNombreIz().contains("_aux") || ((OperacionBinaria)eo).getIzquierda().getNombreDe().contains("_aux") || 
-            ((OperacionBinaria)eo).getDerecha().getNombreIz().contains("_aux") || ((OperacionBinaria)eo).getDerecha().getNombreDe().contains("_aux")) && !pilaFilter.isEmpty()){
-            filterInExpresion = pilaFilter.get(pilaFilter.size()-1);
-            pilaFilter.clear();
-        }
-    }
-    
+        filterIsExpresion  = false; 
 
-    filterIsExpresion  = false; 
 
-    :}   PARENTESIS_CIERRA THEN bloque_sentencias:bs2 END{:
+    :} PARENTESIS_CIERRA THEN bloque_sentencias:bs END{:
         produccionesRecorridas.add("sentencia_elseif -> ELIF PARENTESIS_ABRE expresion_or PARENTESIS_CIERRA THEN bloque_sentencias");
         ArrayList<SentenciaElif> listaElif = new ArrayList<>();
         
-        
-        SentenciaElif sentenciaElif;
-        if(filterInExpresion!=null){
-            sentenciaElif = new SentenciaElif(bs2,eo,filterInExpresion);
-            filterInExpresion = null;
-        }else{
-            sentenciaElif = new SentenciaElif(bs2,eo);
+        SentenciaElif sentenciaElif  = new SentenciaElif(bs,eo);
+        if(arrayFilterInExpresion != null && !arrayFilterInExpresion.isEmpty()) {
+            sentenciaElif.setSentenciaArrayFilter(new ArrayList<Filter>(arrayFilterInExpresion));
+            arrayFilterInExpresion.clear();
         }
+
         
         listaElif.add(sentenciaElif);
         
-        //listaElif.add(new SentenciaElif(bs2,eo));
 
         RESULT = listaElif;
 :};
@@ -1160,7 +1195,10 @@ expresion_incremento_decremento ::= VAR:var OPERADOR_SUMA:op OPERADOR_SUMA: op2{
             }
         }
         Identificador identificador = new Identificador(var,Tipo.INTEGER);
-        RESULT = new IncrementoDecrementoFor(identificador,op + op2,Tipo.INTEGER);
+        Entero entero = new Entero(1);
+        Suma suma = new Suma(identificador, entero,Tipo.INTEGER );
+        Asignacion asignacion = new Asignacion((Identificador)identificador.clonar(), suma);
+        RESULT = new IncrementoDecrementoFor(asignacion);
     :}
     | VAR:var OPERADOR_RESTA:op OPERADOR_RESTA: op2{:
         produccionesRecorridas.add("expresion_incremento_decremento -> OPERADOR_RESTA OPERADOR_RESTA");
@@ -1173,17 +1211,56 @@ expresion_incremento_decremento ::= VAR:var OPERADOR_SUMA:op OPERADOR_SUMA: op2{
             }
         }
         Identificador identificador = new Identificador(var,Tipo.INTEGER);
-        RESULT = new IncrementoDecrementoFor(identificador,op + op2,Tipo.INTEGER);
+        Entero entero = new Entero(1);
+        Resta resta = new Resta(identificador, entero,Tipo.INTEGER);
+        Asignacion asignacion = new Asignacion((Identificador)identificador.clonar(), resta);
+        RESULT = new IncrementoDecrementoFor(asignacion);
 :};
-sentencia_for ::= FOR PARENTESIS_ABRE {: filterIsExpresion = true;:} sentencia_asignacion: sa  PUNTO_COMA expresion_incremento_decremento:e_id PUNTO_COMA comparacion:c_f  PARENTESIS_CIERRA DO 
+sentencia_for ::= FOR PARENTESIS_ABRE sentencia_asignacion: sa {: filterIsExpresion = true;
+    if(((Asignacion)sa).getExpresion().getNombre().contains("_aux") && !pilaFilter.isEmpty()){
+        for(Filter f : pilaFilter){
+            arrayFilterInExpresion.add(f);
+        }
+        pilaFilter.clear();
+    }
+    if(((Asignacion)sa).getExpresion().isOperacionBinaria()){
+        if((((OperacionBinaria)(((Asignacion)sa).getExpresion())).getIzquierda().getNombreIz().contains("_aux") || ((OperacionBinaria)(((Asignacion)sa).getExpresion())).getIzquierda().getNombreDe().contains("_aux") || 
+            ((OperacionBinaria)(((Asignacion)sa).getExpresion())).getDerecha().getNombreIz().contains("_aux") || ((OperacionBinaria)(((Asignacion)sa).getExpresion())).getDerecha().getNombreDe().contains("_aux")) && !pilaFilter.isEmpty()){
+            for(Filter f : pilaFilter){
+                arrayFilterInExpresion.add(f);
+            }
+            pilaFilter.clear();
+        }
+    }
+ :} PUNTO_COMA expresion_incremento_decremento:e_id PUNTO_COMA comparacion:c_f  PARENTESIS_CIERRA DO 
 {:
     pilaFor.add("for"); 
     isSentenciaFor = true;
+
+
+    String id2 = e_id.getAsignacion().getIdent().getNombre();
+    if(verificarOperacionConComparacion(e_id, (OperacionBinaria)c_f)) throw new Exception("La Comparacion no es compatible con el tipo de operacion.");
+
+    if(!((OperacionBinaria)c_f).getIzquierda().getClass().toString().contains("Identificador")) throw new Exception("El operador de la Izquierda en la Comparacion no es compatible.");
+
+    if(!c_f.getNombreIz().equals(id2)) throw new VarForNotEqualException("La variable utlizada en el FOR debe ser la misma");
+
     
     if(((Asignacion)sa).getExpresion().getNombre().contains("_aux") && !pilaFilter.isEmpty()){
-        filterInExpresion = pilaFilter.get(pilaFilter.size()-1);
+        for(Filter f : pilaFilter){
+            arrayFilterInComparacionFor.add(f);
+        }
         pilaFilter.clear();
     }
+    
+    if((((OperacionBinaria)c_f).getDerecha().getNombreIz().contains("_aux") || ((OperacionBinaria)c_f).getDerecha().getNombreDe().contains("_aux")) && !pilaFilter.isEmpty()){
+        for(Filter f : pilaFilter){
+            arrayFilterInComparacionFor.add(f);
+        }
+        pilaFilter.clear();
+    }
+    
+
     
     filterIsExpresion = false;
     if (pilaVariablesInFor.contains(((Asignacion)sa).getIdent().getNombre())) {
@@ -1195,7 +1272,12 @@ sentencia_for ::= FOR PARENTESIS_ABRE {: filterIsExpresion = true;:} sentencia_a
     :} bloque_sentencias:bs END{:
     produccionesRecorridas.add("sentencia_for -> FOR PARENTESIS_ABRE VAR ASIGNACION CONST_INT PUNTO_COMA VAR expresion_incremento_decremento PUNTO_COMA comparacion PARENTESIS_CIERRA DO bloque_sentencias END");
     //Verificar que c_f contenga el mismo id que id1 y id2;
-    String id2 = ((Identificador)e_id.getExpresion()).getNombre();
+
+    if(!c_f.isOperacionBinaria()){
+        throw new ComparacionForException("El For no admite este tipo de comparacion"); //ademas compara la tercer variable del for 
+    }
+
+    String id2 = e_id.getAsignacion().getIdent().getNombre();
     if((((Asignacion)sa).getIdent().getNombre()).equals(id2)){
         if (!c_f.ComparacionFor(((Asignacion)sa).getIdent().getNombre())){       
             pilaVariablesInFor.remove(pilaVariablesInFor.size()-1);
@@ -1214,7 +1296,10 @@ sentencia_for ::= FOR PARENTESIS_ABRE {: filterIsExpresion = true;:} sentencia_a
             throw new VarNotDeclaredTSException("La variable " + ((Asignacion)sa).getIdent().getNombre() + " no está declarada previamente.");
         }
         if(verificarOperacionConComparacion(e_id, (OperacionBinaria)c_f)) throw new Exception("La Comparacion no es compatible con el tipo de operacion.");
-
+        
+        if(!((OperacionBinaria)c_f).getIzquierda().getClass().toString().contains("Identificador")) throw new Exception("El operador de la Izquierda en la Comparacion no es compatible.");
+        
+        if(!c_f.getNombreIz().equals(id2)) throw new VarForNotEqualException("La variable utlizada en el FOR debe ser la misma");
 
 
     }else{
@@ -1233,12 +1318,26 @@ sentencia_for ::= FOR PARENTESIS_ABRE {: filterIsExpresion = true;:} sentencia_a
         isSentenciaFor = false;
     }
     
-    SentenciaFor sf;
-    if(filterInExpresion!=null){
-        sf = new SentenciaFor(c_f,(Asignacion)sa,e_id,bs,filterInExpresion);
+    SentenciaFor sf = new SentenciaFor(c_f,(Asignacion)sa,e_id,bs);
+
+    if(arrayFilterInExpresion!=null && !arrayFilterInExpresion.isEmpty()){
+        if(arrayFilterInComparacionFor!= null && !arrayFilterInComparacionFor.isEmpty()){
+            sf.setFilterComparacion(arrayFilterInComparacionFor);
+            sf.setFilterAsignacion(new ArrayList<Filter>(arrayFilterInExpresion));
+        }else{
+            sf.setFilterAsignacion(new ArrayList<Filter>(arrayFilterInExpresion));
+        }
     }else{
-        sf = new SentenciaFor(c_f,(Asignacion)sa,e_id,bs);
+        if(arrayFilterInComparacionFor!= null && !arrayFilterInComparacionFor.isEmpty()){
+            sf.setFilterComparacion(new ArrayList<Filter>(arrayFilterInComparacionFor));
+        }
     }
+    
+    arrayFilterInExpresion.clear() ;
+    arrayFilterInComparacionFor.clear();
+
+
+    
 
     filterInExpresion = null;
 

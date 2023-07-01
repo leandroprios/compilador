@@ -19,7 +19,7 @@ public class Identificador extends Constante {
     public Identificador(String nombre, Tipo tipo) {
         setTipo(tipo);
         setNombre(nombre);
-        setNombreVar(nombre);
+        setNombreVar("identificador");
         this.setIdVar(CodeGeneratorHelper.getNewPointer());
         this.setllamadoDesdeExpresion("");
     }

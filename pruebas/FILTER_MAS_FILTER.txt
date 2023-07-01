@@ -1,0 +1,13 @@
+DECLARE.SECTION
+INT : var1, var2, var3, var4, var5, i, j;
+float: var6;
+BOOLEAN: varlogica, varlogica2, varlogica3;
+ENDDECLARE.SECTION
+PROGRAM.SECTION
+
+ var6 =  filter(_==3, [var2,var3,var4,var5]) +filter(_==3, [var6]) 
+for( i =  1+ 2  ; i++; i < 1 * 3) do
+	display(i)
+end
+
+ENDPROGRAM.SECTION
