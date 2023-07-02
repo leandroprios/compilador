@@ -2218,6 +2218,7 @@ filterIsExpresion  = true;
                 pilaFilter.clear();
             }
         }else{
+            System.out.println("eo.getNombre(): " + eo.getNombre());
             if(eo.getNombre().equals("NOT")){
                 if(((NegacionLogica)eo).getExpresion().getNombre().contains("_aux") && !pilaFilter.isEmpty()){
                     for(Filter f : pilaFilter){
@@ -2225,7 +2226,7 @@ filterIsExpresion  = true;
                     }
                     pilaFilter.clear();
                 }
-            }else if(!eo.getNombre().equals("Boolean")){
+            }else if((ht.get(eo.getNombre()) == null || ht.get(eo.getNombre()) != Tipo.BOOLEAN) && !eo.getNombre().equals("Boolean")){
                 throw new Exception("No se admite esta expresion.");
             }
         }
@@ -2256,10 +2257,7 @@ filterIsExpresion  = true;
 
     if(arrayFilterInExpresion != null && !arrayFilterInExpresion.isEmpty()) {
         sentenciaIf.setSentenciaArrayFilter(new ArrayList<Filter>(arrayFilterInExpresion));
-        System.out.println("filter adentro del if " + sentenciaIf.getSentenciaArrayFilter().size());
         arrayFilterInExpresion.clear();
-        
-        System.out.println("filter adentro del if despues " + sentenciaIf.getSentenciaArrayFilter().size());
     }
 
     RESULT = sentenciaIf;
@@ -2311,15 +2309,16 @@ filterIsExpresion  = true;
                 pilaFilter.clear();
             }
         }else{
+            System.out.println("eo.getNombre(): " + eo.getNombre());
             if(eo.getNombre().equals("NOT")){
                 if(((NegacionLogica)eo).getExpresion().getNombre().contains("_aux") && !pilaFilter.isEmpty()){
                     for(Filter f : pilaFilter){
                         arrayFilterInExpresion.add(f);
                     }
                     pilaFilter.clear();
-                }else if(!eo.getNombre().equals("Boolean")){
-                    throw new Exception("No se admite esta expresion.");
                 }
+            }else if((ht.get(eo.getNombre()) == null || ht.get(eo.getNombre()) != Tipo.BOOLEAN) && !eo.getNombre().equals("Boolean")){
+                throw new Exception("No se admite esta expresion.");
             }
         }
     }
@@ -2399,6 +2398,7 @@ filterIsExpresion  = true;
                     pilaFilter.clear();
                 }
             }else{
+                System.out.println("eo.getNombre(): " + eo.getNombre());
                 if(eo.getNombre().equals("NOT")){
                     if(((NegacionLogica)eo).getExpresion().getNombre().contains("_aux") && !pilaFilter.isEmpty()){
                         for(Filter f : pilaFilter){
@@ -2406,9 +2406,7 @@ filterIsExpresion  = true;
                         }
                         pilaFilter.clear();
                     }
-                }else if(!eo.getNombre().equals("Boolean")){
-                    throw new Exception("No se admite esta expresion.");
-                }else{
+            }else if((ht.get(eo.getNombre()) == null || ht.get(eo.getNombre()) != Tipo.BOOLEAN) && !eo.getNombre().equals("Boolean")){
                     throw new Exception("No se admite esta expresion.");
                 }
             }
@@ -2669,17 +2667,6 @@ filterIsExpresion  = true;
     }
     
     SentenciaFor sf = new SentenciaFor(c_f,(Asignacion)sa,e_id,bs);
-
-
-    /*if(filterInExpresion!=null){
-        if(filtersComparacion!= null && !filtersComparacion.isEmpty()){
-            sf = new SentenciaFor(c_f,(Asignacion)sa,e_id,bs,filters, filtersComparacion);
-        }else{
-            sf = new SentenciaFor(c_f,(Asignacion)sa,e_id,bs,filters);
-        }
-    }else{
-        sf = new SentenciaFor(c_f,(Asignacion)sa,e_id,bs);
-    }*/
 
     if(arrayFilterInExpresion!=null && !arrayFilterInExpresion.isEmpty()){
         if(arrayFilterInComparacionFor!= null && !arrayFilterInComparacionFor.isEmpty()){

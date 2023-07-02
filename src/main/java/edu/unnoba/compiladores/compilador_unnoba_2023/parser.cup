@@ -1050,6 +1050,7 @@ sentencia_if_completa ::= IF PARENTESIS_ABRE {:filterIsExpresion  = true; :}  ex
                 pilaFilter.clear();
             }
         }else{
+            System.out.println("eo.getNombre(): " + eo.getNombre());
             if(eo.getNombre().equals("NOT")){
                 if(((NegacionLogica)eo).getExpresion().getNombre().contains("_aux") && !pilaFilter.isEmpty()){
                     for(Filter f : pilaFilter){
@@ -1057,7 +1058,7 @@ sentencia_if_completa ::= IF PARENTESIS_ABRE {:filterIsExpresion  = true; :}  ex
                     }
                     pilaFilter.clear();
                 }
-            }else if(!eo.getNombre().equals("Boolean")){
+            }else if((ht.get(eo.getNombre()) == null || ht.get(eo.getNombre()) != Tipo.BOOLEAN) && !eo.getNombre().equals("Boolean")){
                 throw new Exception("No se admite esta expresion.");
             }
         }
@@ -1100,15 +1101,16 @@ sentencia_elseif ::= sentencia_elseif: elseif ELIF PARENTESIS_ABRE {:filterIsExp
                 pilaFilter.clear();
             }
         }else{
+            System.out.println("eo.getNombre(): " + eo.getNombre());
             if(eo.getNombre().equals("NOT")){
                 if(((NegacionLogica)eo).getExpresion().getNombre().contains("_aux") && !pilaFilter.isEmpty()){
                     for(Filter f : pilaFilter){
                         arrayFilterInExpresion.add(f);
                     }
                     pilaFilter.clear();
-                }else if(!eo.getNombre().equals("Boolean")){
-                    throw new Exception("No se admite esta expresion.");
                 }
+            }else if((ht.get(eo.getNombre()) == null || ht.get(eo.getNombre()) != Tipo.BOOLEAN) && !eo.getNombre().equals("Boolean")){
+                throw new Exception("No se admite esta expresion.");
             }
         }
     }
@@ -1149,6 +1151,7 @@ sentencia_elseif ::= sentencia_elseif: elseif ELIF PARENTESIS_ABRE {:filterIsExp
                     pilaFilter.clear();
                 }
             }else{
+                System.out.println("eo.getNombre(): " + eo.getNombre());
                 if(eo.getNombre().equals("NOT")){
                     if(((NegacionLogica)eo).getExpresion().getNombre().contains("_aux") && !pilaFilter.isEmpty()){
                         for(Filter f : pilaFilter){
@@ -1156,9 +1159,7 @@ sentencia_elseif ::= sentencia_elseif: elseif ELIF PARENTESIS_ABRE {:filterIsExp
                         }
                         pilaFilter.clear();
                     }
-                }else if(!eo.getNombre().equals("Boolean")){
-                    throw new Exception("No se admite esta expresion.");
-                }else{
+            }else if((ht.get(eo.getNombre()) == null || ht.get(eo.getNombre()) != Tipo.BOOLEAN) && !eo.getNombre().equals("Boolean")){
                     throw new Exception("No se admite esta expresion.");
                 }
             }

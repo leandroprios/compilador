@@ -1,21 +1,14 @@
 DECLARE.SECTION
-INT : var1, var2, var3, var4, var5, i, j;
-float: var6;
-BOOLEAN: varlogica, varlogica2, varlogica3;
+INT : var1, var2, var3, var4,i;
+float: var5, var8, var6;
+BOOLEAN: varlogica;
 ENDDECLARE.SECTION
 PROGRAM.SECTION
-
-varlogica = true
-varlogica2 = varlogica
-
-if(filter(_==false, [varlogica2,varlogica])) THEN
-	display("filter del if = true")
-end
-elif(NOT filter(_==false, [varlogica2,varlogica])) then
-	display("filter del elif = true por el NOT")
-end
-else
-	display("else")
+for(i = 0; i++; i<3) do
+	var2 = 2 + i
+	DISPLAY(var2)
+	break
+	DISPLAY(i)
 end
 
 ENDPROGRAM.SECTION

@@ -10,7 +10,7 @@ var6 =3
 display("ingrese un boolean (1/0)")
 varlogica = input_boolean()
 if (varlogica) then
-	var5 = filter(_!=true, [var2,var3,var4])
+	var5 = filter(_!=0, [var2,var3,var4])
 end 
 display(var5)
 DISPLAY("fin del programa")
